@@ -1,0 +1,36 @@
+{
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "",
+  "short_name": "Resons",
+  "description": "Audio Sharing App",
+  "icons": [
+    {
+      "src": "/icons/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "share_target": {
+    "action": "/post/create/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "file",
+          "accept": ["audio/*"]
+        }
+      ]
+    }
+  },
+  "splash_pages": null,
+  "splash_screen": {
+    "template": "splash.html",
+    "image_url": "splash-image.png",
+    "image_caption": "App Loading..."
+  }
+}
