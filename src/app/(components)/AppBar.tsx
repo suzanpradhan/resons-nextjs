@@ -108,25 +108,22 @@ const Header = () => {
                 </ul>
               </div>
               <SearchBar />
-              <Link
+              <Button
+                type="link"
                 href="/postCreate"
-              >
-                <Button
-                  type="link"
-                  href="/postCreate"
-                  text="Upload"
-                  kind="default"
-                  prefix={
-                    <UploadSimple
-                      className="text-white"
-                      size={18}
-                      weight="fill"
-                    />
-                  }
-                  textClassName="ml-1"
-                  className="hidden md:block font-bold pointer-events-none"
-                />
-              </Link>
+                text="Upload"
+                kind="default"
+                prefix={
+                  <UploadSimple
+                    className="text-white"
+                    size={18}
+                    weight="fill"
+                  />
+                }
+                textClassName="ml-1"
+                className="hidden md:block font-bold pointer-events-none"
+              />
+
             </div>
             <div className="basis-[15%] flex flex-row justify-end gap-3 items-center hidden md:flex flex-row">
               <Link

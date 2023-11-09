@@ -1,6 +1,5 @@
-import React from 'react';
-import CreatableSelect from 'react-select/creatable';
 import { MultiValue } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
 // Define an interface for the option type
 interface Option {
@@ -27,6 +26,7 @@ const MultiSelect = ({ options, selectedOptions, onChange }: MultiSelectType) =>
       value={selectedOptions}
       onChange={handleChange}
       placeholder="Select or type..."
+      id='tag'
     />
   );
 };

@@ -6,18 +6,17 @@ import MultiSelect from '@/core/ui/components/MultiSelect'; // Import your custo
 import coverImageApi from '@/modules/coverImage/coverImageApi';
 import { CoverImageDetailType } from '@/modules/coverImage/coverImageType';
 import postApi from '@/modules/post/postApi';
+import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MultiValue } from 'react-select';
-import { Navigation, Autoplay, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import Image from 'next/image';
+import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css';
+import 'swiper/css/autoplay';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 
 
@@ -225,8 +224,8 @@ function PostToFeed(props: PostCreateProps) {
                 </select>
             </div>
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tag">
-                </label>
+                {/* <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tag">
+                </label> */}
                 <input
                     className="mr-3"
                     id="tag"
@@ -287,7 +286,7 @@ function PostToFeed(props: PostCreateProps) {
                     </Swiper>
                 </div>
                 <div className="flex items-center mt-4">
-                    <img
+                    <Image
                         className="mr-2"
                         width={20}
                         height={20}
