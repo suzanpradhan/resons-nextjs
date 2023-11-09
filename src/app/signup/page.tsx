@@ -184,9 +184,9 @@ export default function SignUp() {
         navigate.push('/');
         return;
       }
-      // setAuthenticateChecked(true);
-      // setIsAllow(true);
-      navigate.push('/login');
+      setAuthenticateChecked(true);
+      setIsAllow(true);
+      // navigate.push('/login');
     } else {
       setAuthenticateChecked(true);
       setIsAllow(false);

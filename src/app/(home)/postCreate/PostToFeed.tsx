@@ -6,18 +6,17 @@ import MultiSelect from '@/core/ui/components/MultiSelect'; // Import your custo
 import coverImageApi from '@/modules/coverImage/coverImageApi';
 import { CoverImageDetailType } from '@/modules/coverImage/coverImageType';
 import postApi from '@/modules/post/postApi';
+import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MultiValue } from 'react-select';
-import { Navigation, Autoplay, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import Image from 'next/image';
+import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css';
+import 'swiper/css/autoplay';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 
 
@@ -68,7 +67,7 @@ function PostToFeed(props: PostCreateProps) {
     // Function to handle file selection
     const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         // const file = e.target.files[0];
-        //console.log('Selected File:', file);
+        console.log('Selected File:', e.target.files);
     };
 
     const predefinedOptions = [
@@ -279,6 +278,8 @@ function PostToFeed(props: PostCreateProps) {
                                         onClick={() => handleImageClick(image.id)}
                                         className={`image-button ${selectedImageId === image.id ? 'selected' : ''} cover-image-size`}
                                         src={image.filePath}
+                                        width={100}
+                                        height={100}
                                         alt={`Image ${index + 1}`}
                                     />
                                 </SwiperSlide>
