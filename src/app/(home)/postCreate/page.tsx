@@ -5,7 +5,7 @@ import genresApi from '@/modules/genres/genresApi';
 import topicsApi from '@/modules/topics/topicsApi';
 import classNames from 'classnames';
 import { Microphone, Pause, Play, StopCircle } from 'phosphor-react';
-import { useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
 import NextPageComponent from './NextPageComponent';
@@ -22,10 +22,13 @@ const UserPostCreatePage = () => {
     const [shouldNext, setShouldNext] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false)
+    const [uploadTime, setUploadTime] = useState(0)
     const audioRef = useRef<any>(null);
     const waveRef = useRef<any>(null);
     const record = useRef<any>(null);
     const recordedAudio = useRef<any>(null);
+    const uploadedAudio = useRef<any>(null)
+    const uploadedAudioRef = useRef<any>(null)
 
     const [isNextPageVisible, setIsNextPageVisible] = useState(false); // Declare isNextPageVisible here
     const [isNextUploadVisible, setIsNextUploadVisible] = useState(false);
@@ -41,10 +44,9 @@ const UserPostCreatePage = () => {
         setActiveTab(tab);
     };
 
-    const onNextButtonClick = () => {
-
-        setAudioDuration?.(audioRef.current.getDuration());
-        setAudioWaveData?.(audioRef.current.exportPeaks()?.[0]);
+    const onNextButtonClick = (ref: MutableRefObject<any>) => {
+        setAudioDuration?.(ref.current.getDuration());
+        setAudioWaveData?.(ref.current.exportPeaks()?.[0]);
         setIsNextPageVisible(true);
 
 
@@ -59,6 +61,16 @@ const UserPostCreatePage = () => {
         }
         setIsPlaying(!isPlaying);
     };
+
+    const handleUploadPlayPause = () => {
+        if (!uploadedAudioRef.current) return;
+        if (isPlaying) {
+            uploadedAudioRef.current.pause();
+        } else {
+            uploadedAudioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+    }
 
     const stopTheRecording = () => {
         if (waveRef.current) {
@@ -152,8 +164,8 @@ const UserPostCreatePage = () => {
         // });
         audioElement.load();
         console.log(audioElement);
-        audioRef.current = WaveSurfer.create({
-            container: recordedAudio.current,
+        uploadedAudioRef.current = WaveSurfer.create({
+            container: uploadedAudio.current,
             waveColor: '#000000',
             progressColor: '#B00000',
             url: audioElement.src,
@@ -161,24 +173,25 @@ const UserPostCreatePage = () => {
             height: 80,
             barRadius: 2,
         });
-        if (audioRef.current) {
-            audioRef.current.on("decode", () => {
-                const getAudioDuration = audioRef.current.getDuration();
-                setRecordTime(getAudioDuration * 1000);
-                console.log("record time", recordTime)
-                setAudioDuration(getAudioDuration);
-                console.log("audio duration", audioDuration);
+        if (uploadedAudioRef.current) {
+            uploadedAudioRef.current.on("decode", () => {
+                const getAudioDuration = uploadedAudioRef.current.getDuration();
+                console.log("get audio duration", getAudioDuration)
+                setUploadTime(getAudioDuration * 1000);
+                console.log("upload time", uploadTime)
+                // setAudioDuration(getAudioDuration);
+                // console.log("audio duration", audioDuration);
             });
         }
-        audioRef.current.on('finish', () => {
-            audioRef.current.setTime(0);
+        uploadedAudioRef.current.on('finish', () => {
+            uploadedAudioRef.current.setTime(0);
             setIsPlaying(false);
         });
         setAudioFile(file);
+
         // setIsNextUploadVisible(true);
         setShouldNext(true);
         setIsUploaded(true)
-
     };
 
     useEffect(() => {
@@ -188,8 +201,17 @@ const UserPostCreatePage = () => {
             const getRemainaingTime = recordTime - (currentTime * 1000);
             setRecordTime(getRemainaingTime);
         })
-
     }, [audioRef.current]);
+
+    useEffect(() => {
+        if (!uploadedAudioRef.current) return;
+
+        uploadedAudioRef.current.on('timeupdate', (currentTime: number) => {
+            console.log(">>> upload time", uploadTime)
+            const getRemainaingTime = uploadTime - (currentTime * 1000);
+            setUploadTime(getRemainaingTime);
+        })
+    }, [uploadedAudioRef.current]);
 
     useEffect(() => {
         const fetchSharedAudioFiles = async () => {
@@ -275,8 +297,8 @@ const UserPostCreatePage = () => {
                 {activeTab == 'upload' &&
                     <div>
 
-                        <div className={`bg-slate-200 pl-10 pr-[80px] mt-4 relative h-[150px] flex flex-col justify-center`} ref={recordedAudio}>
-                            {isUploaded ? <div className='inline-flex absolute left-[10px]' onClick={handlePlayPause}>
+                        <div className={`bg-slate-200 pl-10 pr-[80px] mt-4 relative h-[150px] flex flex-col justify-center`} ref={uploadedAudio}>
+                            {isUploaded ? <div className='inline-flex absolute left-[10px]' onClick={handleUploadPlayPause}>
                                 {isPlaying ?
                                     <Pause
                                         size="24"
@@ -303,7 +325,7 @@ const UserPostCreatePage = () => {
                             }
 
                             <div className={classNames("inline-flex absolute right-[15px] py-0.5 px-2 bg-gray-600 text-white rounded-md", isUploaded ? 'block' : 'hidden')}>
-                                <div>{formatTime(recordTime / 1000)}</div>
+                                <div>{formatTime(uploadTime / 1000)}</div>
                             </div>
                         </div>
                     </div>
@@ -315,7 +337,7 @@ const UserPostCreatePage = () => {
                             ? "bg-red-500 cursor-pointer"
                             : "bg-slate-200 cursor-not-allowed"
                             }  font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out transform`}
-                        onClick={onNextButtonClick}
+                        onClick={() => { activeTab === "recorder" && onNextButtonClick(audioRef); activeTab === "upload" && onNextButtonClick(uploadedAudioRef) }}
                     >
                         Next
                     </button>
