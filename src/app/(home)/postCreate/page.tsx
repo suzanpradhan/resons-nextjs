@@ -8,7 +8,7 @@ import { Microphone, Pause, Play, StopCircle } from 'phosphor-react';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
-import NextPageComponent from './NextPageComponent';
+import NextPageComponent from './nextPageComp/page';
 
 
 const UserPostCreatePage = () => {
@@ -22,7 +22,7 @@ const UserPostCreatePage = () => {
     const [shouldNext, setShouldNext] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false)
-    const [uploadTime, setUploadTime] = useState(0)
+    const [uploadTime, setUploadTime] = useState<undefined | number>(undefined)
     const audioRef = useRef<any>(null);
     const waveRef = useRef<any>(null);
     const record = useRef<any>(null);
@@ -48,8 +48,6 @@ const UserPostCreatePage = () => {
         setAudioDuration?.(ref.current.getDuration());
         setAudioWaveData?.(ref.current.exportPeaks()?.[0]);
         setIsNextPageVisible(true);
-
-
     }
 
     const handlePlayPause = () => {
@@ -77,6 +75,7 @@ const UserPostCreatePage = () => {
             waveRef.current.on("decode", () => {
                 const getAudioDuration = waveRef.current.getDuration();
                 setRecordTime(getAudioDuration * 1000);
+                console.log("++", recordTime)
                 setAudioDuration(getAudioDuration);
             });
             waveRef.current.destroy();
@@ -145,48 +144,28 @@ const UserPostCreatePage = () => {
 
     const handleFileChange = (e: any) => {
         setAudioFile(undefined);
-        // setRecordTime(0);
         const file = e.target.files[0];
         const audioElement = new Audio();
         audioElement.src = URL.createObjectURL(file);
-        // audioElement.addEventListener("loadedmetadata", () => {
-        //     const durationInSeconds = audioElement.duration;
-        //     const durationInMinutes = (durationInSeconds / 60);
-        //     console.log("record time (minutes):", recordTime);
-        //     setRecordTime(durationInMinutes);
-        //     console.log("duration in minutes (minutes):", durationInMinutes * 10);
-
-        //     setAudioFile(file);
-        //     // setIsNextUploadVisible(true);
-        //     console.log("audiof", audioFile)
-        //     setShouldNext(true);
-        //     console
-        // });
         audioElement.load();
         console.log(audioElement);
-        uploadedAudioRef.current = WaveSurfer.create({
-            container: uploadedAudio.current,
-            waveColor: '#000000',
-            progressColor: '#B00000',
-            url: audioElement.src,
-            barWidth: 3,
-            height: 80,
-            barRadius: 2,
-        });
-        if (uploadedAudioRef.current) {
-            uploadedAudioRef.current.on("decode", () => {
-                const getAudioDuration = uploadedAudioRef.current.getDuration();
-                console.log("get audio duration", getAudioDuration)
-                setUploadTime(getAudioDuration * 1000);
-                console.log("upload time", uploadTime)
-                // setAudioDuration(getAudioDuration);
-                // console.log("audio duration", audioDuration);
+
+        const initiateUploadTime = () => {
+            uploadedAudioRef.current = WaveSurfer.create({
+                container: uploadedAudio.current,
+                waveColor: '#000000',
+                progressColor: '#B00000',
+                url: audioElement.src,
+                barWidth: 3,
+                height: 80,
+                barRadius: 2,
             });
+
+
         }
-        uploadedAudioRef.current.on('finish', () => {
-            uploadedAudioRef.current.setTime(0);
-            setIsPlaying(false);
-        });
+
+        initiateUploadTime();
+
         setAudioFile(file);
 
         // setIsNextUploadVisible(true);
@@ -196,21 +175,35 @@ const UserPostCreatePage = () => {
 
     useEffect(() => {
         if (!audioRef.current) return;
-        console.log(recordTime)
+
         audioRef.current.on('timeupdate', (currentTime: number) => {
             const getRemainaingTime = recordTime - (currentTime * 1000);
             setRecordTime(getRemainaingTime);
+            console.log(recordTime)
         })
     }, [audioRef.current]);
 
     useEffect(() => {
         if (!uploadedAudioRef.current) return;
-
+        if (uploadedAudioRef.current) {
+            uploadedAudioRef.current.on("decode", () => {
+                const getAudioDuration = uploadedAudioRef.current.getDuration();
+                setUploadTime(getAudioDuration * 1000);
+                console.log("upload time", uploadTime)
+            });
+        }
+        uploadedAudioRef.current.on('finish', () => {
+            uploadedAudioRef.current.setTime(0);
+            setIsPlaying(false);
+        });
         uploadedAudioRef.current.on('timeupdate', (currentTime: number) => {
-            console.log(">>> upload time", uploadTime)
-            const getRemainaingTime = uploadTime - (currentTime * 1000);
-            setUploadTime(getRemainaingTime);
-        })
+            if (uploadTime != undefined) {
+                console.log(">>> upload time", uploadTime)
+                const getRemainaingTime = uploadTime - (currentTime * 1000);
+                console.log(">>> remaining time time", getRemainaingTime)
+                setUploadTime(getRemainaingTime);
+            }
+        });
     }, [uploadedAudioRef.current]);
 
     useEffect(() => {
@@ -325,7 +318,7 @@ const UserPostCreatePage = () => {
                             }
 
                             <div className={classNames("inline-flex absolute right-[15px] py-0.5 px-2 bg-gray-600 text-white rounded-md", isUploaded ? 'block' : 'hidden')}>
-                                <div>{formatTime(uploadTime / 1000)}</div>
+                                {uploadTime && <div>{formatTime(uploadTime / 1000)}</div>}
                             </div>
                         </div>
                     </div>
