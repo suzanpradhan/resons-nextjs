@@ -7,7 +7,6 @@ export default async function HomePage() {
     { next: { revalidate: 60 } }
   );
   const response = await res.json();
-console.log(response);
 
   return <FeedPostListing preloadedPosts={response?.data} />;
 }

@@ -67,7 +67,7 @@ function PostToFeed(props: PostCreateProps) {
     // Function to handle file selection
     const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         // const file = e.target.files[0];
-        //console.log('Selected File:', file);
+        console.log('Selected File:', e.target.files);
     };
 
     const predefinedOptions = [
@@ -278,6 +278,8 @@ function PostToFeed(props: PostCreateProps) {
                                         onClick={() => handleImageClick(image.id)}
                                         className={`image-button ${selectedImageId === image.id ? 'selected' : ''} cover-image-size`}
                                         src={image.filePath}
+                                        width={100}
+                                        height={100}
                                         alt={`Image ${index + 1}`}
                                     />
                                 </SwiperSlide>
