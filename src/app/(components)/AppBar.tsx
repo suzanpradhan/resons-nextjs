@@ -21,12 +21,12 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const session = useSession();
+
   // const scrollDirection = useScrollDirection();
 
-  // console.log(scrollDirection);
-
   const handleLogout = async () => {
-    Cookies.remove("token");
+    Cookies.remove('token');
+    Cookies.remove('token');
     signOut({ callbackUrl: '/login', redirect: true });
   };
 
@@ -54,12 +54,26 @@ const Header = () => {
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
-  }
+  };
+  };
 
   return (
     <>
       <div
-        className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${currentPage == 1 ? '' : 'hidden'} ${(scrollDirection === 'up' || scrollDirection === 'down') ? '-translate-y-[105%]' : ''}`}
+        className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${
+          currentPage == 1 ? '' : 'hidden'
+        } ${
+          scrollDirection === 'up' || scrollDirection === 'down'
+            ? '-translate-y-[105%]'
+            : ''
+        }`}
+        className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${
+          currentPage == 1 ? '' : 'hidden'
+        } ${
+          scrollDirection === 'up' || scrollDirection === 'down'
+            ? '-translate-y-[105%]'
+            : ''
+        }`}
       >
         <header className="static sm:container md:container lg:container mx-auto px-4 sm:px-0 py-2 md:py-0">
           <div className="flex flex-row items-center justify-between">
@@ -81,10 +95,16 @@ const Header = () => {
                   <li className="basis-1/3">
                     <Link
                       href="/"
-                      className={`block py-[.8rem] px-4 text-center ${pathName === '/'
-                        ? 'text-accentRed bg-redShade font-bold'
-                        : 'text-dark-500 font-normal'
-                        }`}
+                      className={`block py-[.8rem] px-4 text-center ${
+                        pathName === '/'
+                          ? 'text-accentRed bg-redShade font-bold'
+                          : 'text-dark-500 font-normal'
+                      }`}
+                      className={`block py-[.8rem] px-4 text-center ${
+                        pathName === '/'
+                          ? 'text-accentRed bg-redShade font-bold'
+                          : 'text-dark-500 font-normal'
+                      }`}
                     >
                       Home
                     </Link>
@@ -123,13 +143,10 @@ const Header = () => {
                 textClassName="ml-1"
                 className="hidden md:block font-bold pointer-events-none"
               />
-
             </div>
             <div className="basis-[15%] flex flex-row justify-end gap-3 items-center hidden md:flex flex-row">
-              <Link
-                href="/notification"
-
-              >
+              <Link href="/notification">
+              <Link href="/notification">
                 <Bell size="27" className="text-primary-700" weight="regular" />
                 {unreadNotificationCount ? (
                   <>
@@ -163,11 +180,25 @@ const Header = () => {
                       <li className="hover:bg-gray-100 pt-5 pb-5 pl-10">
                         <Link href="/settings">Settings</Link>
                       </li>
-                      <li className="hover:bg-gray-100 pt-5 pb-5 pl-10 cursor-pointer" onClick={handleLogout}>
-                        <a href="#" onClick={(e) => e.preventDefault()}>Logout</a>
+                      <li
+                        className="hover:bg-gray-100 pt-5 pb-5 pl-10 cursor-pointer"
+                        onClick={handleLogout}
+                      >
+                        <Link href="#" onClick={(e) => e.preventDefault()}>
+                          Logout
+                        </Link>
                       </li>
                       <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
-                        <Link href="#">Sign Up</Link>
+                        <Link href="/signup">Sign Up</Link>
+                      </li>
+                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                        <Link href="/(home)/profile/">Profile</Link>
+                      </li>
+                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                        <Link href="/profile">Profile</Link>
+                      </li>
+                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                        <Link href="/profile">Profile</Link>
                       </li>
                       {/* Add more dropdown items here */}
                     </ul>

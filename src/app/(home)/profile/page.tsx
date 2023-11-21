@@ -25,6 +25,7 @@ export default function ProfilePage() {
 
   return (
     <div className="sm:container md:container lg:container mx-auto mb-20 sm:mb-0 md:px-4 min-h-screen">
+
       {myProfile ? <ProfileHeader viewProfile={myProfile} /> : <></>}
       <div className="px-4 md:px-0">
         {myProfile?.posts?.data?.length > 0 ? (

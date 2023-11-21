@@ -96,6 +96,7 @@ export default function SignIn() {
 
     const csrfToken = await fetch(`${apiPaths.rootPath}${apiPaths.csrfPath}`);
 
+
     if (csrfToken?.status === 204) {
 
       const response = await dispatch(
@@ -106,6 +107,7 @@ export default function SignIn() {
         navigator.push('/login');
       } else {
         const { optional, data } = response.data;
+        console.log(response)
         // Cookies.set('user_id', data.id);
         // Cookies.set('user_name', data.name);
         // Cookies.set('email', data.email);

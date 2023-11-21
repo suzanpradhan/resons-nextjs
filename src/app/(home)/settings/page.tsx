@@ -40,7 +40,7 @@ export default function SettingPage() {
     current_password: '',
     password: '',
     confirm_password: '',
-  }); 
+  });
 
   const navigate = useRouter();
 
@@ -498,22 +498,24 @@ export default function SettingPage() {
                 >
                   Username
                 </label>
-                <div className="flex">
+                <div className=''>
                   <label
                     htmlFor="username"
-                    className="bg-slate-200 text-sm text-gray-400 font-normal pl-3 py-2 rounded-sm"
+                    className="flex rounded-md border-gray-300 border-[1px] items-center m-0 bg-slate-200 text-sm text-gray-400 font-normal pl-3  "
                   >
-                    https://resons.com/
+                    <span>
+                      https://resons.com/
+                    </span>
+                    <input
+                      id="username"
+                      type="text"
+                      name="username"
+                      value={username ?? ''}
+                      onChange={handleUsernameChange}
+                      className="bg-slate-200 !border-0 inline w-full text-sm text-gray-700 font-normal py-2 pr-3 rounded-sm outline-none "
+                      autoComplete=""
+                    />
                   </label>
-                  <input
-                    id="username"
-                    type="text"
-                    name="username"
-                    value={username ?? ''}
-                    onChange={handleUsernameChange}
-                    className="bg-slate-200 w-full text-sm text-gray-700 font-normal py-2 pr-3 rounded-sm focus:outline-none"
-                    autoComplete=""
-                  />
                 </div>
               </div>
               <div className="flex flex-col py-2">
@@ -805,16 +807,16 @@ export default function SettingPage() {
             </p>
           </div>
           <div className="md:mt-0 md:py-0 mt-4 py-4 basis-4/6 w-full">
-        
-              <div className="py-2">
-                <button
-                  onClick={handleAccountDelete}
-                  className="bg-[#cd3328] py-2 px-3 text-white rounded-md"
-                >
-                  Yes, delete my account
-                </button>
-              </div>
-           
+
+            <div className="py-2">
+              <button
+                onClick={handleAccountDelete}
+                className="bg-[#cd3328] py-2 px-3 text-white rounded-md"
+              >
+                Yes, delete my account
+              </button>
+            </div>
+
           </div>
         </div>
 

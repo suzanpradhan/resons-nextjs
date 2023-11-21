@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useAppDispatch } from '@/core/redux/clientStore';
 import genresApi from '@/modules/genres/genresApi';
@@ -8,107 +8,120 @@ import Recorder from './Recorder';
 import Upload from './Upload';
 import NextPageComponent from './nextPageComp/page';
 
-
 const UserPostCreatePage = () => {
-    const dispatch = useAppDispatch();
-    const [activeTab, setActiveTab] = useState<'recorder' | 'upload'>('upload');
-    const [audioDuration, setAudioDuration] = useState<number>(0);
-    const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
-    const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
-    const [shouldNext, setShouldNext] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isNextPageVisible, setIsNextPageVisible] = useState(false); // Declare isNextPageVisible here
-    const [isNextUploadVisible, setIsNextUploadVisible] = useState(false);
+  const dispatch = useAppDispatch();
+  const [activeTab, setActiveTab] = useState<'recorder' | 'upload'>('upload');
+  const [audioDuration, setAudioDuration] = useState<number>(0);
+  const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
+  const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
+  const [shouldNext, setShouldNext] = useState(false);
+  const [isNextPageVisible, setIsNextPageVisible] = useState(false); // Declare isNextPageVisible here
+  const [isNextUploadVisible, setIsNextUploadVisible] = useState(false);
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
 
+  const handleTabClick = (tab: 'recorder' | 'upload') => {
+    setActiveTab(tab);
+  };
 
-    const formatTime = (time: number) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  const onNextButtonClick = (ref: MutableRefObject<any>) => {
+    setAudioDuration?.(ref.current.getDuration());
+    setAudioWaveData?.(ref.current.exportPeaks()?.[0]);
+    setIsNextPageVisible(true);
+  };
+
+  const handleOpenNextPage = () => {
+    setIsNextPageVisible(true);
+  };
+  const toggleNextPageVisibility = (visible: boolean) => {
+    setIsNextPageVisible(visible);
+  };
+
+  useEffect(() => {
+    const fetchSharedAudioFiles = async () => {
+      try {
+        const cache = await caches.open('sharedAudioCache');
+        const keys = await cache.keys();
+        if (!keys || keys.length <= 0) return;
+        const response = await cache.match(keys[0]);
+        if (!response) return;
+        const audioBlob = await response.blob();
+        setAudioFile(audioBlob as File);
+        keys.forEach((request, index, array) => {
+          cache.delete(request);
+        });
+      } catch (error) {
+        return;
+      }
     };
+    fetchSharedAudioFiles();
+  }, []);
 
-    const handleTabClick = (tab: "recorder" | "upload") => {
-        setActiveTab(tab);
-    };
+  useEffect(() => {
+    dispatch(genresApi.endpoints.getGenres.initiate());
+    dispatch(topicsApi.endpoints.getTopics.initiate());
+  }, [dispatch]);
 
-    const onNextButtonClick = (ref: MutableRefObject<any>) => {
-        setAudioDuration?.(ref.current.getDuration());
-        setAudioWaveData?.(ref.current.exportPeaks()?.[0]);
-        setIsNextPageVisible(true);
-    }
-
-    const handlePlayPause = (ref: MutableRefObject<any>) => {
-        if (!ref.current) return;
-        if (isPlaying) {
-            ref.current.pause();
-        } else {
-            ref.current.play();
-        }
-        setIsPlaying(!isPlaying);
-    };
-
-    const handleOpenNextPage = () => {
-        setIsNextPageVisible(true);
-    };
-    const toggleNextPageVisibility = (visible: boolean) => {
-        setIsNextPageVisible(visible);
-    };
-
-    useEffect(() => {
-        const fetchSharedAudioFiles = async () => {
-            try {
-                const cache = await caches.open('sharedAudioCache');
-                const keys = await cache.keys();
-                if (!keys || keys.length <= 0) return;
-                const response = await cache.match(keys[0]);
-                if (!response) return;
-                const audioBlob = await response.blob();
-                setAudioFile(audioBlob as File);
-                keys.forEach((request, index, array) => {
-                    cache.delete(request);
-                });
-            } catch (error) {
-                return;
-            }
-        };
-        fetchSharedAudioFiles();
-    }, []);
-
-    useEffect(() => {
-        dispatch(genresApi.endpoints.getGenres.initiate());
-        dispatch(topicsApi.endpoints.getTopics.initiate());
-    }, [dispatch]);
-
-    return (
-        <div className='overflow-y-auto pt-11 pb-[60px]' style={{ height: '100vh' }}>
-            <div className="relative flex justify-been items-center px-12 py-4">
-                <h3 className="text-xl">New Post</h3>
-                <div className="divider absolute bottom-0 right-0 left-0 bg-slate-300 h-[1px]"></div>
+  return (
+    <div
+      className="overflow-y-auto pt-11 pb-[60px]"
+      style={{ height: '100vh' }}
+    >
+      <div className="relative flex justify-been items-center px-12 py-4">
+        <h3 className="text-xl">New Post</h3>
+        <div className="divider absolute bottom-0 right-0 left-0 bg-slate-300 h-[1px]"></div>
+      </div>
+      <div
+        style={{ display: isNextPageVisible ? 'none' : 'block' }}
+        className="px-6 py-4 h-full relative"
+      >
+        <div className="flex justify-between items-center gap-2">
+          <button
+            className={`px-5 w-1/2 rounded-md md:w-auto cursor-pointer ${
+              activeTab === 'recorder' ? 'bg-red-500' : 'bg-gray-300'
+            }`}
+            onClick={() => handleTabClick('recorder')}
+          >
+            <div className="w-full text-white font-semibold py-2 px-4 transition duration-300 ease-in-out transform hover:scale-105">
+              Recorder
             </div>
-            <div style={{ display: isNextPageVisible ? 'none' : 'block' }}
-                className="px-6 py-4 h-full relative">
-                <div className="flex justify-between items-center gap-2">
-                    <button className={`px-5 w-1/2 rounded-md md:w-auto cursor-pointer ${activeTab === 'recorder' ? 'bg-red-500' : 'bg-gray-300'}`} onClick={() => handleTabClick('recorder')}>
-                        <div className="w-full text-white font-semibold py-2 px-4 transition duration-300 ease-in-out transform hover:scale-105">
-                            Recorder
-                        </div>
-                    </button>
-                    <button className={`px-5 w-1/2 ml-2 rounded-md md:w-auto cursor-pointer ${activeTab === 'upload' ? 'bg-red-500' : 'bg-gray-300'}`} onClick={() => handleTabClick('upload')}>
-                        <div className="w-full text-white font-semibold py-2 px-4 transition duration-300 ease-in-out transform hover:scale-105">
-                            Upload
-                        </div>
-                    </button>
-                </div>
-
-                {activeTab == 'recorder' && <Recorder formatTime={formatTime} isPlaying={isPlaying} setAudioDuration={setAudioDuration} setShouldNext={setShouldNext} setAudioFile={setAudioFile} setIsPlaying={setIsPlaying} />}
-                {activeTab == 'upload' && <Upload formatTime={formatTime} isPlaying={isPlaying} setAudioFile={setAudioFile} setIsPlaying={setIsPlaying} setShouldNext={setShouldNext} />}
-
+          </button>
+          <button
+            className={`px-5 w-1/2 ml-2 rounded-md md:w-auto cursor-pointer ${
+              activeTab === 'upload' ? 'bg-red-500' : 'bg-gray-300'
+            }`}
+            onClick={() => handleTabClick('upload')}
+          >
+            <div className="w-full text-white font-semibold py-2 px-4 transition duration-300 ease-in-out transform hover:scale-105">
+              Upload
             </div>
-            {isNextPageVisible && (
-                <NextPageComponent audioFile={audioFile} toggleNextPageVisibility={toggleNextPageVisibility} audioDuration={audioDuration} audioWaveData={audioWaveData} />
-            )}
-        </div >
-    );
+          </button>
+        </div>
+
+        {activeTab == 'recorder' && (
+          <Recorder
+            setAudioDuration={setAudioDuration}
+            setShouldNext={setShouldNext}
+            setAudioFile={setAudioFile}
+          />
+        )}
+        {activeTab == 'upload' && (
+          <Upload setAudioFile={setAudioFile} setShouldNext={setShouldNext} />
+        )}
+      </div>
+      {isNextPageVisible && (
+        <NextPageComponent
+          audioFile={audioFile}
+          toggleNextPageVisibility={toggleNextPageVisibility}
+          audioDuration={audioDuration}
+          audioWaveData={audioWaveData}
+        />
+      )}
+    </div>
+  );
 };
 
 export default UserPostCreatePage;
