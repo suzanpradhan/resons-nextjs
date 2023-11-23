@@ -31,6 +31,8 @@ export async function setHeaders(headers: Headers) {
   // }
   // headers.set('content-type', 'application/json');
   const getToken = Cookies.get('token');
+  console.log(getToken);
+
   headers.set('Access-Control-Allow-Origin', '*');
   headers.set(
     'authorization',

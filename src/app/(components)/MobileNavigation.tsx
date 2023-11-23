@@ -8,13 +8,10 @@ import {
   House,
   Playlist,
   Record,
-  UserCircle
+  UserCircle,
 } from 'phosphor-react';
 import { useState } from 'react';
 import useScrollDirection from './useScrollDirection';
-
-
-
 
 const MobileNavigation = () => {
   const pathName = usePathname();
@@ -26,35 +23,37 @@ const MobileNavigation = () => {
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
-  }
+  };
   const notificationCount = 5; // Replace with your actual notification count
 
   return (
     <div
       className={
         'fixed md:hidden bottom-0 left-0 w-full bg-gray-100 z-40 border-0 border-t border-gray-100 ' +
-        ((scrollDirection === 'up' || scrollDirection === 'down') ? 'hidden' : '')
+        (scrollDirection === 'up' || scrollDirection === 'down' ? 'hidden' : '')
       }
     >
       <ul className="flex justify-evenly items-end list-none m-0 p-0">
         <li className="basis-[20%]">
           <Link
             href="/"
-            className={`block py-4 px-3 text-gray-400 ${pathName === '/' ? 'bg-gray-200' : ''
-              }`}
+            className={`block py-4 px-3 text-gray-400 ${
+              pathName === '/' ? 'bg-gray-200' : ''
+            }`}
           >
             <div className="w-max mx-auto">
               <House
                 size="24"
                 weight="fill"
-                className={`${pathName === '/' ? 'text-accent' : 'text-primary-400'
-                  }`}
+                className={`${
+                  pathName === '/' ? 'text-accent' : 'text-primary-400'
+                }`}
               />
             </div>
           </Link>
         </li>
 
-        <li title='Explore' className="basis-[20%]">
+        <li title="Explore" className="basis-[20%]">
           <Link
             href="/explore"
             className={`block py-[.8rem] px-4 text-center `}
@@ -63,13 +62,14 @@ const MobileNavigation = () => {
               <GlobeHemisphereEast
                 size="24"
                 weight="fill"
-                className={`${pathName === '/topic' ? 'text-accent' : 'text-primary-400'
-                  }`}
+                className={`${
+                  pathName === '/topic' ? 'text-accent' : 'text-primary-400'
+                }`}
               />
             </div>
           </Link>
         </li>
-        <li title='Create Post' className="basis-[20%]">
+        <li title="Create Post" className="basis-[20%]">
           <Link
             href="/postCreate"
             className={`block py-[.8rem] px-4 text-center `}
@@ -83,7 +83,7 @@ const MobileNavigation = () => {
             </div>
           </Link>
         </li>
-        <li title='Library' className="basis-[20%]">
+        <li title="Library" className="basis-[20%]">
           <Link
             href="/library"
             className={`block py-[.8rem] px-4 text-center `}
@@ -92,17 +92,17 @@ const MobileNavigation = () => {
               <Playlist
                 size="24"
                 weight="fill"
-                className={`${pathName === '/library' ? 'text-accent' : 'text-primary-400'
-                  }`}
+                className={`${
+                  pathName === '/library' ? 'text-accent' : 'text-primary-400'
+                }`}
               />
             </div>
           </Link>
         </li>
 
-
         <li className="basis-[20%]">
           <Link
-            href="/settings"
+            href="/profile"
             className={`block py-[.8rem] px-4 text-center `}
           >
             <div className="w-max mx-auto relative">
@@ -114,12 +114,12 @@ const MobileNavigation = () => {
               <UserCircle
                 size="24"
                 weight="fill"
-                className={`${pathName === '/settings' ? 'text-accent' : 'text-primary-400'
-                  }`}
+                className={`${
+                  pathName === '/profile' ? 'text-accent' : 'text-primary-400'
+                }`}
               />
             </div>
           </Link>
-
         </li>
       </ul>
     </div>

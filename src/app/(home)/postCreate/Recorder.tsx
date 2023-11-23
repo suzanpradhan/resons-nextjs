@@ -77,7 +77,8 @@ const Recorder = ({
         const getAudioDuration = waveRef.current.getDuration();
         setRecordTime(getAudioDuration * 1000);
         console.log('++', recordTime);
-        setAudioDuration(getAudioDuration);
+        setAudioDuration(recordTime);
+        setShouldNext(true);
       });
       waveRef.current.destroy();
     }
@@ -85,7 +86,8 @@ const Recorder = ({
       record.current.stopRecording();
       record.current.destroy();
     }
-    setShouldNext(true);
+    // setShouldNext(true);
+    // console.log(shouldNext);
   };
 
   useEffect(() => {

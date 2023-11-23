@@ -5,12 +5,16 @@ import PlayPauseWithWave from './PlayPauseWithWave';
 type UploadPropType = {
   setAudioFile: Dispatch<SetStateAction<File | undefined>>;
   setShouldNext: Dispatch<SetStateAction<boolean>>;
+  setAudioDuration: Dispatch<SetStateAction<number>>;
 };
 
-const Upload = ({ setAudioFile, setShouldNext }: UploadPropType) => {
-  const [isUploaded, setIsUploaded] = useState(false);
+const Upload = ({
+  setAudioFile,
+  setShouldNext,
+  setAudioDuration,
+}: UploadPropType) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [uploadTime, setUploadTime] = useState<undefined | number>(undefined);
+  const [uploadTime, setUploadTime] = useState<number | undefined>(undefined);
   const audioRef = useRef<any>(null);
   const uploadedAudio = useRef<any>(null);
 
@@ -34,20 +38,22 @@ const Upload = ({ setAudioFile, setShouldNext }: UploadPropType) => {
       barRadius: 2,
     });
 
+    const getDuration = audioRef.current.getDuration();
+    setUploadTime(getDuration);
     setAudioFile(file);
+
+    console.log('KKK', getDuration, uploadTime);
     // setIsNextUploadVisible(true);
     setShouldNext(true);
-    setIsUploaded(true);
   };
 
   useEffect(() => {
     const handleDecode = () => {
       const getAudioDuration = audioRef.current.getDuration();
-      setUploadTime((prevUploadTime) => {
+      setUploadTime(() => {
         const newUploadTime = getAudioDuration * 1000;
         return newUploadTime;
       });
-      console.log('Upload time', uploadTime);
     };
 
     // const handleFinish = () => {
@@ -55,27 +61,24 @@ const Upload = ({ setAudioFile, setShouldNext }: UploadPropType) => {
     //   setIsPlaying(false);
     // };
 
-    if (audioRef.current) {
-      audioRef.current.on('decode', handleDecode);
-      // audioRef.current.on('finish', handleFinish);
-    }
-  }, [audioRef.current]);
-
-  useEffect(() => {
-    console.log('Upload time', uploadTime);
     const handleTimeUpdate = () => {
       const currentTime = audioRef.current.getCurrentTime();
       console.log('Current time', currentTime);
 
       uploadTime &&
-        setUploadTime((prevUploadTime) => {
+        setUploadTime(() => {
           const getRemainingTime = uploadTime - currentTime;
           return getRemainingTime;
         });
       console.log('upload time', uploadTime);
     };
-    audioRef.current?.on('timeupdate', handleTimeUpdate);
-  }, [audioRef.current?.getCurrentTime()]);
+
+    if (audioRef.current) {
+      audioRef.current.on('decode', handleDecode);
+      // audioRef.current.on('finish', handleFinish);
+      audioRef.current?.on('timeupdate', handleTimeUpdate);
+    }
+  }, [audioRef.current]);
 
   return (
     <>
@@ -106,11 +109,11 @@ const Upload = ({ setAudioFile, setShouldNext }: UploadPropType) => {
             onChange={(e) => handleFileChange(e)}
           />
         </label>
-        {isUploaded && (
+        {/* {isUploaded && (
           <button className="text-white bg-red-500 px-5 py-3 rounded-md active:scale-105 hover:shadow-md">
             Next
           </button>
-        )}
+        )} */}
       </div>
     </>
   );

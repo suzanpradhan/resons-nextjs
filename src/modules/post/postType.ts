@@ -54,7 +54,8 @@ export interface PostFormType {
   privacy_code: string;
   expiration_type: string;
   language: string;
-  cover_image_id: string;
+  cover_image_id?: string;
+  cover_image?: File;
   remember_my_language: string;
   color_code: string;
   tags: any;

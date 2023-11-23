@@ -55,18 +55,10 @@ const Header = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-  };
 
   return (
     <>
       <div
-        className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${
-          currentPage == 1 ? '' : 'hidden'
-        } ${
-          scrollDirection === 'up' || scrollDirection === 'down'
-            ? '-translate-y-[105%]'
-            : ''
-        }`}
         className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${
           currentPage == 1 ? '' : 'hidden'
         } ${
@@ -100,11 +92,6 @@ const Header = () => {
                           ? 'text-accentRed bg-redShade font-bold'
                           : 'text-dark-500 font-normal'
                       }`}
-                      className={`block py-[.8rem] px-4 text-center ${
-                        pathName === '/'
-                          ? 'text-accentRed bg-redShade font-bold'
-                          : 'text-dark-500 font-normal'
-                      }`}
                     >
                       Home
                     </Link>
@@ -128,6 +115,7 @@ const Header = () => {
                 </ul>
               </div>
               <SearchBar />
+
               <Button
                 type="link"
                 href="/postCreate"
@@ -145,7 +133,6 @@ const Header = () => {
               />
             </div>
             <div className="basis-[15%] flex flex-row justify-end gap-3 items-center hidden md:flex flex-row">
-              <Link href="/notification">
               <Link href="/notification">
                 <Bell size="27" className="text-primary-700" weight="regular" />
                 {unreadNotificationCount ? (
@@ -190,12 +177,6 @@ const Header = () => {
                       </li>
                       <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
                         <Link href="/signup">Sign Up</Link>
-                      </li>
-                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
-                        <Link href="/(home)/profile/">Profile</Link>
-                      </li>
-                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
-                        <Link href="/profile">Profile</Link>
                       </li>
                       <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
                         <Link href="/profile">Profile</Link>

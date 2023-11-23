@@ -142,6 +142,20 @@ const postApi = baseApi.injectEndpoints({
       },
     }),
 
+    //   {
+    //     "title": "upload title",
+    //     "audio_file": "asdfj",
+    //     "file_duration": 10,
+    //     "wave_data":  "wave data",
+    //     "privacy_code": 0,
+    //     "expiration_type": "Never",
+    //     "language": "string",
+    //     "cover_image": "string",
+    //     "remember_my_language": 0,
+    //     "color_code": "string",
+    //     "tags": "any",
+    //     "is_ai_generated": 0
+    // }
     // Add Post
     addPost: builder.mutation<any, PostFormType>({
       query: ({ ...payload }) => {
@@ -157,7 +171,11 @@ const postApi = baseApi.injectEndpoints({
         formData.append('is_ai_generated', payload?.is_ai_generated);
         formData.append('expiration_type', payload.expiration_type);
         formData.append('language', payload.language);
-        formData.append('cover_image_id', payload.cover_image_id);
+        // if (payload.cover_image) {
+        //   console.log(["here", payload.cover_image])
+        //   formData.append('cover_image', payload.cover_image);
+        // }
+        // formData.append('cover_image_id', payload.cover_image_id);
         formData.append('remember_my_language', payload.remember_my_language);
         formData.append('color_code', payload.color_code);
         formData.append('tags', payload.tags as any);

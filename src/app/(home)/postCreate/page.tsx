@@ -11,9 +11,12 @@ import NextPageComponent from './nextPageComp/page';
 const UserPostCreatePage = () => {
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<'recorder' | 'upload'>('upload');
+
+  // data required for audio upload to feed or story
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
   const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
+
   const [shouldNext, setShouldNext] = useState(false);
   const [isNextPageVisible, setIsNextPageVisible] = useState(false); // Declare isNextPageVisible here
   const [isNextUploadVisible, setIsNextUploadVisible] = useState(false);
@@ -76,7 +79,7 @@ const UserPostCreatePage = () => {
       </div>
       <div
         style={{ display: isNextPageVisible ? 'none' : 'block' }}
-        className="px-6 py-4 h-full relative"
+        className="px-6 py-4 h-full relative text-center"
       >
         <div className="flex justify-between items-center gap-2">
           <button
@@ -109,7 +112,19 @@ const UserPostCreatePage = () => {
           />
         )}
         {activeTab == 'upload' && (
-          <Upload setAudioFile={setAudioFile} setShouldNext={setShouldNext} />
+          <Upload
+            setAudioDuration={setAudioDuration}
+            setAudioFile={setAudioFile}
+            setShouldNext={setShouldNext}
+          />
+        )}
+        {shouldNext && (
+          <button
+            onClick={handleOpenNextPage}
+            className="text-white my-2 bg-red-400 px-5 py-3 rounded-md active:scale-105 hover:shadow-md"
+          >
+            Next
+          </button>
         )}
       </div>
       {isNextPageVisible && (
