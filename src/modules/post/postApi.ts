@@ -164,8 +164,9 @@ const postApi = baseApi.injectEndpoints({
         if (payload.wave_data) {
           formData.append('wave_data', JSON.stringify(payload.wave_data));
         }
-        if (payload.file_duration)
+        if (payload.file_duration != undefined) {
           formData.append('file_duration', payload.file_duration.toString());
+        }
         formData.append('privacy_code', payload.privacy_code);
         formData.append('audio_file', payload.audio_file);
         formData.append('is_ai_generated', payload?.is_ai_generated);
@@ -173,7 +174,9 @@ const postApi = baseApi.injectEndpoints({
         formData.append('language', payload.language);
         // if (payload.cover_image) {
         //   console.log(["here", payload.cover_image])
-        //   formData.append('cover_image', payload.cover_image);
+        if (payload.cover_image) {
+          formData.append('cover_image', payload.cover_image);
+        }
         // }
         // formData.append('cover_image_id', payload.cover_image_id);
         formData.append('remember_my_language', payload.remember_my_language);

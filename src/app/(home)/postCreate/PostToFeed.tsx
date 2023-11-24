@@ -154,7 +154,7 @@ function PostToFeed(props: PostCreateProps) {
             is_ai_generated: '0',
             expiration_type: selectedExpirationValue,
             language: selectedLanguageValue,
-            cover_image: selectedImages[-1],
+            cover_image: selectedImages[0],
             remember_my_language: rememberMyLanguage,
             color_code: '#0000',
             tags: selectedTagOptions.map((tag) => tag.value),
