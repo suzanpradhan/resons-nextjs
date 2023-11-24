@@ -136,11 +136,6 @@ function PostToFeed(props: PostCreateProps) {
     console.log('here');
     //setIsLoading(true);
     event.preventDefault();
-    // if (audioFile) {
-    //     if (isLoading) {
-    //         return;
-    //     }
-    // setIsLoading(true);
     console.log(selectedImages);
     try {
       await Promise.resolve(
