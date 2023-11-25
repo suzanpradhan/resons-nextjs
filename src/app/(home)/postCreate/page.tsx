@@ -4,9 +4,9 @@ import { useAppDispatch } from '@/core/redux/clientStore';
 import genresApi from '@/modules/genres/genresApi';
 import topicsApi from '@/modules/topics/topicsApi';
 import { MutableRefObject, useEffect, useState } from 'react';
+import NextPageComponent from './NextPageComponent';
 import Recorder from './Recorder';
 import Upload from './Upload';
-import NextPageComponent from './nextPageComp/page';
 
 const UserPostCreatePage = () => {
   const dispatch = useAppDispatch();
