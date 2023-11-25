@@ -13,7 +13,24 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
   return (
     <div className="bg-white mb-5 mt-12 drop-shadow-2xl">
-      <div className="w-[70px] md:w-[100px] h-[70px] md:h-[100px] rounded-full overflow-hidden">
+      <div className="flex">
+        <div className="w-8 h-8">
+          <Image
+            src={
+              props.viewProfile?.profile_image &&
+              props.viewProfile?.profile_image != null
+                ? props.viewProfile.profile_image
+                : '/images/avatar.jpg'
+            }
+            alt="post_owner_avatar"
+            fill
+            // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            objectFit="cover"
+          />
+        </div>
+        <div></div>
+      </div>
+      {/* <div className="w-[70px] md:w-[100px] h-[70px] md:h-[100px] rounded-full overflow-hidden">
         <Image
           src={
             props.viewProfile?.profile_image &&
@@ -26,7 +43,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           objectFit="cover"
         />
-      </div>
+      </div> */}
     </div>
     // <div className="bg-white mb-5 mt-10 drop-shadow-2xl">
     //   <div className="relative">

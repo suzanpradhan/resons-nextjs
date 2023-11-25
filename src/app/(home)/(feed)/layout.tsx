@@ -1,13 +1,11 @@
 // Import necessary libraries and components
-"use client"
+'use client';
 import AppBar from '@/app/(components)/AppBar';
 import MobileNavigation from '@/app/(components)/MobileNavigation';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { updateHomePage } from '@/modules/post/homePageReducer';
-import Cookies from 'js-cookie';
-import { usePathname, useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PostDetailComponent from '../(components)/PostDetailComponent';
 import NowPlayingBarV3 from '../../(components)/(nowPlayingPlayer)/NowPlayingBarV3';
 
@@ -18,9 +16,6 @@ export default function HomeLayout({
   children: React.ReactNode;
   view?: React.ReactNode;
 }) {
-  const navigator = useRouter();
-  const [authenticateChecked, setAuthenticateChecked] = useState(false);
-  const pathName = usePathname();
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage
@@ -64,20 +59,20 @@ export default function HomeLayout({
     // Your additional logic here (if needed)
   }, [handleScroll]);
 
-  useEffect(() => {
-    // Check if the authentication cookie is present
-    const isAuthenticated = Cookies.get('authenticated') === 'true';
+  // useEffect(() => {
+  //   // Check if the authentication cookie is present
+  //   const isAuthenticated = Cookies.get('authenticated') === 'true';
 
-    if (isAuthenticated) {
-      setAuthenticateChecked(true);
-    } else {
-      navigator.push("/login");
-    }
-  }, []);
+  //   if (isAuthenticated) {
+  //     setAuthenticateChecked(true);
+  //   } else {
+  //     navigator.push("/login");
+  //   }
+  // }, []);
 
-  if (!authenticateChecked) {
-    return null;
-  }
+  // if (!authenticateChecked) {
+  //   return null;
+  // }
 
   return (
     <>
@@ -85,14 +80,16 @@ export default function HomeLayout({
         <AppBar />
         <div
           id="homePageScroller"
-          className={`absolute transition-all duration-200 ease-in-out w-full ${currentPage == 1 ? '' : '-translate-x-full'
-            } h-[calc(100dvh)] top-0`}
+          className={`absolute transition-all duration-200 ease-in-out w-full ${
+            currentPage == 1 ? '' : '-translate-x-full'
+          } h-[calc(100dvh)] top-0`}
         >
           {children}
         </div>
         <div
-          className={`absolute transition-all duration-200 ease-in-out top-0 h-[calc(100dvh)] w-full left-full ${currentPage == 2 ? '-translate-x-full' : ''
-            }`}
+          className={`absolute transition-all duration-200 ease-in-out top-0 h-[calc(100dvh)] w-full left-full ${
+            currentPage == 2 ? '-translate-x-full' : ''
+          }`}
         >
           {homePagePostId ? (
             <PostDetailComponent params={{ id: homePagePostId }} />
@@ -103,7 +100,6 @@ export default function HomeLayout({
         <NowPlayingBarV3 />
       </div>
       {currentPage == 1 ? <MobileNavigation /> : <></>}
-
     </>
   );
 }
