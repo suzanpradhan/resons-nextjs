@@ -22,6 +22,13 @@ const Header = () => {
   const pathName = usePathname();
   const session = useSession();
 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = Cookies.get('token');
+    console.log(token);
+
+    return token != undefined;
+  });
+
   // const scrollDirection = useScrollDirection();
 
   const handleLogout = async () => {
@@ -164,23 +171,40 @@ const Header = () => {
                 {isOpen && (
                   <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-48">
                     <ul>
-                      <li className="hover:bg-gray-100 pt-5 pb-5 pl-10">
-                        <Link href="/settings">Settings</Link>
-                      </li>
-                      <li
-                        className="hover:bg-gray-100 pt-5 pb-5 pl-10 cursor-pointer"
-                        onClick={handleLogout}
-                      >
-                        <Link href="#" onClick={(e) => e.preventDefault()}>
-                          Logout
-                        </Link>
-                      </li>
-                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
-                        <Link href="/signup">Sign Up</Link>
-                      </li>
-                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
-                        <Link href="/profile">Profile</Link>
-                      </li>
+                      {isAuthenticated ? (
+                        <>
+                          <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                            <Link href="/profile">Profile</Link>
+                          </li>
+                          <li className="hover:bg-gray-100 pt-5 pb-5 pl-10">
+                            <Link href="/settings">Settings</Link>
+                          </li>
+                          <li
+                            className="hover:bg-gray-100 pt-5 pb-5 pl-10 cursor-pointer"
+                            onClick={handleLogout}
+                          >
+                            <Link href="#" onClick={(e) => e.preventDefault()}>
+                              Logout
+                            </Link>
+                          </li>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+
+                      {!isAuthenticated ? (
+                        <>
+                          <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                            <Link href="/signup">Sign Up</Link>
+                          </li>
+                          <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                            <Link href="/login">Login</Link>
+                          </li>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+
                       {/* Add more dropdown items here */}
                     </ul>
                   </div>
