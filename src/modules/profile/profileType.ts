@@ -26,6 +26,7 @@ export const profileDetailSchema = z.object({
     following: z.number(),
     total_posts: z.number(),
     total_stories: z.number(),
+    bio: z.string().optional(),
     total_tracks: z.number(),
     country: countriesDetailSchema.optional(),
     settings: z.array(settingsDetailSchema).optional(),
