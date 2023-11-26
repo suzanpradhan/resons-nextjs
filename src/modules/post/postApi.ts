@@ -37,6 +37,31 @@ const postApi = baseApi.injectEndpoints({
       },
     }),
 
+    getPopularPostList: builder.query<PaginatedResponseType<PostDetailType>, void>({
+      query: () => `${apiPaths.popularPostUrl}?page=1&paginate=10`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.data.map(({ id }) => ({ type: 'PopularPosts', id } as const)),
+            { type: 'PopularPosts', id: 'LIST' },
+          ]
+          : [{ type: 'PopularPosts', id: 'LIST' }],
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      merge: (currentCache, newItems) => {
+        currentCache.pagination = newItems.pagination;
+        currentCache.data.push(...newItems.data);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+      transformResponse: (response: any) => {
+        console.log(response.data);
+        return response?.data as PaginatedResponseType<PostDetailType>;
+      },
+    }),
+
     // Get List of Posts
     getMyPostList: builder.query<PostDetailType[], void>({
       query: () => `${apiPaths.myPostUrl}`,
