@@ -7,6 +7,9 @@ function useScrollDirection() {
 
   useEffect(() => {
     const scrollableDiv = document.getElementById('feed-listing');
+    if (!scrollableDiv) {
+      return;
+    }
     let lastScrollY = scrollableDiv!.scrollTop;
 
     // function to run on scroll
@@ -24,7 +27,7 @@ function useScrollDirection() {
       updateScrollDirection();
       clearTimeout(isScrolling);
       isScrolling = setTimeout(() => {
-        setScrollDirection("");
+        setScrollDirection('');
       }, 500);
     }); // add event listener
     return () => {
