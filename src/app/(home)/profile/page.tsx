@@ -1,31 +1,28 @@
 'use client';
 
 import ProfileWavePlayer from '@/app/(components)/ProfileWavePlayer';
-import ProfileHeader from './(components)/ProfileHeader';
-
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { PostDetailType } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
 import { useEffect } from 'react';
+import ProfileHeader from './(components)/ProfileHeader';
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(profileApi.endpoints.getMyProfileData.initiate("?load=true"));
+    dispatch(profileApi.endpoints.getMyProfileData.initiate('?load=true'));
   }, [dispatch]);
 
-  const myProfile = useAppSelector(
-    (state: RootState) => {
-      return state.baseApi.queries[`getMyProfileData("?load=true")`]
-        ?.data as any
-    }
-  );
+  const myProfile = useAppSelector((state: RootState) => {
+    return state.baseApi.queries[`getMyProfileData("?load=true")`]?.data as any;
+  });
+
+  console.log(myProfile?.posts?.data);
 
   return (
-    <div className="sm:container md:container lg:container mx-auto mb-20 sm:mb-0 md:px-4 min-h-screen">
-
+    <div className="sm:container md:container lg:container mx-auto mb-20 sm:mb-0 md:px-4">
       {myProfile ? <ProfileHeader viewProfile={myProfile} /> : <></>}
       <div className="px-4 md:px-0">
         {myProfile?.posts?.data?.length > 0 ? (

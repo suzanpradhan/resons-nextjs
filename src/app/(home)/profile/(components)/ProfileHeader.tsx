@@ -3,6 +3,8 @@
 
 import { ProfileDetailType } from '@/modules/profile/profileType';
 import Image from 'next/image';
+import Link from 'next/link';
+import { GearSix, NotePencil } from 'phosphor-react';
 
 interface ProfileHeaderProps {
   viewProfile: ProfileDetailType;
@@ -11,26 +13,24 @@ interface ProfileHeaderProps {
 const ProfileHeader = (props: ProfileHeaderProps) => {
   console.log('props', props);
 
+  const PROFILE_DETAILS = [
+    {
+      detailName: 'Followers',
+      detailNumber: props.viewProfile.followers,
+    },
+    {
+      detailName: 'Following',
+      detailNumber: props.viewProfile.following,
+    },
+    {
+      detailName: 'Posts',
+      detailNumber: props.viewProfile.total_posts,
+    },
+  ];
+
   return (
-    <div className="bg-white mb-5 mt-12 drop-shadow-2xl">
-      <div className="flex">
-        <div className="w-8 h-8">
-          <Image
-            src={
-              props.viewProfile?.profile_image &&
-              props.viewProfile?.profile_image != null
-                ? props.viewProfile.profile_image
-                : '/images/avatar.jpg'
-            }
-            alt="post_owner_avatar"
-            fill
-            // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            objectFit="cover"
-          />
-        </div>
-        <div></div>
-      </div>
-      {/* <div className="w-[70px] md:w-[100px] h-[70px] md:h-[100px] rounded-full overflow-hidden">
+    <div className="bg-white mb-5 mt-12 drop-shadow-2xl p-4 flex gap-2 items-center border-red-400 border-b-2">
+      <div className="relative w-28 md:w-36 h-28 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
         <Image
           src={
             props.viewProfile?.profile_image &&
@@ -43,7 +43,40 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           objectFit="cover"
         />
-      </div> */}
+      </div>
+      <div className="flex flex-col grow gap-1 max-w-2xl">
+        <div className="flex justify-between">
+          <h2 className="m-0 font-bold text-xl md:text-3xl truncate shrink">
+            {props.viewProfile.name}
+          </h2>
+          <div className="flex gap-1 text-slate-500">
+            <Link href="/">
+              <NotePencil size={24} />
+            </Link>
+            <Link href="/settings">
+              <GearSix size={24} />
+            </Link>
+          </div>
+        </div>
+        <p>{props.viewProfile.about}</p>
+
+        <div className="flex gap-2 justify-between">
+          {PROFILE_DETAILS.map((detail, index) => (
+            <Link
+              href={`profile/${props.viewProfile.id}/connections`}
+              className="flex flex-col"
+              key={index}
+            >
+              <h3 className="font-bold text-base md:text-xl">
+                {detail.detailNumber}
+              </h3>
+              <p className="text-slate-500 text-base md:text-xl">
+                {detail.detailName}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
     // <div className="bg-white mb-5 mt-10 drop-shadow-2xl">
     //   <div className="relative">
