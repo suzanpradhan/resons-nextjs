@@ -24,6 +24,8 @@ export const profileDetailSchema = z.object({
     profile_hits: z.string().optional(),
     followers: z.number(),
     following: z.number(),
+    total_posts: z.number(),
+    total_stories: z.number(),
     total_tracks: z.number(),
     country: countriesDetailSchema.optional(),
     settings: z.array(settingsDetailSchema).optional(),

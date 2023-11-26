@@ -1,5 +1,5 @@
 // Import necessary libraries and components
-"use client"
+'use client';
 import AppBar from '@/app/(components)/AppBar';
 import MobileNavigation from '@/app/(components)/MobileNavigation';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
@@ -71,7 +71,7 @@ export default function HomeLayout({
     if (isAuthenticated) {
       setAuthenticateChecked(true);
     } else {
-      navigator.push("/login");
+      navigator.push('/login');
     }
   }, []);
 
@@ -85,14 +85,16 @@ export default function HomeLayout({
         <AppBar />
         <div
           id="homePageScroller"
-          className={`absolute transition-all duration-200 ease-in-out w-full ${currentPage == 1 ? '' : '-translate-x-full'
-            } h-[calc(100dvh)] top-0`}
+          className={`absolute transition-all duration-200 ease-in-out w-full ${
+            currentPage == 1 ? '' : '-translate-x-full'
+          } h-[calc(100dvh)] top-0`}
         >
           {children}
         </div>
         <div
-          className={`absolute transition-all duration-200 ease-in-out top-0 h-[calc(100dvh)] w-full left-full ${currentPage == 2 ? '-translate-x-full' : ''
-            }`}
+          className={`absolute transition-all duration-200 ease-in-out top-0 h-[calc(100dvh)] w-full left-full ${
+            currentPage == 2 ? '-translate-x-full' : ''
+          }`}
         >
           {homePagePostId ? (
             <PostDetailComponent params={{ id: homePagePostId }} />
@@ -103,7 +105,6 @@ export default function HomeLayout({
         <NowPlayingBarV3 />
       </div>
       {currentPage == 1 ? <MobileNavigation /> : <></>}
-
     </>
   );
 }
