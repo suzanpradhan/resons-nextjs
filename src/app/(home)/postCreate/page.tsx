@@ -73,7 +73,7 @@ const UserPostCreatePage = () => {
       className="overflow-y-auto pt-11 pb-[60px]"
       style={{ height: '100vh' }}
     >
-      <div className="relative flex justify-been items-center px-12 py-4">
+      <div className="relative flex justify-been items-center px-6 py-4">
         <h3 className="text-xl">New Post</h3>
         <div className="divider absolute bottom-0 right-0 left-0 bg-slate-300 h-[1px]"></div>
       </div>
@@ -113,6 +113,7 @@ const UserPostCreatePage = () => {
         )}
         {activeTab == 'upload' && (
           <Upload
+            audioDuration={audioDuration}
             setAudioDuration={setAudioDuration}
             setAudioFile={setAudioFile}
             setShouldNext={setShouldNext}
