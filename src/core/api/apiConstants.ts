@@ -66,7 +66,7 @@ export const apiPaths = {
   loginUrl: '/login/email',
   registerUrl: '/register/email',
   // Profile
-  profileUrl: '/me',
+  profileUrl: '/socialnetwork/profile/me',
   viewProfile: '/viewProfile',
   profileUpdateUrl: '/updateProfile',
   accountDeleteUrl: '/socialnetwork/settings/delete-account',
