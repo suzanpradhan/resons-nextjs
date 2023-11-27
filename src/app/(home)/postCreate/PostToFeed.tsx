@@ -144,7 +144,7 @@ function PostToFeed(props: PostCreateProps) {
             title: title,
             privacy_code: selectedPrivacyValue,
             audio_file: props?.audioFile!,
-            file_duration: props.audioDuration as number,
+            file_duration: (props.audioDuration as number) / 1000,
             wave_data: props.audioWaveData,
             is_ai_generated: '0',
             expiration_type: selectedExpirationValue,

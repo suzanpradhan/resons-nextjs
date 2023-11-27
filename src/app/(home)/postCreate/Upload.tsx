@@ -7,6 +7,7 @@ type UploadPropType = {
   setAudioFile: Dispatch<SetStateAction<File | undefined>>;
   setShouldNext: Dispatch<SetStateAction<boolean>>;
   setAudioDuration: Dispatch<SetStateAction<number>>;
+  setAudioWaveData: Dispatch<SetStateAction<any>>;
 };
 
 const Upload = ({
@@ -14,6 +15,7 @@ const Upload = ({
   setAudioFile,
   setShouldNext,
   setAudioDuration,
+  setAudioWaveData,
 }: UploadPropType) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [uploadTime, setUploadTime] = useState<number | undefined>(undefined);
@@ -47,6 +49,7 @@ const Upload = ({
       barRadius: 2,
     });
 
+    setAudioFile(file);
     setShouldNext(true);
   };
 
@@ -57,6 +60,7 @@ const Upload = ({
         console.log('audio Duration' + getAudioDuration);
         setUploadTime(getAudioDuration * 1000);
         setAudioDuration(getAudioDuration * 1000);
+        setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
       });
       audioRef.current.on('finish', () => {
         audioRef.current.setTime(0);

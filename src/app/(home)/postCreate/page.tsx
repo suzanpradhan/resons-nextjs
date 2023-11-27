@@ -113,6 +113,7 @@ const UserPostCreatePage = () => {
         )}
         {activeTab == 'upload' && (
           <Upload
+            setAudioWaveData={setAudioWaveData}
             audioDuration={audioDuration}
             setAudioDuration={setAudioDuration}
             setAudioFile={setAudioFile}
