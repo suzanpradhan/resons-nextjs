@@ -26,9 +26,12 @@ const profileApi = baseApi
                 },
             }),
 
-            getMyProfileData: builder.query<ProfileDetailType, string>({
-                query: (query: string) => `${apiPaths.profileUrl}/${query}`,
+            getMyProfileData: builder.query<ProfileDetailType, void>({
+                query: () => `${apiPaths.profileUrl}`,
                 providesTags: ['Profile'],
+                serializeQueryArgs: ({ endpointName }) => {
+                    return endpointName;
+                },
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {
                         await queryFulfilled;
