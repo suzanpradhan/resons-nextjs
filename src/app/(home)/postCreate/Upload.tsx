@@ -42,7 +42,6 @@ const Upload = ({
     setUploadTime(getDuration);
     setAudioFile(file);
 
-    console.log('KKK', getDuration, uploadTime);
     // setIsNextUploadVisible(true);
     setShouldNext(true);
   };
@@ -63,14 +62,12 @@ const Upload = ({
 
     const handleTimeUpdate = () => {
       const currentTime = audioRef.current.getCurrentTime();
-      console.log('Current time', currentTime);
 
       uploadTime &&
         setUploadTime(() => {
           const getRemainingTime = uploadTime - currentTime;
           return getRemainingTime;
         });
-      console.log('upload time', uploadTime);
     };
 
     if (audioRef.current) {
