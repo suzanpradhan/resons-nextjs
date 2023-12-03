@@ -9,7 +9,7 @@ import {
   updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
-import { Pause, Play } from 'phosphor-react';
+import { Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { ConnectedProps, connect } from 'react-redux';
@@ -142,10 +142,13 @@ const WavePlayer = ({
   return (
     <div>
       <div className="relative flex items-center w-full">
+        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm mr-1">
+          <SkipBack size={18} className={`${'text-white'}`} weight="fill" />
+        </div>
         {controls ? (
           <button
             type="button"
-            className={`border-none rounded-full p-2 mr-2 ${
+            className={`border-none rounded-full p-2 ${
               theme == 'dark' ? 'bg-white' : 'bg-primary-900'
             }`}
             onClick={handlePlayPause}
@@ -180,9 +183,12 @@ const WavePlayer = ({
         ) : (
           <></>
         )}
+        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm ml-1">
+          <SkipForward size={18} className={`${'text-white'}`} weight="fill" />
+        </div>
         <div
           ref={audioContainer}
-          className={`w-full flex-1 audio-wrapper ${
+          className={`w-full flex-1 audio-wrapper ml-2 ${
             playlist[currentPlaylistIndex]?.url == audioItem.url
               ? ''
               : 'pointer-events-none'

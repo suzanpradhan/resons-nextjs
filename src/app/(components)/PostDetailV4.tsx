@@ -106,7 +106,6 @@ const PostDetailV4 = ({
               : '#2D2D2E',
           }}
         >
-          jhg
           {props.playlist[props.currentPlaylistIndex]?.info?.id ==
             props.post.id && props.isPlaying ? (
             <Image
