@@ -12,11 +12,11 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(profileApi.endpoints.getMyProfileData.initiate());
+    dispatch(profileApi.endpoints.getMyProfile.initiate());
   }, [dispatch]);
 
   const myProfile = useAppSelector((state: RootState) => {
-    return state.baseApi.queries[`getMyProfileData`]?.data as any;
+    return state.baseApi.queries[`getMyProfile(undefined)`]?.data as any;
   });
 
   console.log(myProfile?.posts?.data);
