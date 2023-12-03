@@ -15,8 +15,6 @@ export const postListingSlice = createSlice({
   initialState,
   reducers: {
     updatedCurrentPage: (state, action: PayloadAction<number>) => {
-      console.log(state.currentPage);
-
       state.currentPage = action.payload;
     },
     updateLoading: (state, action: PayloadAction<boolean>) => {

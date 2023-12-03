@@ -19,8 +19,6 @@ export default function ProfilePage() {
     return state.baseApi.queries[`getMyProfileData("?load=true")`]?.data as any;
   });
 
-  console.log(myProfile?.posts?.length);
-
   return (
     <div className="sm:container md:container lg:container mx-auto  flex flex-col h-full">
       <div className="overflow-y-scroll pb-16 md:pb-0">

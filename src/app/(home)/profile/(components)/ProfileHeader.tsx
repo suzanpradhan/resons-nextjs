@@ -11,8 +11,6 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-  console.log('props', props);
-
   const PROFILE_DETAILS = [
     {
       detailName: 'Followers',

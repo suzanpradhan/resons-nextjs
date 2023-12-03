@@ -6,8 +6,6 @@ import { ChatCircle, Heart, ShareNetwork } from 'phosphor-react';
 import WavePlayer from './WavePlayer';
 
 const ProfileWavePlayer = (post: PostDetailType) => {
-  console.log('post', post.cover_image);
-
   return (
     <div
       className="relative flex flex-col w-full mt-2 rounded-md overflow-hidden"
