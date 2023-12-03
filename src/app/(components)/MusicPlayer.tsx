@@ -90,11 +90,7 @@ const MusicPlayer = ({ params }: MusicPlayerType) => {
             className="flex px-6 gap-3 items-center "
           >
             <div>
-              <PlayCircle
-                size={40}
-                className="rounded-full bg-black"
-                color="white"
-              />
+              <PlayCircle size={40} className="rounded-full" weight="fill" />
             </div>
             <div className="grow flex flex-col">
               <p className="text-lg font-semibold">{item.postName}</p>

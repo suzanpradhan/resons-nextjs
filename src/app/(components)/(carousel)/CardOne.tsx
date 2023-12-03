@@ -8,7 +8,7 @@ interface CardOneProps {
     title: string;
   };
   classnames?: string;
-  routeName: string;
+  routeName?: string;
 }
 
 export default function CardOne({
