@@ -15,9 +15,13 @@ interface Group {
 
 interface MainCarouselProps {
   slides: Group[];
+  routeName: string;
 }
 
-export default function MultiCarousel({ slides }: MainCarouselProps) {
+export default function MultiCarousel({
+  slides,
+  routeName,
+}: MainCarouselProps) {
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -69,6 +73,7 @@ export default function MultiCarousel({ slides }: MainCarouselProps) {
             slide={slide}
             key={index}
             classnames={index == slides[0].slides.length - 1 ? 'pr-4' : ''}
+            routeName={routeName}
           />
         ))}
       </Carousel>

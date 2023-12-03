@@ -50,6 +50,8 @@ const Upload = ({
     });
 
     setAudioFile(file);
+
+    // setIsNextUploadVisible(true);
     setShouldNext(true);
   };
 

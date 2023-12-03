@@ -63,7 +63,7 @@ const MobileNavigation = () => {
                 size="24"
                 weight="fill"
                 className={`${
-                  pathName === '/topic' ? 'text-accent' : 'text-primary-400'
+                  pathName === '/explore' ? 'text-accent' : 'text-primary-400'
                 }`}
               />
             </div>

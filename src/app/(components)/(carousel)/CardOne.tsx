@@ -8,13 +8,18 @@ interface CardOneProps {
     title: string;
   };
   classnames?: string;
+  routeName?: string;
 }
 
-export default function CardOne({ slide, classnames }: CardOneProps) {
+export default function CardOne({
+  slide,
+  classnames,
+  routeName,
+}: CardOneProps) {
   return (
     <>
       <Link
-        href={`/genres/${slide.id}`}
+        href={`/explore/${routeName}/${slide.title}`}
         className={'flex flex-col items-center last-of-type:mr-0 ' + classnames}
       >
         <div className="w-full h-28 sm:h-36 rounded-md overflow-hidden drop-shadow-xl">

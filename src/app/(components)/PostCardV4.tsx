@@ -64,7 +64,8 @@ const PostCardV4 = (props: PostCardProps) => {
             url:
               apiPaths.baseUrl +
               '/socialnetwork/audio/stream/' +
-              comment.audio.id + "?isPostAudio=NO"!,
+              comment.audio.id +
+              '?isPostAudio=NO'!,
             duration: comment.audio.file_duration
               ? parseFloat(comment.audio.file_duration)
               : 0,
@@ -84,7 +85,8 @@ const PostCardV4 = (props: PostCardProps) => {
             url:
               apiPaths.baseUrl +
               '/socialnetwork/audio/stream/' +
-              props.post.audio?.id + "?isPostAudio=YES",
+              props.post.audio?.id +
+              '?isPostAudio=YES',
             duration: props.post.audio.file_duration
               ? parseFloat(props.post.audio.file_duration)
               : 0,
@@ -161,7 +163,6 @@ const PostCardV4 = (props: PostCardProps) => {
             postId={props.post.id!}
           />
         ) : null}
-
         {props.post.comments && props.post.comments.length > 0 ? (
           <PlayAllButton
             totalComment={props.post.total_comments}
@@ -172,7 +173,6 @@ const PostCardV4 = (props: PostCardProps) => {
             }}
           />
         ) : null}
-
         <div className="p-4 bg-white flex items-center gap-3">
           <div className="w-11 h-11 rounded-full overflow-hidden">
             <Image
