@@ -31,7 +31,6 @@ export async function setHeaders(headers: Headers) {
   // }
   // headers.set('content-type', 'application/json');
   const getToken = Cookies.get('token');
-  console.log(getToken);
 
   headers.set('Access-Control-Allow-Origin', '*');
   headers.set(
@@ -66,7 +65,7 @@ export const apiPaths = {
   loginUrl: '/login/email',
   registerUrl: '/register/email',
   // Profile
-  profileUrl: '/me',
+  profileUrl: '/socialnetwork/profile/me',
   viewProfile: '/viewProfile',
   profileUpdateUrl: '/updateProfile',
   accountDeleteUrl: '/socialnetwork/settings/delete-account',
@@ -121,6 +120,7 @@ export const apiPaths = {
   countriesListUrl: '/countries',
   //Topic List
   getTopicsListUrl: '/socialnetwork/api-topics/lists',
+  searchTopicUrl: '/socialnetwork/topics/search',
   //Cover Image
   getCoverImageUrl: '/socialnetwork/cover-images',
 

@@ -9,7 +9,7 @@ import {
   updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
-import { Pause, Play } from 'phosphor-react';
+import { Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { ConnectedProps, connect } from 'react-redux';
@@ -135,7 +135,6 @@ const WavePlayer = ({
         dispatch(updateIsPlaying(true));
       }
     } else {
-      console.log("sdkjfhfsjkhjfkjsdj")
       dispatch(playSong(audioItem));
     }
   };
@@ -143,34 +142,40 @@ const WavePlayer = ({
   return (
     <div>
       <div className="relative flex items-center w-full">
+        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm mr-1">
+          <SkipBack size={18} className={`${'text-white'}`} weight="fill" />
+        </div>
         {controls ? (
           <button
             type="button"
-            className={`border-none rounded-full p-2 mr-2 ${theme == 'dark' ? 'bg-white' : 'bg-primary-900'
-              }`}
+            className={`border-none rounded-full p-2 ${
+              theme == 'dark' ? 'bg-white' : 'bg-primary-900'
+            }`}
             onClick={handlePlayPause}
           >
             {playlist[currentPlaylistIndex]?.url == audioItem.url &&
-              isPlaying ? (
+            isPlaying ? (
               <Pause
                 size={size == 'small' ? 9 : 24}
-                className={`${sessionPlayed
-                  ? 'text-purple'
-                  : theme == 'dark'
+                className={`${
+                  sessionPlayed
+                    ? 'text-purple'
+                    : theme == 'dark'
                     ? 'text-accent'
                     : 'text-white'
-                  }`}
+                }`}
                 weight="fill"
               />
             ) : (
               <Play
                 size={size == 'small' ? 9 : 24}
-                className={`${sessionPlayed
-                  ? 'text-purple'
-                  : theme == 'dark'
+                className={`${
+                  sessionPlayed
+                    ? 'text-purple'
+                    : theme == 'dark'
                     ? 'text-accent'
                     : 'text-white'
-                  }`}
+                }`}
                 weight="fill"
               />
             )}
@@ -178,12 +183,16 @@ const WavePlayer = ({
         ) : (
           <></>
         )}
+        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm ml-1">
+          <SkipForward size={18} className={`${'text-white'}`} weight="fill" />
+        </div>
         <div
           ref={audioContainer}
-          className={`w-full flex-1 audio-wrapper ${playlist[currentPlaylistIndex]?.url == audioItem.url
-            ? ''
-            : 'pointer-events-none'
-            }`}
+          className={`w-full flex-1 audio-wrapper ml-2 ${
+            playlist[currentPlaylistIndex]?.url == audioItem.url
+              ? ''
+              : 'pointer-events-none'
+          }`}
           onClick={(e) => {
             e?.stopPropagation();
           }}
@@ -191,13 +200,13 @@ const WavePlayer = ({
         <div className="bg-primary-900 text-white text-xs w-11 text-center py-1 ml-1 rounded-sm">
           {audioItem.duration
             ? formatTime(
-              audioItem.duration
-                ? audioItem.duration -
-                (playlist[currentPlaylistIndex]?.url == audioItem.url
-                  ? currentTime
-                  : 0)
-                : 0
-            )
+                audioItem.duration
+                  ? audioItem.duration -
+                      (playlist[currentPlaylistIndex]?.url == audioItem.url
+                        ? currentTime
+                        : 0)
+                  : 0
+              )
             : '0:00'}
         </div>
       </div>

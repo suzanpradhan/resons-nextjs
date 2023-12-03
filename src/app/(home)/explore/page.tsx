@@ -2,8 +2,8 @@
 
 import SearchBar from '@/app/(components)/SearchBar';
 import { useState } from 'react';
+import LanguagePostList from './(components)/LanguagePostList';
 import PopularPostsSection from './(components)/PopularPostsSection';
-import Suggestion from './(components)/Suggestion';
 import TopicGenres from './(components)/TopicGenres';
 import TopicListScroll from './(components)/TopicListScroll';
 
@@ -46,7 +46,8 @@ export default function TopicPage() {
         {/* <TopicListScroll title="Newest" /> */}
         {/* <TopicListScroll title="Professionals" /> */}
         <TopicListScroll title="More you like" />
-        <Suggestion title="Artist to Follow" />
+        {/* <Suggestion title="Artist to Follow" /> */}
+        <LanguagePostList title="Explore by language" />
       </div>
     </div>
   );

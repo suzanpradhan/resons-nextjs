@@ -2,7 +2,6 @@ import { language_code, privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import CustomPopup from '@/core/ui/components/CustomPopup';
-import MultiSelect from '@/core/ui/components/MultiSelect'; // Import your custom MultiSelect component
 import coverImageApi from '@/modules/coverImage/coverImageApi';
 import { CoverImageDetailType } from '@/modules/coverImage/coverImageType';
 import postApi from '@/modules/post/postApi';
@@ -11,6 +10,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
+import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/navigation';
@@ -25,7 +25,6 @@ interface PostCreateProps {
 }
 
 function PostToFeed(props: PostCreateProps) {
-  console.log('PostCreateProps', props);
   const dispatch = useAppDispatch();
   // const router = useRouter();
   const selectRef = useRef(null);
@@ -69,21 +68,10 @@ function PostToFeed(props: PostCreateProps) {
     }
   };
 
-  const predefinedOptions = [
-    { value: 'wedding', label: 'wedding' },
-    { value: 'Event', label: 'Event' },
-    { value: 'Festival', label: 'Festival' },
-  ];
-
   interface Option {
     value: string;
     label: string;
   }
-
-  const handleSelectTagChange = (selectedOptions: MultiValue<Option>) => {
-    console.log('selectedOptions', selectedOptions);
-    setSelectedTagOptions(selectedOptions);
-  };
 
   useEffect(() => {
     dispatch(coverImageApi.endpoints.getCoverImage.initiate());
@@ -100,10 +88,7 @@ function PostToFeed(props: PostCreateProps) {
     colorCode: item.color_code,
   }));
 
-  console.log(getCoverImageList);
-
   const handleImageClick = (imageId: any) => {
-    console.log(imageId);
     setSelectedImageId(imageId);
   };
 
@@ -136,7 +121,7 @@ function PostToFeed(props: PostCreateProps) {
     console.log('here');
     //setIsLoading(true);
     event.preventDefault();
-    console.log(selectedImages);
+    console.log(selectedTagOptions);
     try {
       await Promise.resolve(
         dispatch(
@@ -144,7 +129,7 @@ function PostToFeed(props: PostCreateProps) {
             title: title,
             privacy_code: selectedPrivacyValue,
             audio_file: props?.audioFile!,
-            file_duration: props.audioDuration as number,
+            file_duration: (props.audioDuration as number) / 1000,
             wave_data: props.audioWaveData,
             is_ai_generated: '0',
             expiration_type: selectedExpirationValue,
@@ -199,11 +184,7 @@ function PostToFeed(props: PostCreateProps) {
         >
           Tag
         </label>
-        <MultiSelect
-          options={predefinedOptions}
-          selectedOptions={selectedTagOptions}
-          onChange={handleSelectTagChange}
-        />
+        <AsyncMultiSelect setSelectedTagOptions={setSelectedTagOptions} />
       </div>
 
       <div className="mb-4">

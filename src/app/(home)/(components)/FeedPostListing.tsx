@@ -48,7 +48,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
     const scrollableDiv = scrollableDivRef.current;
     if (
       scrollableDiv.scrollHeight - scrollableDiv.scrollTop <=
-      scrollableDiv.clientHeight + 5000 &&
+        scrollableDiv.clientHeight + 5000 &&
       !isLoading &&
       hasMoreData
     ) {
@@ -64,7 +64,6 @@ const FeedPostListing = (props: FeedPostListingProps) => {
         postApi.endpoints.getPostList.initiate(currentPage)
       );
       setIsLoading(false); // Set isLoading to false after the request is completed
-      console.log('response.data=' + response.data);
       if (response.data) {
         if (
           response.data!.pagination.currentPage >=
@@ -104,9 +103,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
 
       {postListData?.data.map((post, index) => {
         // console.log("Post Data:", post); // Add this line to log each post data
-        return (
-          <PostCardV4 key={`post_detail_${index}`} post={post} />
-        );
+        return <PostCardV4 key={`post_detail_${index}`} post={post} />;
       })}
       {hasMoreData ? (
         <PostLoadingSkeleton />

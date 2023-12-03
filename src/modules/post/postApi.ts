@@ -230,6 +230,23 @@ const postApi = baseApi.injectEndpoints({
         return response as any;
       },
     }),
+    // search topics
+    searchTopics: builder.mutation<any, string>({
+      query: (query) => {
+        var formData = new FormData();
+        formData.append('title', query);
+        return {
+          url: `${apiPaths.searchTopicUrl}`,
+          method: 'POST',
+          body: formData,
+          formData: true,
+        };
+      },
+      transformResponse: (response: any) => {
+        console.log(response);
+        return response?.data as any;
+      },
+    }),
   }),
   overrideExisting: true,
 });

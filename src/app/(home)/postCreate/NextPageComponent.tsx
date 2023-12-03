@@ -25,7 +25,7 @@ function NextPageComponent(props: PostCreateProps) {
   };
   return (
     <div className="bg-white">
-      <div className="px-6 py-4 h-full relative" style={{ height: '120vh' }}>
+      <div className="px-6 py-4 h-full relative" style={{ minHeight: '80dvh' }}>
         <div className="mb-4">
           <div
             className={`px-5 w-1/2 rounded-md bg-red-400 md:w-auto cursor-pointer`}

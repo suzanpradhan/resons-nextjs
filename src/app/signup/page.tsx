@@ -27,7 +27,6 @@ interface ApiError {
 }
 
 export default function SignUp() {
-  console.log('here');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useRouter();
@@ -193,10 +192,11 @@ export default function SignUp() {
   //   }
   // }, []);
 
-  if (!authenticateChecked) {
-    return null;
-  }
+  // if (!authenticateChecked) {
+  //   return null;
+  // }
 
+  // console.log('authenticateChecked');
   return (
     <>
       <div className="flex h-screen items-center justify-center">

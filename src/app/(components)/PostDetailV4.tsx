@@ -116,7 +116,6 @@ const PostDetailV4 = ({
               className="w-6 h-6 object-contain absolute bottom-4 right-4"
             />
           ) : null}
-
           {props.post.cover_image ? (
             <Image
               alt="post-cover"
@@ -133,12 +132,12 @@ const PostDetailV4 = ({
             <></>
           )}
           <div
-            className={`absolute -top-4 right-4 rounded-full bg-slate-100 py-1 px-3 text-xs sm:text-sm font-medium text-black shadow-lg border-0 border-white border-t-2 border-b border-b-gray-500 ${props.currentPage == 2 ? 'hidden' : ''
-              }`}
+            className={`absolute -top-4 right-4 rounded-full bg-slate-100 py-1 px-3 text-xs sm:text-sm font-medium text-black shadow-lg border-0 border-white border-t-2 border-b border-b-gray-500 ${
+              props.currentPage == 2 ? 'hidden' : ''
+            }`}
           >
             {moment.duration(props.post.time_duration, 'seconds').humanize() +
               ' ago'}
-             
           </div>
           <div className="flex items-center">
             <div className="flex-1 flex items-center gap-2">
@@ -151,12 +150,12 @@ const PostDetailV4 = ({
               <div className="w-max h-max border-solid border-0 border-white rounded-full p-1">
                 <div
                   className="w-14 h-14 rounded-full overflow-hidden cursor-pointer"
-                  onClick={(e) => { }}
+                  onClick={(e) => {}}
                 >
                   <Image
                     src={
                       props.post.owner.profile_image &&
-                        props.post.owner.profile_image != null
+                      props.post.owner.profile_image != null
                         ? props.post.owner.profile_image
                         : '/images/avatar.jpg'
                     }
@@ -188,21 +187,21 @@ const PostDetailV4 = ({
                   )}
                 </h3>
                 <p
-                  className={`text-xs sm:text-sm font-light text-white ${props.currentPage == 1 ? 'hidden' : ''
-                    }`}
+                  className={`text-xs sm:text-sm font-light text-white ${
+                    props.currentPage == 1 ? 'hidden' : ''
+                  }`}
                 >
                   {props.post.owner.country?.name}
                   {props.post.owner.country ? ' • ' : ' '}
-               
 
-                  
                   {moment
                     .duration(props.post.time_duration, 'seconds')
                     .humanize() + ' ago'}
                 </p>
                 <p
-                  className={`text-xs sm:text-sm font-light text-white ${props.currentPage == 2 ? 'hidden' : ''
-                    }`}
+                  className={`text-xs sm:text-sm font-light text-white ${
+                    props.currentPage == 2 ? 'hidden' : ''
+                  }`}
                 >
                   {props.post.owner.country?.name}
                 </p>
@@ -247,7 +246,10 @@ const PostDetailV4 = ({
             <WavePlayer
               audioItem={{
                 url: props?.post?.audio
-                  ? apiPaths.baseUrl + '/socialnetwork/audio/stream/' + props?.post?.audio?.id + "?isPostAudio=YES"
+                  ? apiPaths.baseUrl +
+                    '/socialnetwork/audio/stream/' +
+                    props?.post?.audio?.id +
+                    '?isPostAudio=YES'
                   : '', // Check if props.post.audio exists
                 duration: parseFloat(props?.post?.audio?.file_duration || '0'), // Use optional chaining and provide a default value
                 info: {
@@ -263,7 +265,8 @@ const PostDetailV4 = ({
               theme="dark"
               audioWaveData={
                 props?.post?.audio
-                  ? props?.post?.audio?.wave_data || JSON.stringify(defaultWaveData)
+                  ? props?.post?.audio?.wave_data ||
+                    JSON.stringify(defaultWaveData)
                   : JSON.stringify(defaultWaveData) // Check if props.post.audio.wave_data exists
               }
               size="large"
@@ -311,8 +314,8 @@ const PostDetailV4 = ({
               {props?.post?.total_comments && props?.post?.total_comments > 1
                 ? props?.post?.total_comments + ' comments'
                 : props.post.total_comments > 0
-                  ? props.post.total_comments + ' comment'
-                  : null}
+                ? props.post.total_comments + ' comment'
+                : null}
               {/* <div
             className="flex items-center absolute bottom-[-8px] left-2/3"
             style={{ transform: 'translateX(-50%)' }}

@@ -66,3 +66,5 @@ export interface SearchFormType {
   searchText: string | null;
   searchType: string | null;
 }
+
+export interface SearchTagsReturnType { }

@@ -73,7 +73,7 @@ const UserPostCreatePage = () => {
       className="overflow-y-auto pt-11 pb-[60px]"
       style={{ height: '100vh' }}
     >
-      <div className="relative flex justify-been items-center px-12 py-4">
+      <div className="relative flex justify-been items-center px-6 py-4">
         <h3 className="text-xl">New Post</h3>
         <div className="divider absolute bottom-0 right-0 left-0 bg-slate-300 h-[1px]"></div>
       </div>
@@ -103,16 +103,70 @@ const UserPostCreatePage = () => {
             </div>
           </button>
         </div>
+        <div
+          style={{ display: isNextPageVisible ? 'none' : 'block' }}
+          className="px-6 py-4 h-full text-center"
+        >
+          <div className="flex justify-between items-center gap-2">
+            <button
+              className={`px-5 w-1/2 rounded-md md:w-auto cursor-pointer ${
+                activeTab === 'recorder' ? 'bg-red-500' : 'bg-gray-300'
+              }`}
+              onClick={() => handleTabClick('recorder')}
+            >
+              <div className="w-full text-white font-semibold py-2 px-4 transition duration-300 ease-in-out transform hover:scale-105">
+                Recorder
+              </div>
+            </button>
+            <button
+              className={`px-5 w-1/2 ml-2 rounded-md md:w-auto cursor-pointer ${
+                activeTab === 'upload' ? 'bg-red-500' : 'bg-gray-300'
+              }`}
+              onClick={() => handleTabClick('upload')}
+            >
+              <div className="w-full text-white font-semibold py-2 px-4 transition duration-300 ease-in-out transform hover:scale-105">
+                Upload
+              </div>
+            </button>
+          </div>
 
-        {activeTab == 'recorder' && (
-          <Recorder
-            setAudioDuration={setAudioDuration}
-            setShouldNext={setShouldNext}
-            setAudioFile={setAudioFile}
+          {activeTab == 'recorder' && (
+            <Recorder
+              setAudioDuration={setAudioDuration}
+              setShouldNext={setShouldNext}
+              setAudioFile={setAudioFile}
+            />
+          )}
+          {activeTab == 'upload' && (
+            <Upload
+              setAudioDuration={setAudioDuration}
+              setAudioFile={setAudioFile}
+              setShouldNext={setShouldNext}
+              audioDuration={audioDuration}
+              setAudioWaveData={setAudioWaveData}
+            />
+          )}
+          {shouldNext && (
+            <button
+              onClick={handleOpenNextPage}
+              className="text-white my-2 bg-red-400 px-5 py-3 rounded-md active:scale-105 hover:shadow-md"
+            >
+              Next
+            </button>
+          )}
+        </div>
+        {isNextPageVisible && (
+          <NextPageComponent
+            audioFile={audioFile}
+            toggleNextPageVisibility={toggleNextPageVisibility}
+            audioDuration={audioDuration}
+            audioWaveData={audioWaveData}
           />
         )}
         {activeTab == 'upload' && (
           <Upload
+            setAudioWaveData={setAudioWaveData}
+            audioDuration={audioDuration}
             setAudioDuration={setAudioDuration}
             setAudioFile={setAudioFile}
             setShouldNext={setShouldNext}
@@ -127,14 +181,6 @@ const UserPostCreatePage = () => {
           </button>
         )}
       </div>
-      {isNextPageVisible && (
-        <NextPageComponent
-          audioFile={audioFile}
-          toggleNextPageVisibility={toggleNextPageVisibility}
-          audioDuration={audioDuration}
-          audioWaveData={audioWaveData}
-        />
-      )}
     </div>
   );
 };

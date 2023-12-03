@@ -46,13 +46,13 @@ const TopicGenres = ({ title }: { title: string }) => {
     // Insert the new data into the slides array of the target genres
     targetGenres.slides = newGenres;
 
-    console.log(targetGenres);
-    console.log(newGenres);
+    // console.log(targetGenres);
+    // console.log(newGenres);
   }
 
   return (
     <>
-      <MultiCarousel slides={group} />
+      <MultiCarousel slides={group} routeName="genres" />
     </>
   );
 };
