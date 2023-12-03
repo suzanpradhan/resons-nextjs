@@ -11,8 +11,8 @@ module.exports = withPWA({
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: '127.0.0.1', //local
-        // hostname: 'resons.iionstech.com', //live
+        // hostname: '127.0.0.1', //local
+        hostname: 'resons.iionstech.com', //live
         port: '8000',
         pathname: '/**',
       },
