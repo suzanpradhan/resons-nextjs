@@ -3,6 +3,8 @@
 import ProfileWavePlayer from '@/app/(components)/ProfileWavePlayer';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
+import { PaginatedResponseType } from '@/core/types/reponseTypes';
+import postApi from '@/modules/post/postApi';
 import { PostDetailType } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
 import { useEffect } from 'react';
@@ -13,10 +15,16 @@ export default function ProfilePage() {
 
   useEffect(() => {
     dispatch(profileApi.endpoints.getMyProfile.initiate());
+    dispatch(postApi.endpoints.getMyPostList.initiate());
   }, [dispatch]);
 
   const myProfile = useAppSelector((state: RootState) => {
     return state.baseApi.queries[`getMyProfile(undefined)`]?.data as any;
+  });
+
+  const myPostList = useAppSelector((state: RootState) => {
+    return state.baseApi.queries[`getMyPostList`]
+      ?.data as PaginatedResponseType<PostDetailType>;
   });
 
   console.log(myProfile?.posts?.data);
@@ -25,9 +33,9 @@ export default function ProfilePage() {
     <div className="sm:container md:container lg:container mx-auto mb-20 sm:mb-0 md:px-4">
       {myProfile ? <ProfileHeader viewProfile={myProfile} /> : <></>}
       <div className="px-4 md:px-0">
-        {myProfile?.posts?.data?.length > 0 ? (
+        {myPostList?.data?.length > 0 ? (
           <>
-            {myProfile?.posts?.data?.map((post: PostDetailType) => (
+            {myPostList?.data?.map((post: PostDetailType) => (
               // <PostCardV4 key={post.id} post={post} />
               <ProfileWavePlayer key={post?.id} {...post} />
             ))}
