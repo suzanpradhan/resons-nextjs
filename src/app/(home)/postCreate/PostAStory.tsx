@@ -2,6 +2,7 @@ import { privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch } from '@/core/redux/clientStore';
 import CustomPopup from '@/core/ui/components/CustomPopup';
 import storyApi from '@/modules/story/storyApi';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface StoryCreateProps {
@@ -12,6 +13,7 @@ interface StoryCreateProps {
 
 function PostAStory(props: StoryCreateProps) {
   const dispatch = useAppDispatch();
+  const navigate = useRouter();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedPrivacyValue, setSelectedPrivacyValue] = useState('0');
   const openPopup = () => {
@@ -31,11 +33,11 @@ function PostAStory(props: StoryCreateProps) {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     try {
-      await Promise.resolve(
+      const data = await Promise.resolve(
         dispatch(
           storyApi.endpoints.addStory.initiate({
             title: 'This is story title',
-            privacy_code: selectedPrivacyValue,
+            privacy_code: selectedPrivacyValue ?? '1',
             audio_file: props.audioFile!,
             file_duration: props.audioDuration as number,
             wave_data: props.audioWaveData,
@@ -44,6 +46,10 @@ function PostAStory(props: StoryCreateProps) {
           })
         )
       );
+
+      if (Object.prototype.hasOwnProperty.call(data, 'data')) {
+        navigate.push('/');
+      }
     } catch (error) {
       console.log(error);
     }

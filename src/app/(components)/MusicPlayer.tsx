@@ -137,6 +137,7 @@ const MusicPlayer = ({ params }: MusicPlayerType) => {
 
           <div className="rounded-lg bg-white/10 backdrop-blur-sm mt-2 px-4 py-1">
             <WavePlayer
+              playBackControls={true}
               audioItem={{
                 url: '', // Check if props.post.audio exists
                 duration: parseFloat('0'), // Use optional chaining and provide a default value

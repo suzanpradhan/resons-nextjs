@@ -20,6 +20,8 @@ interface WavePlayerV2Props extends PropsFromRedux {
   onPlay?: () => void;
   audioWaveData?: string;
   controls?: boolean;
+  playBackControls?: boolean;
+
   theme?: 'dark' | 'white';
   size?: 'small' | 'large';
 }
@@ -30,6 +32,7 @@ const WavePlayer = ({
   audioWaveData,
   theme = 'white',
   controls = true,
+  playBackControls = false,
   size,
   currentTime,
   currentPlaylistIndex,
@@ -76,6 +79,7 @@ const WavePlayer = ({
         audioRef.current.destroy();
         audioRef.current = undefined;
       }
+
       if (!audioContainer.current) return;
 
       var waveColor = (audioRef.current = WaveSurfer.create({
@@ -142,9 +146,12 @@ const WavePlayer = ({
   return (
     <div>
       <div className="relative flex items-center w-full">
-        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm mr-1">
-          <SkipBack size={18} className={`${'text-white'}`} weight="fill" />
-        </div>
+        {playBackControls && (
+          <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm mr-1">
+            <SkipBack size={18} className={`${'text-white'}`} weight="fill" />
+          </div>
+        )}
+
         {controls ? (
           <button
             type="button"
@@ -183,9 +190,16 @@ const WavePlayer = ({
         ) : (
           <></>
         )}
-        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm ml-1">
-          <SkipForward size={18} className={`${'text-white'}`} weight="fill" />
-        </div>
+        {playBackControls && (
+          <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm ml-1">
+            <SkipForward
+              size={18}
+              className={`${'text-white'}`}
+              weight="fill"
+            />
+          </div>
+        )}
+
         <div
           ref={audioContainer}
           className={`w-full flex-1 audio-wrapper ml-2 ${

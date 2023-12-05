@@ -95,7 +95,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
 
   return (
     <div
-      className="w-full flex flex-col items-center h-screen max-h-screen gap-6 pt-20 pb-17 overflow-scroll"
+      className="w-full flex flex-col items-center h-screen max-h-screen gap-6 pt-16 pb-17 overflow-scroll"
       ref={scrollableDivRef}
       id="feed-listing"
     >

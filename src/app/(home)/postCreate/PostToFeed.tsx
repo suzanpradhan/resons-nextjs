@@ -5,18 +5,22 @@ import CustomPopup from '@/core/ui/components/CustomPopup';
 import coverImageApi from '@/modules/coverImage/coverImageApi';
 import { CoverImageDetailType } from '@/modules/coverImage/coverImageType';
 import postApi from '@/modules/post/postApi';
+import { useFormik } from 'formik';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
 import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
+import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ZodError } from 'zod';
 
 interface PostCreateProps {
   audioFile: File | undefined;
@@ -26,7 +30,7 @@ interface PostCreateProps {
 
 function PostToFeed(props: PostCreateProps) {
   const dispatch = useAppDispatch();
-  // const router = useRouter();
+  const navigate = useRouter();
   const selectRef = useRef(null);
   const [selectedImages, setSelectedImages] = useState<(File | undefined)[]>(
     []
@@ -56,17 +60,6 @@ function PostToFeed(props: PostCreateProps) {
   };
 
   // Function to handle file selection
-  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectFile = e.target.files ? e.target.files[0] : undefined;
-    if (selectFile) {
-      //   const file = URL.createObjectURL(e.target.files[0]);
-      setSelectedImages((prevSelectedImages) => [
-        ...prevSelectedImages,
-        selectFile,
-      ]);
-      console.log('Selected File:', selectedImages);
-    }
-  };
 
   interface Option {
     value: string;
@@ -96,12 +89,9 @@ function PostToFeed(props: PostCreateProps) {
     setTitle(event.target.value);
   };
 
-  const handlePrivacyValueChange = (event: any) => {
-    setSelectedPrivacyValue(event.target.value);
-  };
-
   const handleLanguageValueChange = (event: any) => {
-    setSelectedLanguageValue(event.target.value);
+    // setSelectedLanguageValue(event.target.value);
+    formik.setFieldValue('language', event.target.value);
   };
 
   const handleExpirationValueChange = (event: any) => {
@@ -117,30 +107,69 @@ function PostToFeed(props: PostCreateProps) {
     }
   };
 
-  const handleSubmit = async (event: any) => {
-    console.log('here');
-    //setIsLoading(true);
-    event.preventDefault();
-    console.log(selectedTagOptions);
+  // const handleSubmit = async (event: any) => {
+  //   //setIsLoading(true);
+  //   event.preventDefault();
+  //   try {
+  //     await Promise.resolve(
+  //       dispatch(
+  //         postApi.endpoints.addPost.initiate({
+  //           title: title,
+  //           privacy_code: selectedPrivacyValue,
+  //           audio_file: props?.audioFile!,
+  //           file_duration: (props.audioDuration as number) / 1000,
+  //           wave_data: props.audioWaveData,
+  //           is_ai_generated: '0',
+  //           expiration_type: selectedExpirationValue,
+  //           language: selectedLanguageValue,
+  //           cover_image: selectedImages[0],
+  //           remember_my_language: rememberMyLanguage,
+  //           color_code: '#0000',
+  //           tags: selectedTagOptions.map((tag) => tag.value),
+  //         })
+  //       )
+  //     );
+  //     // setSelectedValue('');
+  //     // setTitle('');
+  //     // setSelectedOptions([]);
+  //     // setSelectedLabels([]);
+  //     // setDescription('');
+  //     // setAudioFile(undefined);
+  //     // navigate.push('/');
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   //     setIsLoading(false);
+  //   // }
+  // };
+
+  const onSubmit = async (data: PostDefaultFormType) => {
     try {
-      await Promise.resolve(
+      const responseData = await Promise.resolve(
         dispatch(
           postApi.endpoints.addPost.initiate({
-            title: title,
-            privacy_code: selectedPrivacyValue,
-            audio_file: props?.audioFile!,
-            file_duration: (props.audioDuration as number) / 1000,
+            title: data.title,
+            privacy_code: data.privacy_code,
+            audio_file: data.audio_file,
+            file_duration: data.file_duration,
             wave_data: props.audioWaveData,
-            is_ai_generated: '0',
-            expiration_type: selectedExpirationValue,
-            language: selectedLanguageValue,
-            cover_image: selectedImages[0],
-            remember_my_language: rememberMyLanguage,
-            color_code: '#0000',
+            is_ai_generated: data.is_ai_generated,
+            expiration_type: data.expiration_type,
+            language: data.language,
+            cover_image: data.cover_image!,
+            remember_my_language: data.remember_my_language,
+            color_code: data.color_code,
             tags: selectedTagOptions.map((tag) => tag.value),
           })
         )
       );
+      if (Object.prototype.hasOwnProperty.call(responseData, 'data')) {
+        await dispatch(
+          postApi.endpoints.getPostList.initiate(0, { forceRefetch: true })
+        );
+        navigate.push('/');
+      }
+
       // setSelectedValue('');
       // setTitle('');
       // setSelectedOptions([]);
@@ -151,12 +180,65 @@ function PostToFeed(props: PostCreateProps) {
     } catch (error) {
       console.log(error);
     }
-    //     setIsLoading(false);
-    // }
+  };
+
+  const validateForm = (values: PostDefaultFormType) => {
+    try {
+      postFormSchema.parse(values);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        console.log('error');
+
+        return error.formErrors.fieldErrors;
+      }
+    }
+  };
+
+  const formik = useFormik<PostDefaultFormType>({
+    enableReinitialize: true,
+    initialValues: {
+      title: '',
+      audio_file: props.audioFile!,
+      file_duration: (props.audioDuration as number) / 1000,
+      wave_data: props.audioWaveData,
+      privacy_code: '1',
+      expiration_type: 'Never',
+      language: '',
+      cover_image_id: undefined,
+      cover_image: undefined,
+      color_code: '#000000',
+      remember_my_language: '0',
+      tags: undefined,
+      is_ai_generated: '0',
+    },
+    validateOnChange: false,
+    validate: validateForm,
+    onSubmit,
+  });
+
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectFile = e.target.files ? e.target.files[0] : undefined;
+    if (selectFile) {
+      //   const file = URL.createObjectURL(e.target.files[0]);
+      setSelectedImages((prevSelectedImages) => [
+        // ...prevSelectedImages,
+        selectFile,
+      ]);
+      formik.setFieldValue('cover_image', selectFile);
+    }
+  };
+
+  const handlePrivacyValueChange = (event: any) => {
+    setSelectedPrivacyValue(event.target.value);
   };
 
   return (
-    <div>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        formik.handleSubmit(event);
+      }}
+    >
       <CustomPopup
         isOpen={isPopupOpen}
         onClose={closePopup}
@@ -173,9 +255,13 @@ function PostToFeed(props: PostCreateProps) {
           className="shadow appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="title"
           type="text"
-          onChange={handleTitleChange}
+          // onChange={handleTitleChange}
           placeholder="Maximum 45 characters"
+          {...formik.getFieldProps('title')}
         />
+        {!!formik.errors.title && (
+          <div className="text-red-500 text-sm mt-2">{formik.errors.title}</div>
+        )}
       </div>
       <div className="mb-4">
         <label
@@ -197,9 +283,10 @@ function PostToFeed(props: PostCreateProps) {
         <select
           className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
           id="language"
+          name="language"
           onChange={handleLanguageValueChange}
         >
-          <option value="0">Select Language</option>
+          <option value="">Select Language</option>
           {language_code?.length > 0
             ? language_code.map((value, index) => (
                 <option value={value.code} key={index}>
@@ -208,6 +295,11 @@ function PostToFeed(props: PostCreateProps) {
               ))
             : null}
         </select>
+        {!!formik.errors.language && (
+          <div className="text-red-500 text-sm mt-2">
+            {formik.errors.language}
+          </div>
+        )}
       </div>
       <div className="mb-4">
         {/* <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tag">
@@ -262,8 +354,8 @@ function PostToFeed(props: PostCreateProps) {
           navigation
           autoplay={{ delay: 3000 }}
         >
-          {selectedImages &&
-            selectedImages.map((image, index) => (
+          {formik.values.cover_image &&
+            [formik.values.cover_image].map((image, index) => (
               <SwiperSlide key={index}>
                 {image && (
                   <div className="relative w-32 h-20">
@@ -299,6 +391,7 @@ function PostToFeed(props: PostCreateProps) {
               ))
             : null} */}
         </Swiper>
+
         <div className="flex items-center mt-4">
           <label
             htmlFor="coverImageInput"
@@ -316,12 +409,18 @@ function PostToFeed(props: PostCreateProps) {
           <input
             id="coverImageInput"
             type="file"
+            name="cover_image"
             accept="image/*" // Specify the file types you want to allow (e.g., images)
             onChange={handleFileSelect}
             style={{ display: 'none' }} // Hide the input element
             ref={fileInputRef}
           />
         </div>
+        {!!formik.errors.cover_image && (
+          <div className="text-red-500 text-sm mt-2">
+            {formik.errors.cover_image}
+          </div>
+        )}
       </div>
 
       <div className="mb-4">
@@ -368,15 +467,14 @@ function PostToFeed(props: PostCreateProps) {
       <div className="mb-4">
         <div className="flex items-center justify-center">
           <button
-            type="button"
-            onClick={handleSubmit}
+            type="submit"
             className="bg-red-500 w-1/2 text-white text-base px-4 py-2 rounded-sm"
           >
             Post
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
