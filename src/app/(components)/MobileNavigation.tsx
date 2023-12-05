@@ -29,15 +29,15 @@ const MobileNavigation = () => {
   return (
     <div
       className={
-        'fixed md:hidden bottom-0 left-0 w-full bg-gray-100 z-40 border-0 border-t border-gray-100 ' +
+        'fixed md:hidden bottom-0 left-0 w-full bg-white z-40 border-0 border-t border-gray-100 ' +
         (scrollDirection === 'up' || scrollDirection === 'down' ? 'hidden' : '')
       }
     >
-      <ul className="flex justify-evenly items-end list-none m-0 p-0">
+      <ul className="flex justify-evenly list-none m-0 p-0 h-12">
         <li className="basis-[20%]">
           <Link
             href="/"
-            className={`block py-4 px-3 text-gray-400 ${
+            className={`flex items-center px-4 h-full text-gray-400 ${
               pathName === '/' ? 'bg-gray-200' : ''
             }`}
           >
@@ -54,10 +54,7 @@ const MobileNavigation = () => {
         </li>
 
         <li title="Explore" className="basis-[20%]">
-          <Link
-            href="/explore"
-            className={`block py-[.8rem] px-4 text-center `}
-          >
+          <Link href="/explore" className={`flex items-center px-4 h-full`}>
             <div className="w-max mx-auto">
               <GlobeHemisphereEast
                 size="24"
@@ -70,10 +67,7 @@ const MobileNavigation = () => {
           </Link>
         </li>
         <li title="Create Post" className="basis-[20%]">
-          <Link
-            href="/postCreate"
-            className={`block py-[.8rem] px-4 text-center `}
-          >
+          <Link href="/postCreate" className={`flex items-center px-4 h-full`}>
             <div className="w-max mx-auto">
               <Record
                 size="24"
@@ -84,10 +78,7 @@ const MobileNavigation = () => {
           </Link>
         </li>
         <li title="Library" className="basis-[20%]">
-          <Link
-            href="/library"
-            className={`block py-[.8rem] px-4 text-center `}
-          >
+          <Link href="/library" className={`flex items-center px-4 h-full`}>
             <div className="w-max mx-auto">
               <Playlist
                 size="24"
@@ -101,16 +92,13 @@ const MobileNavigation = () => {
         </li>
 
         <li className="basis-[20%]">
-          <Link
-            href="/profile"
-            className={`block py-[.8rem] px-4 text-center `}
-          >
+          <Link href="/profile" className={`flex items-center px-4 h-full`}>
             <div className="w-max mx-auto relative">
-              {notificationCount > 0 && (
+              {/* {notificationCount > 0 && (
                 <span className="absolute top-0 -mt-4 right-0 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
                   {notificationCount}
                 </span>
-              )}
+              )} */}
               <UserCircle
                 size="24"
                 weight="fill"

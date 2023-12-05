@@ -1,7 +1,12 @@
+import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 
 export async function middleware(req: any) {
-  const cookieToken = req.cookies.get('token');
+  // const cookieToken = req.cookies.get('token');
+
+  const token = await getToken({ req, secret: process.env.JWT_SECRET });
+
+  const { pathname } = req.nextUrl;
 
   // const isSiteAuth = req.cookies.get('authenticated');
 
@@ -9,11 +14,28 @@ export async function middleware(req: any) {
   //   return NextResponse.redirect(new URL('/login', req.url));
   // }
 
-  if (!cookieToken?.value) {
+  // if (!cookieToken?.value) {
+  //   return NextResponse.redirect(new URL('/login', req.url));
+  // }
+
+
+  if (req.nextUrl.pathname.startsWith('/_next/')) {
+    return;
+  }
+
+  if (token) {
+    if (pathname === '/login') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+    return;
+  } else {
+    if (pathname === '/login') {
+      return;
+    }
     return NextResponse.redirect(new URL('/login', req.url));
   }
 }
 
 export const config = {
-  matcher: ['/library', '/settings', '/notification', '/postCreate', '/profile'],
+  matcher: ['/library', '/settings', '/notification', '/postCreate', '/profile', '/login'],
 };

@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import storyApi from '@/modules/story/storyApi';
 import { StoryListType } from '@/modules/story/storyType';
-import Cookies from 'js-cookie';
 import { CaretDown, CaretUp } from 'phosphor-react';
 import { useEffect, useState } from 'react';
 import StoryCard from './StoryCard';
@@ -10,7 +9,6 @@ import StoryCard from './StoryCard';
 const StoryList = () => {
   const dispatch = useAppDispatch();
   const [showAll, setShowAll] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const toggleStoryView = () => {
     setShowAll(!showAll);
   };
@@ -21,29 +19,12 @@ const StoryList = () => {
   );
 
   useEffect(() => {
-    console.log('blah blah blah');
+    dispatch(
+      storyApi.endpoints.getUserStoryList.initiate(undefined, {
+        forceRefetch: true,
+      })
+    );
   }, [dispatch]);
-
-  useEffect(() => {
-    if (isAuthorized) {
-      console.log('authorized');
-
-      dispatch(
-        storyApi.endpoints.getUserStoryList.initiate(undefined, {
-          forceRefetch: true,
-        })
-      );
-    }
-  }, [dispatch, isAuthorized]);
-
-  useEffect(() => {
-    const isToken = Cookies.get('token');
-    if (isToken) {
-      setIsAuthorized(true);
-    }
-  }, [dispatch]);
-
-  if (!isAuthorized) return null;
 
   return storyList?.data && storyList?.data?.length ? (
     <div className="relative flex items-center flex-col w-full max-w-3xl rounded-lg backdrop-blur-sm transition-all">

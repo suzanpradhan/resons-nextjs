@@ -1,123 +1,140 @@
 'use client';
-import { apiPaths } from '@/core/api/apiConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import Button from '@/core/ui/components/Button';
 import TextField from '@/core/ui/components/TextField';
-import loginAPI from '@/modules/login/loginAPI';
+import { LoginRequestType, loginFormSchema } from '@/modules/login/loginType';
 import socialApi from '@/modules/social/socialAPI';
 import { useFormik } from 'formik';
-import Cookies from 'js-cookie';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { z } from 'zod';
 import { toFormikValidate } from 'zod-formik-adapter';
 import { GoogleSignInButton } from '../(components)/authButtons';
 
 export default function SignIn() {
-  const navigator = useRouter();
+  // const navigator = useRouter();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [authenticateChecked, setAuthenticateChecked] = useState(false);
-  const [isAllow, setIsAllow] = useState(() => {
-    // Check if the authentication cookie is present
-    const isAuthenticated = Cookies.get('authenticated') === 'true';
-    return isAuthenticated;
-  });
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-  });
+  // const [authenticateChecked, setAuthenticateChecked] = useState(false);
+  // const [isAllow, setIsAllow] = useState(() => {
+  //   // Check if the authentication cookie is present
+  //   const isAuthenticated = Cookies.get('authenticated') === 'true';
+  //   return isAuthenticated;
+  // });
+  // const [errors, setErrors] = useState({
+  //   email: '',
+  //   password: '',
+  // });
 
-  const [password, setPassword] = useState('');
-  const defaultPasss = process.env.NEXT_PUBLIC_DEFAULT_PASS
-    ? process.env.NEXT_PUBLIC_DEFAULT_PASS
-    : '';
+  // const [password, setPassword] = useState('');
+  // const defaultPasss = process.env.NEXT_PUBLIC_DEFAULT_PASS
+  //   ? process.env.NEXT_PUBLIC_DEFAULT_PASS
+  //   : '';
 
-  const handlePasswordCheck = () => {
-    // Replace 'your_expected_password' with the actual expected password
-    if (password === defaultPasss) {
-      // Set a cookie to indicate the user is authenticated
-      Cookies.set('authenticated', 'true', { expires: 365 }); // Cookie expires in 1 year
-      navigator.push('/');
-    } else {
-      alert('Worng password!');
-    }
-  };
+  // const handlePasswordCheck = () => {
+  //   // Replace 'your_expected_password' with the actual expected password
+  //   if (password === defaultPasss) {
+  //     // Set a cookie to indicate the user is authenticated
+  //     Cookies.set('authenticated', 'true', { expires: 365 }); // Cookie expires in 1 year
+  //     navigator.push('/');
+  //   } else {
+  //     alert('Worng password!');
+  //   }
+  // };
 
-  const handleChange = (event: any) => {
-    formik.setFieldValue(event.target.name, event.target.value);
-  };
+  // const handleChange = (event: any) => {
+  //   formik.setFieldValue(event.target.name, event.target.value);
+  // };
 
-  const loginFormSchema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-  });
+  // const loginFormSchema = z.object({
+  //   email: z.string().email(),
+  //   password: z.string(),
+  // });
 
-  type LoginRequestType = z.infer<typeof loginFormSchema>;
+  // type LoginRequestType = z.infer<typeof loginFormSchema>;
 
   const onSubmit = async (values: LoginRequestType) => {
     setIsLoading(true);
-
-    if (!values.email || values.email === '') {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: 'Email is required.',
-      }));
-      setIsLoading(false);
-      return false;
-    } else {
-      const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-      const isValidEmail = emailPattern.test(values.email);
-
-      if (isValidEmail) {
-        setErrors((prevErrors) => ({ ...prevErrors, email: '' }));
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          email: 'Invalid email format.',
-        }));
-      }
-    }
-
-    if (!values.password || values.password === '') {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: 'Password is required.',
-      }));
-      setIsLoading(false);
-      return false;
-    }
-
-    const csrfToken = await fetch(`${apiPaths.rootPath}${apiPaths.csrfPath}`);
-
-    if (csrfToken?.status === 204) {
-      const response = await dispatch(
-        loginAPI.endpoints.login.initiate(values)
-      );
-
-      if (response && 'error' in response) {
-        navigator.push('/login');
-      } else {
-        const { optional, data } = response.data;
-        console.log(response);
-        // Cookies.set('user_id', data.id);
-        // Cookies.set('user_name', data.name);
-        // Cookies.set('email', data.email);
-        Cookies.set('token', optional.token, { expires: 365 });
-
-        navigator.push('/');
-      }
-    } else {
-      setIsLoading(false);
-      toast.error('Failed to Login');
-    }
-
+    await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      platform: 'mobile',
+      redirect: true,
+    })
+      .then(() => {
+        // if (response?.ok) {
+        //   // router.push('/');
+        // } else {
+        //   alert(JSON.stringify(response));
+        // }
+      })
+      .catch((errorResponse) => {
+        // alert(JSON.stringify(errorResponse));
+      });
     setIsLoading(false);
   };
+
+  // const onSubmit = async (values: LoginRequestType) => {
+  //   setIsLoading(true);
+
+  //   if (!values.email || values.email === '') {
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       email: 'Email is required.',
+  //     }));
+  //     setIsLoading(false);
+  //     return false;
+  //   } else {
+  //     const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  //     const isValidEmail = emailPattern.test(values.email);
+
+  //     if (isValidEmail) {
+  //       setErrors((prevErrors) => ({ ...prevErrors, email: '' }));
+  //     } else {
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         email: 'Invalid email format.',
+  //       }));
+  //     }
+  //   }
+
+  //   if (!values.password || values.password === '') {
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       password: 'Password is required.',
+  //     }));
+  //     setIsLoading(false);
+  //     return false;
+  //   }
+
+  //   const csrfToken = await fetch(`${apiPaths.rootPath}${apiPaths.csrfPath}`);
+
+  //   if (csrfToken?.status === 204) {
+  //     const response = await dispatch(
+  //       loginAPI.endpoints.login.initiate(values)
+  //     );
+
+  //     if (response && 'error' in response) {
+  //       navigator.push('/login');
+  //     } else {
+  //       const { optional, data } = response.data;
+  //       console.log(response);
+  //       // Cookies.set('user_id', data.id);
+  //       // Cookies.set('user_name', data.name);
+  //       // Cookies.set('email', data.email);
+  //       Cookies.set('token', optional.token, { expires: 365 });
+
+  //       navigator.push('/');
+  //     }
+  //   } else {
+  //     setIsLoading(false);
+  //     toast.error('Failed to Login');
+  //   }
+
+  //   setIsLoading(false);
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -199,9 +216,9 @@ export default function SignIn() {
                 placeholder="Your Email Address"
                 id="email"
                 type="email"
-                name="email"
-                onChange={handleChange}
-                // {...formik.getFieldProps('email')}
+                // name="email"
+                // onChange={handleChange}
+                {...formik.getFieldProps('email')}
               />
               {!!formik.errors.email && (
                 <div className="text-accent text-sm">{formik.errors.email}</div>
@@ -213,9 +230,9 @@ export default function SignIn() {
                 placeholder="Your Password"
                 id="password"
                 type="password"
-                name="password"
-                onChange={handleChange}
-                // {...formik.getFieldProps('password')}
+                // name="password"
+                // onChange={handleChange}
+                {...formik.getFieldProps('password')}
               />
               {!!formik.errors.password && (
                 <div className="text-accent text-sm">
@@ -235,7 +252,7 @@ export default function SignIn() {
           </form>
 
           <div className="flex items-center justify-between mb-4">
-            <Link href="#" className="text-xs text-accent font-medium">
+            <Link href="/signup" className="text-xs text-accent font-medium">
               Don&apos;t have an account? Sign up
             </Link>
             <Link href="#" className="text-xs text-blue-700 font-medium">
