@@ -15,6 +15,7 @@ import { MultiValue } from 'react-select';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
 import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
+import Button from '@/core/ui/components/Button';
 import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import 'swiper/css';
 import 'swiper/css/autoplay';
@@ -37,6 +38,7 @@ function PostToFeed(props: PostCreateProps) {
   const [selectedImages, setSelectedImages] = useState<(File | undefined)[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedTagOptions, setSelectedTagOptions] = useState<
@@ -146,6 +148,7 @@ function PostToFeed(props: PostCreateProps) {
   // };
 
   const onSubmit = async (data: PostDefaultFormType) => {
+    setIsLoading(true);
     try {
       const responseData = await Promise.resolve(
         dispatch(
@@ -171,6 +174,7 @@ function PostToFeed(props: PostCreateProps) {
         );
         navigate.push('/');
       }
+      setIsLoading(false);
 
       // setSelectedValue('');
       // setTitle('');
@@ -468,12 +472,12 @@ function PostToFeed(props: PostCreateProps) {
 
       <div className="mb-4">
         <div className="flex items-center justify-center">
-          <button
+          <Button
+            text="Post"
+            className="w-fit"
             type="submit"
-            className="bg-red-500 w-1/2 text-white text-base px-4 py-2 rounded-sm"
-          >
-            Post
-          </button>
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </form>

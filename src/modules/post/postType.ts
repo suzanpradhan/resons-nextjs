@@ -55,7 +55,7 @@ export const postFormSchema = z.object({
   expiration_type: z.string(),
   language: z.string().pipe(nonempty),
   cover_image_id: z.string().optional(),
-  cover_image: z.custom<File>((val) => !(val instanceof File), "Required"),
+  cover_image: z.custom<File>((val) => (val instanceof File), "Required"),
   remember_my_language: z.string(),
   color_code: z.string(),
   tags: z.any(),
