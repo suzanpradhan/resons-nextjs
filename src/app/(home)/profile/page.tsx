@@ -1,6 +1,6 @@
 'use client';
 
-import ProfileWavePlayer from '@/app/(components)/ProfileWavePlayer';
+import PostCardV4 from '@/app/(components)/PostCardV4';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { PaginatedResponseType } from '@/core/types/reponseTypes';
@@ -36,8 +36,9 @@ export default function ProfilePage() {
         {myPostList?.data?.length > 0 ? (
           <>
             {myPostList?.data?.map((post: PostDetailType) => (
-              // <PostCardV4 key={post.id} post={post} />
-              <ProfileWavePlayer key={post?.id} {...post} />
+              <PostCardV4 key={post.id} post={post} />
+              // <ProfileWavePlayer key={post?.id} {...post} />
+              // <PostCardV4 key={post?.id} {...post} />
             ))}
           </>
         ) : (
