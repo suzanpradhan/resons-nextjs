@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import PostAStory from './PostAStory';
 import PostToFeed from './PostToFeed';

@@ -1,3 +1,5 @@
+'use client';
+
 import { Microphone, StopCircle } from 'phosphor-react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';

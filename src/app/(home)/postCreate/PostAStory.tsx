@@ -1,3 +1,5 @@
+'use client';
+
 import { privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch } from '@/core/redux/clientStore';
 import CustomPopup from '@/core/ui/components/CustomPopup';

@@ -1,3 +1,5 @@
+'use client';
+
 import { language_code, privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
