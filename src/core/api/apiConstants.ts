@@ -87,7 +87,7 @@ export const apiPaths = {
   popularPostUrl: '/socialnetwork/post/list/popular',
   postDeleteUrl: '/socialnetwork/post/delete',
   allPostDeleteUrl: '/socialnetwork/settings/delete-all-posts',
-  myPostUrl: '/socialnetwork/post/my-posts?paginate=',
+  myPostUrl: '/socialnetwork/post/my-posts',
   userPostUrl: '/socialnetwork/profile/list-posts',
   postSingleUrl: '/socialnetwork/post/display',
   postCreateUrl: '/socialnetwork/post/create',

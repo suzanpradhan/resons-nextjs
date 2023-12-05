@@ -27,7 +27,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   ];
 
   return (
-    <div className="bg-white mb-5 mt-11 drop-shadow-2xl pl-4 pr-6 py-4 flex gap-4">
+    <div className="bg-white mb-5 mt-11 pl-4 pr-6 py-4 flex gap-4">
       <div className="relative w-20 md:w-36 h-20 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
         <Image
           src={

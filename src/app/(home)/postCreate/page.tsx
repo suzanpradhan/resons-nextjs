@@ -138,7 +138,7 @@ const UserPostCreatePage = () => {
           audioWaveData={audioWaveData}
         />
       )}
-      {activeTab == 'upload' && (
+      {/* {activeTab == 'upload' && (
         <Upload
           setAudioWaveData={setAudioWaveData}
           audioDuration={audioDuration}
@@ -146,15 +146,15 @@ const UserPostCreatePage = () => {
           setAudioFile={setAudioFile}
           setShouldNext={setShouldNext}
         />
-      )}
-      {shouldNext && !isNextPageVisible && (
+      )} */}
+      {/* {shouldNext && !isNextPageVisible && (
         <button
           onClick={handleOpenNextPage}
           className="text-white my-2 bg-red-400 px-5 py-3 rounded-md active:scale-105 hover:shadow-md"
         >
           Next
         </button>
-      )}
+      )} */}
     </div>
   );
 };
