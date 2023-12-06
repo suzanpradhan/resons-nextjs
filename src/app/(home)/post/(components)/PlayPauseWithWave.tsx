@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Pause, Play } from 'phosphor-react';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
@@ -7,6 +8,7 @@ type PlayPauseWithWavePropType = {
   audio: MutableRefObject<any>;
   audioRef: MutableRefObject<any>;
   setIsPlaying: Dispatch<SetStateAction<boolean>>;
+  wavePlayerVisible: boolean;
 };
 
 const PlayPauseWithWave = ({
@@ -15,6 +17,7 @@ const PlayPauseWithWave = ({
   audio,
   audioRef,
   setIsPlaying,
+  wavePlayerVisible,
 }: PlayPauseWithWavePropType) => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -33,11 +36,14 @@ const PlayPauseWithWave = ({
   };
   return (
     <div
-      className={`bg-slate-200 pl-10 pr-[80px] mt-4 relative h-[150px] flex flex-col justify-center`}
+      className={classNames(
+        `bg-slate-400 rounded pl-10 pr-[65px] relative flex flex-col justify-center `,
+        wavePlayerVisible ? 'block' : 'hidden'
+      )}
       ref={audio}
     >
       <button
-        className="inline-flex absolute left-[10px]"
+        className="inline-flex absolute left-[0px] bottom-7"
         onClick={() => handlePlayPause()}
       >
         {isPlaying ? (
@@ -46,7 +52,7 @@ const PlayPauseWithWave = ({
           <Play size="24" className="text-white" weight="fill" />
         )}
       </button>
-      <div className="inline-flex absolute right-[15px] py-0.5 px-2 bg-gray-600 text-white rounded-md">
+      <div className="inline-flex absolute right-[3px] py-0.5 px-2 bottom-7 bg-gray-600 text-white rounded-md">
         {audioTime ? formatTime(audioTime / 1000) : '0:00'}
       </div>
     </div>

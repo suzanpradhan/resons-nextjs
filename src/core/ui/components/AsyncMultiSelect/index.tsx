@@ -1,16 +1,28 @@
 import { useAppDispatch } from '@/core/redux/clientStore';
 import postApi from '@/modules/post/postApi';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { MultiValue } from 'react-select';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 // Define an interface for the option type
 
-interface AsyncMultiSelectType {
-  id: string;
-  handleChange: (event: any) => void;
-  name: string;
+interface Option {
+  label: string;
+  value: string;
 }
 
-const AsyncMultiSelect = ({ handleChange, name, id }: AsyncMultiSelectType) => {
+interface AsyncMultiSelectType {
+  id: string;
+  name: string;
+  selectedTagOptions: MultiValue<Option>;
+  setSelectedTagOptions: Dispatch<SetStateAction<MultiValue<Option>>>;
+}
+
+const AsyncMultiSelect = ({
+  name,
+  id,
+  selectedTagOptions,
+  setSelectedTagOptions,
+}: AsyncMultiSelectType) => {
   const [query, setQuery] = useState<string>('');
   const dispatch = useAppDispatch();
 
@@ -44,6 +56,15 @@ const AsyncMultiSelect = ({ handleChange, name, id }: AsyncMultiSelectType) => {
     return Promise.resolve(getTagsSelectorData(inputValue));
   };
 
+  const handleTagsChange = (e: MultiValue<Option>) => {
+    console.log(e.length);
+    setSelectedTagOptions((prevStates) => [
+      ...prevStates,
+      { label: e[e.length - 1].label, value: e[e.length - 1].value },
+    ]);
+    console.log(selectedTagOptions);
+  };
+
   // const myoptions = loadOptions();
 
   return (
@@ -54,7 +75,7 @@ const AsyncMultiSelect = ({ handleChange, name, id }: AsyncMultiSelectType) => {
       id={id}
       loadOptions={loadOptions}
       onInputChange={(value) => setQuery(value)}
-      onChange={(e) => handleChange(e)}
+      onChange={(e: MultiValue<Option>) => handleTagsChange(e)}
       defaultOptions
       name={name}
     />

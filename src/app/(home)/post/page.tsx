@@ -4,14 +4,13 @@ import { language_code, privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
-import {
-  PostFormDetailsType,
-  postFormDetailsSchema,
-} from '@/modules/post/postType';
+import postApi from '@/modules/post/postApi';
+import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
-import classnames from 'classnames';
+import { default as classNames, default as classnames } from 'classnames';
 import { useFormik } from 'formik';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   ImageSquare,
   MapPin,
@@ -21,10 +20,16 @@ import {
   UploadSimple,
 } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
+import { MultiValue } from 'react-select';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
-import { toFormikValidate } from 'zod-formik-adapter';
+import { ZodError } from 'zod';
 import PlayPauseWithWave from './(components)/PlayPauseWithWave';
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 const coverImages = [
   { id: 1, source: '/images/avatar.jpg' },
@@ -46,14 +51,22 @@ const LOCATION_OPTIONS = [
 ];
 
 const PostCreatePage = () => {
+  const navigate = useRouter();
   const dispatch = useAppDispatch();
   const [imagesVisibility, toggleImagesVisibility] = useState(false);
   const [locationInputVisibility, toggleLocationInputVisibility] =
     useState(false);
   const [languageInputVisibility, toggleLanguageInputVisibility] =
     useState(false);
+  const [selectedTagOptions, setSelectedTagOptions] = useState<
+    MultiValue<Option>
+  >([]);
 
   //recorded audio datas
+  const [hiddenButton, setHiddenButton] = useState<
+    'upload' | 'record' | undefined
+  >(undefined);
+  const [wavePlayerVisible, toggleWavePlayerVisible] = useState(false);
   const recordedAudio = useRef<any>(null);
   const [recordTime, setRecordTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,15 +76,48 @@ const PostCreatePage = () => {
   const waveRef = useRef<any>(null);
   const record = useRef<any>(null);
   const [audioDuration, setAudioDuration] = useState<number>(0);
+  const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
 
-  const onSubmit = (values: PostFormDetailsType) => {
-    console.log(values);
+  const onSubmit = async (data: PostDefaultFormType) => {
+    // setIsLoading(true);
+    try {
+      const responseData = await Promise.resolve(
+        dispatch(
+          postApi.endpoints.addPost.initiate({
+            title: data.title,
+            privacy_code: data.privacy_code,
+            audio_file: data.audio_file,
+            file_duration: data.file_duration,
+            wave_data: audioWaveData,
+            is_ai_generated: data.is_ai_generated,
+            expiration_type: data.expiration_type,
+            language: data.language,
+            cover_image: data.cover_image!,
+            remember_my_language: data.remember_my_language,
+            color_code: data.color_code,
+            tags: selectedTagOptions.map((tag: Option) => tag.value),
+          })
+        )
+      );
+      if (Object.prototype.hasOwnProperty.call(responseData, 'data')) {
+        await dispatch(
+          postApi.endpoints.getPostList.initiate(0, { forceRefetch: true })
+        );
+        navigate.push('/');
+      }
+      // setIsLoading(false);
+
+      // setSelectedValue('');
+      // setTitle('');
+      // setSelectedOptions([]);
+      // setSelectedLabels([]);
+      // setDescription('');
+      // setAudioFile(undefined);
+      // navigate.push('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  useEffect(() => {
-    dispatch(profileApi.endpoints.getMyProfileData.initiate('?load=true'));
-    // dispatch(coverImageApi.endpoints.getCoverImage.initiate());
-  }, [dispatch]);
 
   const myProfile = useAppSelector((state: RootState) => {
     return state.baseApi.queries[`getMyProfileData("?load=true")`]?.data as any;
@@ -80,7 +126,54 @@ const PostCreatePage = () => {
   // const coverImages = useAppSelector((state: RootState) => {
   //   return state.baseApi.queries['getCoverImage']?.data as any;
   // });
+
+  const validateForm = (values: PostDefaultFormType) => {
+    try {
+      postFormSchema.parse(values);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        console.log(error);
+
+        return error.formErrors.fieldErrors;
+      }
+    }
+  };
+
+  const formik = useFormik<PostDefaultFormType>({
+    enableReinitialize: true,
+    initialValues: {
+      title: '',
+      audio_file: audioFile!,
+      file_duration: (audioDuration as number) / 1000,
+      wave_data: audioWaveData,
+      privacy_code: '1',
+      expiration_type: 'Never',
+      language: '',
+      cover_image_id: undefined,
+      cover_image: undefined,
+      color_code: '#000000',
+      remember_my_language: '0',
+      tags: undefined,
+      is_ai_generated: '0',
+    },
+    validateOnChange: false,
+    validate: validateForm,
+    onSubmit,
+  });
+
+  const handleChange = (event: any) => {
+    if (event.target) {
+      formik.setFieldValue(event.target.name, event.target.value);
+    } else {
+      console.log(event);
+      formik.setFieldValue('tags', event.value);
+    }
+    console.log(formik.values);
+  };
+
   const startNewRecording = async () => {
+    setHiddenButton('upload');
+    toggleWavePlayerVisible(true);
     if (audioRef.current) {
       audioRef.current.destroy();
     }
@@ -122,6 +215,7 @@ const PostCreatePage = () => {
 
         const file = new File([blob], 'audio.wav');
         setAudioFile(file);
+        formik.setFieldValue('audioFile', audioFile);
         setRecording(false);
       });
     };
@@ -133,8 +227,10 @@ const PostCreatePage = () => {
       waveRef.current.on('decode', () => {
         const getAudioDuration = waveRef.current.getDuration();
         setRecordTime(getAudioDuration * 1000);
-        console.log('++', recordTime);
         setAudioDuration(recordTime);
+        console.log(waveRef.current.exportPeaks()[0]);
+        setAudioWaveData?.(waveRef.current.exportPeaks()[0]);
+        // setShouldNext(true);
       });
       waveRef.current.destroy();
     }
@@ -146,9 +242,44 @@ const PostCreatePage = () => {
     // console.log(shouldNext);
   };
 
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    audioRef.current.on('timeupdate', (currentTime: number) => {
+      const getRemainaingTime = recordTime - currentTime * 1000;
+      setRecordTime(getRemainaingTime);
+      console.log(recordTime);
+    });
+  }, [audioRef.current]);
+
+  useEffect(() => {
+    let interval: any;
+    if (recording) {
+      interval = setInterval(() => {
+        setRecordTime((prevTime) => prevTime + 100);
+      }, 100);
+    } else if (!recording) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [recording]);
+
+  useEffect(() => {
+    dispatch(profileApi.endpoints.getMyProfileData.initiate('?load=true'));
+    // dispatch(coverImageApi.endpoints.getCoverImage.initiate());
+  }, [dispatch]);
+
   const handleFileChange = (e: any) => {
+    setHiddenButton('record');
+    toggleWavePlayerVisible(true);
+    if (audioRef.current != null) {
+      audioRef.current.destroy();
+      audioRef.current = null;
+    }
+
     const file = e.target.files[0];
     let audioElement: any;
+
     if (file) {
       setAudioFile(undefined);
       audioElement = new Audio();
@@ -166,35 +297,31 @@ const PostCreatePage = () => {
       barRadius: 2,
     });
 
-    const getDuration = audioRef.current.getDuration();
-    setRecordTime(getDuration);
     setAudioFile(file);
 
     // setIsNextUploadVisible(true);
     // setShouldNext(true);
   };
 
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-      location: '',
-      privacy_code: 1,
-      expiration: '',
-      tag: [],
-    },
-    validate: toFormikValidate(postFormDetailsSchema),
-    onSubmit,
-  });
-
-  const handleChange = (event: any) => {
-    if (event.target) {
-      formik.setFieldValue(event.target.name, event.target.value);
-    } else {
-      console.log(event);
-      formik.setFieldValue('tag', event.value);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.on('ready', () => {
+        const getAudioDuration = audioRef.current.getDuration();
+        console.log('audio Duration' + getAudioDuration);
+        setRecordTime(getAudioDuration * 1000);
+        setAudioDuration(getAudioDuration * 1000);
+        setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
+      });
+      audioRef.current.on('finish', () => {
+        audioRef.current.setTime(0);
+        setIsPlaying(false);
+      });
     }
-    console.log(formik.values);
-  };
+    audioRef.current?.on('timeupdate', () => {
+      const currentTime = audioRef.current.getCurrentTime();
+      setRecordTime(audioDuration - currentTime * 1000);
+    });
+  }, [audioRef.current, audioDuration]);
 
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
@@ -241,21 +368,24 @@ const PostCreatePage = () => {
                 className="-ml-2 bg-transparent !border-0 placeholder:text-slate-400 !focus:border-0 focus:outline-0 text-white"
                 onChange={handleChange}
               />
-              {recordedAudio && (
-                <PlayPauseWithWave
-                  audio={recordedAudio}
-                  audioTime={recordTime}
-                  isPlaying={isPlaying}
-                  setIsPlaying={setIsPlaying}
-                  audioRef={audioRef}
-                />
-              )}
-              <div className="text-white flex gap-2 px-3 py-2 items-center rounded-md bg-[#414141] ">
+
+              <div className="text-white flex gap-2 h-24 px-3 py-2 items-center rounded-md bg-[#414141] ">
                 <span className="grow text-slate-400">
-                  Record or Upload Audio
+                  {!wavePlayerVisible && <>Record or Upload Audio</>}
+                  <PlayPauseWithWave
+                    audio={recordedAudio}
+                    audioTime={recordTime}
+                    isPlaying={isPlaying}
+                    setIsPlaying={setIsPlaying}
+                    audioRef={audioRef}
+                    wavePlayerVisible={wavePlayerVisible}
+                  />
                 </span>
                 <button
-                  className={'rounded-full bg-[#535353] p-2'}
+                  className={classNames(
+                    'rounded-full bg-[#535353] p-2',
+                    hiddenButton === 'record' ? 'hidden' : 'block'
+                  )}
                   onClick={recording ? stopTheRecording : startNewRecording}
                 >
                   {recording ? (
@@ -266,7 +396,10 @@ const PostCreatePage = () => {
                 </button>
 
                 <label
-                  className="rounded-full bg-[#535353] p-2 mb-0"
+                  className={classNames(
+                    'rounded-full bg-[#535353] p-2 mb-0',
+                    hiddenButton === 'upload' ? 'hidden' : 'block'
+                  )}
                   htmlFor="audioUpload"
                 >
                   <UploadSimple size={24} />
@@ -447,9 +580,11 @@ const PostCreatePage = () => {
                   Tag
                 </label>
                 <AsyncMultiSelect
-                  handleChange={handleChange}
+                  // handleChange={handleChange}
                   name="tag"
                   id="tag"
+                  selectedTagOptions={selectedTagOptions}
+                  setSelectedTagOptions={setSelectedTagOptions}
                 />
               </div>
             </div>
