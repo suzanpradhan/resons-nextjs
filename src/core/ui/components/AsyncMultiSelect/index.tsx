@@ -1,19 +1,16 @@
 import { useAppDispatch } from '@/core/redux/clientStore';
 import postApi from '@/modules/post/postApi';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { MultiValue } from 'react-select';
+import { useState } from 'react';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 // Define an interface for the option type
-interface Option {
-  value: string;
-  label: string;
-}
 
 interface AsyncMultiSelectType {
-  setSelectedTagOptions: Dispatch<SetStateAction<MultiValue<Option>>>;
+  id: string;
+  handleChange: (event: any) => void;
+  name: string;
 }
 
-const AsyncMultiSelect = ({ setSelectedTagOptions }: AsyncMultiSelectType) => {
+const AsyncMultiSelect = ({ handleChange, name, id }: AsyncMultiSelectType) => {
   const [query, setQuery] = useState<string>('');
   const dispatch = useAppDispatch();
 
@@ -49,19 +46,17 @@ const AsyncMultiSelect = ({ setSelectedTagOptions }: AsyncMultiSelectType) => {
 
   // const myoptions = loadOptions();
 
-  const onChange = (value: any) => {
-    setSelectedTagOptions(value);
-  };
   return (
     <AsyncCreatableSelect
       cacheOptions
       isMulti
       placeholder="Select or type..."
-      id="tag"
+      id={id}
       loadOptions={loadOptions}
       onInputChange={(value) => setQuery(value)}
-      onChange={(value) => onChange(value)}
+      onChange={(e) => handleChange(e)}
       defaultOptions
+      name={name}
     />
   );
 };
