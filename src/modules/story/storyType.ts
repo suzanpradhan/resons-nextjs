@@ -53,7 +53,7 @@ export interface StoryAudioType {
   file_name: string,
   file_duration: string,
   file_size: string,
-  wave_data: number[]
+  wave_data: string
 }
 
 export interface StorySingleDataType {

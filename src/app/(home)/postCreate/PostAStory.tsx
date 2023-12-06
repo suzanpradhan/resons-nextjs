@@ -1,7 +1,11 @@
+'use client';
+
 import { privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch } from '@/core/redux/clientStore';
+import Button from '@/core/ui/components/Button';
 import CustomPopup from '@/core/ui/components/CustomPopup';
 import storyApi from '@/modules/story/storyApi';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface StoryCreateProps {
@@ -12,7 +16,9 @@ interface StoryCreateProps {
 
 function PostAStory(props: StoryCreateProps) {
   const dispatch = useAppDispatch();
+  const navigate = useRouter();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedPrivacyValue, setSelectedPrivacyValue] = useState('0');
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -30,12 +36,13 @@ function PostAStory(props: StoryCreateProps) {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
-      await Promise.resolve(
+      const data = await Promise.resolve(
         dispatch(
           storyApi.endpoints.addStory.initiate({
             title: 'This is story title',
-            privacy_code: selectedPrivacyValue,
+            privacy_code: selectedPrivacyValue ?? '1',
             audio_file: props.audioFile!,
             file_duration: props.audioDuration as number,
             wave_data: props.audioWaveData,
@@ -44,6 +51,10 @@ function PostAStory(props: StoryCreateProps) {
           })
         )
       );
+      if (Object.prototype.hasOwnProperty.call(data, 'data')) {
+        navigate.push('/');
+      }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +101,7 @@ function PostAStory(props: StoryCreateProps) {
         </label>
         <select
           onChange={handleChangeAiVoice}
-          className="rounded-sm block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+          className=" block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
           id="aiVoice"
         >
           {/* Add your dropdown options here */}
@@ -100,13 +111,12 @@ function PostAStory(props: StoryCreateProps) {
       </div>
       <div className="mb-4">
         <div className="flex items-center justify-center">
-          <button
-            type="submit"
+          <Button
+            text="Post"
+            className="w-fit"
             onClick={handleSubmit}
-            className="bg-red-500 w-1/2 text-white text-base px-4 py-2 rounded-sm"
-          >
-            Post
-          </button>
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>

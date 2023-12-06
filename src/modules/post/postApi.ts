@@ -63,12 +63,12 @@ const postApi = baseApi.injectEndpoints({
     }),
 
     // Get List of Posts
-    getMyPostList: builder.query<PostDetailType[], void>({
+    getMyPostList: builder.query<PaginatedResponseType<PostDetailType>, void>({
       query: () => `${apiPaths.myPostUrl}`,
       providesTags: (result) =>
         result
           ? [
-            ...result.map(({ id }) => ({ type: 'Posts', id } as const)),
+            ...result.data.map(({ id }) => ({ type: 'Posts', id } as const)),
             { type: 'Posts', id: 'LIST' },
           ]
           : [{ type: 'Posts', id: 'LIST' }],
@@ -79,8 +79,8 @@ const postApi = baseApi.injectEndpoints({
         return currentArg !== previousArg;
       },
       transformResponse: (response: any) => {
-        console.log(response?.data?.posts.data);
-        return response?.data?.posts as PostDetailType[];
+        console.log(response?.data);
+        return response?.data as PaginatedResponseType<PostDetailType>;
       },
     }),
 

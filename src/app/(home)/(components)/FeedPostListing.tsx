@@ -10,6 +10,7 @@ import postApi from '@/modules/post/postApi';
 import { updatedCurrentPage } from '@/modules/post/postListingReducer';
 import { PostDetailType } from '@/modules/post/postType';
 import { Howl } from 'howler';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface FeedPostListingProps {
@@ -19,6 +20,7 @@ interface FeedPostListingProps {
 const FeedPostListing = (props: FeedPostListingProps) => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const session = useSession();
   const scrollableDivRef = useRef<any>(null);
   // const [currentPage, setCurrentPage] = useState(1);
   const currentPage = useAppSelector(
@@ -95,11 +97,11 @@ const FeedPostListing = (props: FeedPostListingProps) => {
 
   return (
     <div
-      className="w-full flex flex-col items-center h-screen max-h-screen gap-6 pt-20 pb-17 overflow-scroll"
+      className="w-full flex flex-col items-center h-screen max-h-screen gap-6 pt-16 pb-17 overflow-scroll"
       ref={scrollableDivRef}
       id="feed-listing"
     >
-      <StoryList />
+      {session.data?.user && <StoryList />}
 
       {postListData?.data.map((post, index) => {
         // console.log("Post Data:", post); // Add this line to log each post data

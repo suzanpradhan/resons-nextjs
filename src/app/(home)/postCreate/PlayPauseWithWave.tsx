@@ -1,3 +1,5 @@
+'use client';
+
 import { Pause, Play } from 'phosphor-react';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 

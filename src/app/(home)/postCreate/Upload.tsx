@@ -1,17 +1,23 @@
+'use client';
+
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import PlayPauseWithWave from './PlayPauseWithWave';
 
 type UploadPropType = {
+  audioDuration: number;
   setAudioFile: Dispatch<SetStateAction<File | undefined>>;
   setShouldNext: Dispatch<SetStateAction<boolean>>;
   setAudioDuration: Dispatch<SetStateAction<number>>;
+  setAudioWaveData: Dispatch<SetStateAction<any>>;
 };
 
 const Upload = ({
+  audioDuration,
   setAudioFile,
   setShouldNext,
   setAudioDuration,
+  setAudioWaveData,
 }: UploadPropType) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [uploadTime, setUploadTime] = useState<number | undefined>(undefined);
@@ -19,8 +25,15 @@ const Upload = ({
   const uploadedAudio = useRef<any>(null);
 
   const handleFileChange = (e: any) => {
+    if (audioRef.current != null) {
+      audioRef.current.destroy();
+      audioRef.current = null;
+    }
+
     const file = e.target.files[0];
+    setUploadTime(0);
     let audioElement: any;
+
     if (file) {
       setAudioFile(undefined);
       audioElement = new Audio();
@@ -38,8 +51,6 @@ const Upload = ({
       barRadius: 2,
     });
 
-    const getDuration = audioRef.current.getDuration();
-    setUploadTime(getDuration);
     setAudioFile(file);
 
     // setIsNextUploadVisible(true);
@@ -47,35 +58,27 @@ const Upload = ({
   };
 
   useEffect(() => {
-    const handleDecode = () => {
-      const getAudioDuration = audioRef.current.getDuration();
-      setUploadTime(() => {
-        const newUploadTime = getAudioDuration * 1000;
-        return newUploadTime;
-      });
-    };
-
-    // const handleFinish = () => {
-    //   audioRef.current.setTime(0);
-    //   setIsPlaying(false);
-    // };
-
-    const handleTimeUpdate = () => {
-      const currentTime = audioRef.current.getCurrentTime();
-
-      uploadTime &&
-        setUploadTime(() => {
-          const getRemainingTime = uploadTime - currentTime;
-          return getRemainingTime;
-        });
-    };
-
     if (audioRef.current) {
-      audioRef.current.on('decode', handleDecode);
-      // audioRef.current.on('finish', handleFinish);
-      audioRef.current?.on('timeupdate', handleTimeUpdate);
+      audioRef.current.on('ready', () => {
+        const getAudioDuration = audioRef.current.getDuration();
+        console.log('audio Duration' + getAudioDuration);
+        setUploadTime(getAudioDuration * 1000);
+        setAudioDuration(getAudioDuration * 1000);
+        setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
+      });
+      audioRef.current.on('finish', () => {
+        audioRef.current.setTime(0);
+        setIsPlaying(false);
+      });
     }
-  }, [audioRef.current]);
+  }, [audioRef.current, setAudioDuration]);
+
+  useEffect(() => {
+    audioRef.current?.on('timeupdate', () => {
+      const currentTime = audioRef.current.getCurrentTime();
+      setUploadTime(audioDuration - currentTime * 1000);
+    });
+  }, [audioRef.current, audioDuration]);
 
   return (
     <>
@@ -94,7 +97,7 @@ const Upload = ({
             typeof="button"
             className="text-white bg-red-500 px-5 py-3 mx-auto rounded-md w-max active:scale-105 hover:shadow-md"
           >
-            {uploadedAudio
+            {audioRef.current == null
               ? 'Choose audio file to upload'
               : 'Choose new audio file'}
           </div>
@@ -106,11 +109,6 @@ const Upload = ({
             onChange={(e) => handleFileChange(e)}
           />
         </label>
-        {/* {isUploaded && (
-          <button className="text-white bg-red-500 px-5 py-3 rounded-md active:scale-105 hover:shadow-md">
-            Next
-          </button>
-        )} */}
       </div>
     </>
   );

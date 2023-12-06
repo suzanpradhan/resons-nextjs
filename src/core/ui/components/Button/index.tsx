@@ -74,7 +74,7 @@ const Button = ({ buttonType = 'flat', kind, ...props }: ButtonProps) => {
       className={
         `${
           buttonType == 'bordered' ? 'border' : ''
-        } ${color} h-12 text-sm font-normal hover:bg-opacity-90 py-2 px-3 rounded-sm w-full ` +
+        } ${color} h-10 text-sm font-normal hover:bg-opacity-90 px-3 rounded-md w-full ` +
         (props.className ?? '')
       }
     >

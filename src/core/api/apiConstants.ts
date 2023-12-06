@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { getServerSession } from 'next-auth';
 import { getSession } from 'next-auth/react';
 import { authOptions } from '../utils/authOptions';
@@ -22,7 +21,7 @@ export const getHeaders = async () => {
 };
 
 export async function setHeaders(headers: Headers) {
-  // const session = await getSession();
+
   // if (session) {
   //   const token = session?.user?.token;
   //   if (token) {
@@ -30,13 +29,22 @@ export async function setHeaders(headers: Headers) {
   //   }
   // }
   // headers.set('content-type', 'application/json');
-  const getToken = Cookies.get('token');
+  // const getToken = Cookies.get('token');
 
   headers.set('Access-Control-Allow-Origin', '*');
-  headers.set(
-    'authorization',
-    `Bearer ${getToken}`
-  );
+  const session = await getSession();
+
+  if (session) {
+    const token = session?.user?.token;
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`);
+    }
+  }
+
+  // headers.set(
+  //   'authorization',
+  //   `Bearer ${getToken}`
+  // );
 
   headers.set('accept', 'application/json');
   return headers;
@@ -65,7 +73,7 @@ export const apiPaths = {
   loginUrl: '/login/email',
   registerUrl: '/register/email',
   // Profile
-  profileUrl: '/me',
+  profileUrl: '/socialnetwork/profile/me',
   viewProfile: '/viewProfile',
   profileUpdateUrl: '/updateProfile',
   accountDeleteUrl: '/socialnetwork/settings/delete-account',
@@ -79,7 +87,7 @@ export const apiPaths = {
   popularPostUrl: '/socialnetwork/post/list/popular',
   postDeleteUrl: '/socialnetwork/post/delete',
   allPostDeleteUrl: '/socialnetwork/settings/delete-all-posts',
-  myPostUrl: '/socialnetwork/post/my-posts?paginate=',
+  myPostUrl: '/socialnetwork/post/my-posts',
   userPostUrl: '/socialnetwork/profile/list-posts',
   postSingleUrl: '/socialnetwork/post/display',
   postCreateUrl: '/socialnetwork/post/create',

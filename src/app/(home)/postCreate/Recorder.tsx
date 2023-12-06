@@ -1,3 +1,5 @@
+'use client';
+
 import { Microphone, StopCircle } from 'phosphor-react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
@@ -8,12 +10,14 @@ type RecorderPropType = {
   setAudioDuration: Dispatch<SetStateAction<number>>;
   setShouldNext: Dispatch<SetStateAction<boolean>>;
   setAudioFile: Dispatch<SetStateAction<File | undefined>>;
+  setAudioWaveData: Dispatch<SetStateAction<any>>;
 };
 
 const Recorder = ({
   setAudioDuration,
   setShouldNext,
   setAudioFile,
+  setAudioWaveData,
 }: RecorderPropType) => {
   const [recordTime, setRecordTime] = useState(0);
   const [recording, setRecording] = useState(false);
@@ -76,8 +80,9 @@ const Recorder = ({
       waveRef.current.on('decode', () => {
         const getAudioDuration = waveRef.current.getDuration();
         setRecordTime(getAudioDuration * 1000);
-        console.log('++', recordTime);
         setAudioDuration(recordTime);
+        console.log(waveRef.current.exportPeaks()[0]);
+        setAudioWaveData?.(waveRef.current.exportPeaks()[0]);
         setShouldNext(true);
       });
       waveRef.current.destroy();
