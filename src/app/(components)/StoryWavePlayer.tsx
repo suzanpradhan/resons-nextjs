@@ -1,3 +1,4 @@
+import { defaultWaveData } from '@/core/constants/appConstants';
 import { useAppDispatch } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { formatTime } from '@/core/utils/helpers';
@@ -8,7 +9,7 @@ import {
   updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
-import Image from "next/image";
+import Image from 'next/image';
 import { Pause, Play } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
@@ -37,7 +38,6 @@ const StoryWavePlayer = ({
   isPlaying,
   profileImage,
 }: WavePlayerV2Props) => {
-
   const dispatch = useAppDispatch();
   const audioContainer = useRef(null);
   const audioRef = useRef<WaveSurfer | undefined>(undefined);
@@ -79,6 +79,7 @@ const StoryWavePlayer = ({
         audioRef.current.destroy();
         audioRef.current = undefined;
       }
+
       if (!audioContainer.current) return;
 
       var waveColor = (audioRef.current = WaveSurfer.create({
@@ -90,14 +91,11 @@ const StoryWavePlayer = ({
         barGap: 3,
         barRadius: 2,
         duration: audioItem.duration ? audioItem.duration : 0,
-        peaks: JSON.parse(audioWaveData!),
+        peaks: audioWaveData ? JSON.parse(audioWaveData) : defaultWaveData,
         height: size == 'small' ? 15 : 60,
       }));
 
-      audioRef.current.load(audioItem?.url);
-
       audioRef.current.on('drag', function (progress: any) {
-
         var currentTime = progress * audioItem.duration;
         dispatch(
           manualUpdateCurrentTime({
@@ -106,7 +104,6 @@ const StoryWavePlayer = ({
           })
         );
       });
-
 
       audioRef.current.on('click', function (progress: any) {
         audioRef.current?.manualRenderProgress(progress);
@@ -130,10 +127,10 @@ const StoryWavePlayer = ({
       };
     };
     create();
-  }, [audioId, audioItem.duration, audioItem.url, audioWaveData, dispatch, size, theme, waveLoaded]);
+  }, []);
 
   const handlePlayPause = async (e: any) => {
-    console.log("audioItem", audioItem);
+    console.log('audioItem', audioItem);
     e?.stopPropagation();
     if (playlist[currentPlaylistIndex]?.url == audioItem.url) {
       if (isPlaying) {
@@ -150,13 +147,25 @@ const StoryWavePlayer = ({
   };
 
   return (
-
-    <div className={`relative flex items-center w-full max-w-3xl last:rounded-b-none rounded-lg py-1 mt-1 flex-wrap flex-col`}>
-      <span className='text-[10px] text-gray-700 font-medium flex justify-start w-full px-2'>{audioItem?.info?.description?.split(" ")?.[0]}</span>
-      <div className="h-max border-solid border-0 border-white rounded-full p-1 flex items-center w-full">
-        <div className="w-10 h-10 rounded-full overflow-hidden cursor-pointer">
-          <Image alt="profile-image" loading="lazy" width="100" height="100" decoding="async" data-nimg="1" className="w-10 h-10 object-cover" src={profileImage ? profileImage : '/images/avatar.jpg'}></Image>
+    <div
+      className={`relative flex items-start max-w-3xl last:rounded-b-none rounded-lg mt-2 flex-wrap flex-col mx-4`}
+    >
+      <div className="h-max border-solid border-0 border-white flex items-center w-full">
+        <div className="flex flex-col">
+          <div className="w-12 h-12 rounded-full overflow-hidden cursor-pointer">
+            <Image
+              alt="profile-image"
+              loading="lazy"
+              width="100"
+              height="100"
+              decoding="async"
+              data-nimg="1"
+              className="w-12 h-12 object-cover"
+              src={profileImage ? profileImage : '/images/avatar.jpg'}
+            ></Image>
+          </div>
         </div>
+
         {controls ? (
           <button
             type="button"
@@ -164,26 +173,28 @@ const StoryWavePlayer = ({
             onClick={handlePlayPause}
           >
             {playlist[currentPlaylistIndex]?.url == audioItem.url &&
-              isPlaying ? (
+            isPlaying ? (
               <Pause
                 size={20}
-                className={`${sessionPlayed
-                  ? 'text-purple'
-                  : theme == 'dark'
+                className={`${
+                  sessionPlayed
+                    ? 'text-purple'
+                    : theme == 'dark'
                     ? 'text-accent'
                     : 'text-white'
-                  }`}
+                }`}
                 weight="fill"
               />
             ) : (
               <Play
                 size={20}
-                className={`${sessionPlayed
-                  ? 'text-purple'
-                  : theme == 'dark'
+                className={`${
+                  sessionPlayed
+                    ? 'text-purple'
+                    : theme == 'dark'
                     ? 'text-accent'
                     : 'text-white'
-                  }`}
+                }`}
                 weight="fill"
               />
             )}
@@ -193,10 +204,11 @@ const StoryWavePlayer = ({
         )}
         <div
           ref={audioContainer}
-          className={`w-full flex-1 audio-wrapper ${playlist[currentPlaylistIndex]?.url == audioItem.url
-            ? ''
-            : 'pointer-events-none'
-            }`}
+          className={`w-full flex-1 audio-wrapper ${
+            playlist[currentPlaylistIndex]?.url == audioItem.url
+              ? ''
+              : 'pointer-events-none'
+          }`}
           onClick={(e) => {
             e?.stopPropagation();
           }}
@@ -204,18 +216,20 @@ const StoryWavePlayer = ({
         <div className="bg-primary-900 text-white text-xs w-11 text-center py-1 ml-1 rounded-sm">
           {audioItem.duration
             ? formatTime(
-              audioItem.duration
-                ? audioItem.duration -
-                (playlist[currentPlaylistIndex]?.url == audioItem.url
-                  ? currentTime
-                  : 0)
-                : 0
-            )
+                audioItem.duration
+                  ? audioItem.duration -
+                      (playlist[currentPlaylistIndex]?.url == audioItem.url
+                        ? currentTime
+                        : 0)
+                  : 0
+              )
             : '0:00'}
         </div>
       </div>
+      <span className="text-[10px] text-gray-700 font-medium w-12 text-center">
+        {audioItem?.info?.description?.split(' ')?.[0]}
+      </span>
     </div>
-
   );
 };
 

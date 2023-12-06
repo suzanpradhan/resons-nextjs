@@ -138,22 +138,23 @@ export default function ProfilePage() {
                 <span className="w-16 h-16 block bg-gray-300 rounded-full dark:bg-gray-300"></span>
               </div>
 
-              <div className="ml-4 mt-2 w-full h-24">
-                <h3
-                  className="h-4 bg-gray-300 rounded-md dark:bg-gray-300"
-                  style={{ width: '40%' }}
-                ></h3>
+                <div className="ml-4 mt-2 w-full h-24">
+                  <h3
+                    className="h-4 bg-gray-300 rounded-md dark:bg-gray-300"
+                    style={{ width: '40%' }}
+                  ></h3>
 
-                <ul className="flex mr-1 mt-5">
-                  <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                  <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                  <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                </ul>
+                  <ul className="flex mr-1 mt-5">
+                    <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                    <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                    <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                  </ul>
 
-                <ul className="flex mr-1 mt-5">
-                  <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                  <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                </ul>
+                  <ul className="flex mr-1 mt-5">
+                    <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                    <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

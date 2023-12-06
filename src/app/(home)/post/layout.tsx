@@ -1,27 +1,26 @@
 'use client';
 import AppBar from '@/app/(components)/AppBar';
+import React, { useRef } from 'react';
+
 import MobileNavigation from '@/app/(components)/MobileNavigation';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { updateHomePage } from '@/modules/post/homePageReducer';
-import { usePathname } from 'next/navigation';
-import React, { useEffect, useRef } from 'react';
-
-export default function ExploreLayout({
+import { useEffect } from 'react';
+export default function PostcreateLayout({
   children,
-  view,
 }: {
   children: React.ReactNode;
-  view?: React.ReactNode;
 }) {
-  const pathName = usePathname();
   const dispatch = useAppDispatch();
+
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage
   );
   const homePagePostId = useAppSelector(
     (state: RootState) => state.homepage.homePagePostId
   );
+
   useEffect(() => {
     history.pushState(null, '', location.href);
     window.onpopstate = function () {
@@ -33,17 +32,19 @@ export default function ExploreLayout({
       }
     };
   }, [currentPage]);
+
   const scrollableDivRef = useRef<any>(null);
+
   return (
     <>
       <div className="relative h-[calc(100dvh)] max-h-screen overflow-hidden">
         <AppBar />
-        {/* <div
+        <div
           className="w-full flex flex-col items-center h-screen max-h-screen overflow-hidden"
           ref={scrollableDivRef}
           id="feed-listing"
           style={{ display: 'none' }}
-        ></div> */}
+        ></div>
         <div
           id="homePageScroller"
           className={`absolute transition-all duration-200 ease-in-out w-full ${

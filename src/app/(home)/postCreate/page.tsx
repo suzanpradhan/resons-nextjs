@@ -79,7 +79,7 @@ const UserPostCreatePage = () => {
       </div>
       <div
         style={{ display: isNextPageVisible ? 'none' : 'block' }}
-        className="px-6 py-4 h-full relative text-center"
+        className="px-6 py-4 h-full text-center"
       >
         <div className="flex justify-between items-center gap-2">
           <button
@@ -106,6 +106,7 @@ const UserPostCreatePage = () => {
 
         {activeTab == 'recorder' && (
           <Recorder
+            setAudioWaveData={setAudioWaveData}
             setAudioDuration={setAudioDuration}
             setShouldNext={setShouldNext}
             setAudioFile={setAudioFile}
@@ -113,11 +114,11 @@ const UserPostCreatePage = () => {
         )}
         {activeTab == 'upload' && (
           <Upload
-            setAudioWaveData={setAudioWaveData}
-            audioDuration={audioDuration}
             setAudioDuration={setAudioDuration}
             setAudioFile={setAudioFile}
             setShouldNext={setShouldNext}
+            audioDuration={audioDuration}
+            setAudioWaveData={setAudioWaveData}
           />
         )}
         {shouldNext && (
@@ -137,6 +138,23 @@ const UserPostCreatePage = () => {
           audioWaveData={audioWaveData}
         />
       )}
+      {/* {activeTab == 'upload' && (
+        <Upload
+          setAudioWaveData={setAudioWaveData}
+          audioDuration={audioDuration}
+          setAudioDuration={setAudioDuration}
+          setAudioFile={setAudioFile}
+          setShouldNext={setShouldNext}
+        />
+      )} */}
+      {/* {shouldNext && !isNextPageVisible && (
+        <button
+          onClick={handleOpenNextPage}
+          className="text-white my-2 bg-red-400 px-5 py-3 rounded-md active:scale-105 hover:shadow-md"
+        >
+          Next
+        </button>
+      )} */}
     </div>
   );
 };

@@ -105,7 +105,7 @@ const TopicListScroll = ({ title }: { title: string }) => {
 
   return (
     <>
-      <MultiCarousel slides={group} />
+      <MultiCarousel slides={group} routeName="likes" />
     </>
   );
 };

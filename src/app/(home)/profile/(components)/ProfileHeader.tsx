@@ -11,8 +11,6 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
-  console.log('props', props);
-
   const PROFILE_DETAILS = [
     {
       detailName: 'Followers',
@@ -29,8 +27,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   ];
 
   return (
-    <div className="bg-white mb-5 mt-11 drop-shadow-2xl pl-4 pr-6 py-4 flex gap-4 items-center">
-      <div className="relative w-32 md:w-36 h-32 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
+    <div className="bg-white mb-5 mt-11 pl-4 pr-6 py-4 flex gap-4">
+      <div className="relative w-20 md:w-36 h-20 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
         <Image
           src={
             props.viewProfile?.profile_image &&
@@ -46,7 +44,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
       </div>
       <div className="flex flex-col grow gap-1 max-w-2xl">
         <div className="flex justify-between">
-          <h2 className="m-0 font-medium text-xl md:text-lg truncate shrink">
+          <h2 className="m-0 font-medium text-base md:text-lg truncate shrink">
             {props.viewProfile.name}
           </h2>
           <div className="flex gap-1 text-slate-500">
@@ -57,17 +55,17 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
         </div>
         <p>{props.viewProfile.about}</p>
 
-        <div className="flex gap-10">
+        <div className="flex gap-6">
           {PROFILE_DETAILS.map((detail, index) => (
             <Link
               href={`profile/${props.viewProfile.id}/connections`}
               className="flex flex-col"
               key={index}
             >
-              <h3 className="font-semibold text-lg md:text-xl">
-                {detail.detailNumber}
+              <h3 className="font-medium text-base md:text-xl">
+                {detail.detailNumber ?? 0}
               </h3>
-              <p className="text-slate-500 text-sm md:text-xl">
+              <p className="text-slate-500 text-xs md:text-xl">
                 {detail.detailName}
               </p>
             </Link>
@@ -75,7 +73,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
         </div>
 
         {props.viewProfile.bio ? (
-          <div className="text-sm mt-2">
+          <div className="text-xs mt-1">
             This is bio section of user profile.
           </div>
         ) : (

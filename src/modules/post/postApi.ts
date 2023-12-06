@@ -79,7 +79,6 @@ const postApi = baseApi.injectEndpoints({
         return currentArg !== previousArg;
       },
       transformResponse: (response: any) => {
-        console.log(response?.data?.data);
         return response?.data as PaginatedResponseType<PostDetailType>;
       },
     }),
@@ -228,6 +227,23 @@ const postApi = baseApi.injectEndpoints({
       transformResponse: (response) => {
         console.log(response);
         return response as any;
+      },
+    }),
+    // search topics
+    searchTopics: builder.mutation<any, string>({
+      query: (query) => {
+        var formData = new FormData();
+        formData.append('title', query);
+        return {
+          url: `${apiPaths.searchTopicUrl}`,
+          method: 'POST',
+          body: formData,
+          formData: true,
+        };
+      },
+      transformResponse: (response: any) => {
+        console.log(response);
+        return response?.data as any;
       },
     }),
   }),

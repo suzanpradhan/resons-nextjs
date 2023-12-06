@@ -41,7 +41,7 @@ module.exports = {
           200: '#C1C2C6',
           100: '#D6D6D9',
         },
-        accent: '#de5b6d',
+        accent: '#D9362F',
       },
       fontFamily: {
         sans: ['var(--font-poppins)'],

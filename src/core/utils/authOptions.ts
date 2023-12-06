@@ -34,9 +34,11 @@ export const authOptions: NextAuthOptions = {
           }
 
           if (!data?.error && data) {
+            console.log("data:" + data.data);
+
             return {
-              token: data.data.token,
-              ...data.data.session,
+              token: data.optional.token,
+              ...data.data,
             };
           }
           return null;

@@ -5,7 +5,6 @@ import Button from '@/core/ui/components/Button';
 import TextField from '@/core/ui/components/TextField';
 import { useFormik } from 'formik';
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css'; // remove letter
 import { z } from 'zod';
@@ -50,6 +49,7 @@ const SignIn = () => {
     validate: toFormikValidate(loginFormSchema),
     onSubmit,
   });
+
   return (
     <>
       <section className="bg-whiteShade border border-white h-screen w-full sm:grid sm:grid-cols-2 xl:grid-cols-3">
@@ -88,7 +88,9 @@ const SignIn = () => {
                 {...formik.getFieldProps('email')}
               />
               {!!formik.errors.email && (
-                <div className="text-red-500">{formik.errors.email}</div>
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.email}
+                </div>
               )}
               <TextField
                 placeholder="•••••••••••"
@@ -99,7 +101,9 @@ const SignIn = () => {
                 {...formik.getFieldProps('password')}
               />
               {!!formik.errors.password && (
-                <div className="text-red-500">{formik.errors.password}</div>
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.password}
+                </div>
               )}
               <a
                 href="/reset-password"
@@ -122,9 +126,10 @@ const SignIn = () => {
               </div>
             </form>
           </div>
-          <div className="flex gap-1 m-4 whitespace-nowrap text-sm">
-            By continuing, you agree to our
-            <span>
+          <div className="flex flex-col gap-1 m-4 text-sm text-center">
+            By continuing, you agree to our Terms and Conditions and Privacy
+            Policy.
+            {/* <span>
               <Link
                 href="/terms"
                 className="text-dark underline pointer-events-none"
@@ -139,7 +144,7 @@ const SignIn = () => {
             >
               Privacy Policy
             </Link>
-            .
+            . */}
           </div>
         </div>
       </section>

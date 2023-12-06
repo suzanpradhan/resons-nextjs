@@ -46,23 +46,49 @@ export type PostEachDetailType = {
   comments: PaginatedResponseType<CommentDetailType>;
 };
 
-export interface PostFormType {
-  title: string;
-  audio_file: File;
-  file_duration?: number;
-  wave_data?: number[] | string | Blob;
-  privacy_code: string;
-  expiration_type: string;
-  language: string;
-  cover_image_id?: string;
-  cover_image?: File;
-  remember_my_language: string;
-  color_code: string;
-  tags: any;
-  is_ai_generated: string | Blob;
-}
+export const postFormSchema = z.object({
+  title: z.string().pipe(nonempty),
+  audio_file: z.custom<File>(),
+  file_duration: z.number().optional(),
+  wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)).optional(),
+  privacy_code: z.string(),
+  expiration_type: z.string(),
+  language: z.string().pipe(nonempty),
+  cover_image_id: z.string().optional(),
+  cover_image: z.custom<File>((val) => (val instanceof File), "Required"),
+  remember_my_language: z.string(),
+  color_code: z.string(),
+  tags: z.any(),
+  is_ai_generated: z.string().or(z.instanceof(Blob)),
+});
+
+export const postDefaultSchema = postFormSchema.extend({
+  cover_image: z.custom<File>().optional(),
+
+});
+
+export type PostFormType = z.infer<typeof postFormSchema>;
+export type PostDefaultFormType = z.infer<typeof postDefaultSchema>;
+
+// export interface PostDefaultFormType {
+//   title: string;
+//   audio_file: File;
+//   file_duration?: number;
+//   wave_data?: number[] | string | Blob;
+//   privacy_code: string;
+//   expiration_type: string;
+//   language: string;
+//   cover_image_id?: string;
+//   cover_image?: File;
+//   remember_my_language: string;
+//   color_code: string;
+//   tags: any;
+//   is_ai_generated: string | Blob;
+// }
 
 export interface SearchFormType {
   searchText: string | null;
   searchType: string | null;
 }
+
+export interface SearchTagsReturnType { }

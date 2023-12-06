@@ -29,9 +29,6 @@ const profileApi = baseApi
             getMyProfileData: builder.query<ProfileDetailType, string>({
                 query: (query: string) => `${apiPaths.profileUrl}/${query}`,
                 providesTags: ['Profile'],
-                serializeQueryArgs: ({ endpointName }) => {
-                    return endpointName;
-                },
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {
                         await queryFulfilled;
