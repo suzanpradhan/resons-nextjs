@@ -7,6 +7,26 @@ import { CommentDetailType, commentDetailSchema } from '../comment/commentType';
 import { genresDetailSchema } from '../genres/genresType';
 import { profileDetailSchema } from '../profile/profileType';
 
+// export const postFormDetailsSchema = z.object({
+//   id: z.number().optional(),
+//   title: z.string().pipe(nonempty),
+//   cover_image_id: z.number().optional(),
+//   location: z.string().optional(),
+//   language: z.string().optional(),
+//   privacy_code: z.number().optional(),
+//   // time_duration: z.number().optional(),
+//   // is_ai_generated: z.number().optional(),
+//   // total_duration: z.number(),
+//   // audio: audioDetailSchema,
+//   // owner: accountDetailSchema,
+//   expiration: z.string(),
+//   tag: z.string().array()
+// });
+
+// export type PostFormDetailsType = z.infer<typeof postFormDetailsSchema>;
+
+
+
 export const postDetailSchema = z.object({
   id: z.number().optional(),
   title: z.string().pipe(nonempty),
@@ -55,7 +75,7 @@ export const postFormSchema = z.object({
   expiration_type: z.string(),
   language: z.string().pipe(nonempty),
   cover_image_id: z.string().optional(),
-  cover_image: z.custom<File>((val) => (val instanceof File), "Required"),
+  cover_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
   remember_my_language: z.string(),
   color_code: z.string(),
   tags: z.any(),
