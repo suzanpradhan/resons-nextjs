@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { PostDetailType } from '@/modules/post/postType';
 import { useRouter } from 'next/navigation';
-import { Record } from 'phosphor-react';
 import PlayAllButton from './PlayAllButton';
 import PostDetailV4 from './PostDetailV4';
 
@@ -18,6 +17,7 @@ import { updateHomePage } from '@/modules/post/homePageReducer';
 import { AnimatePresence, motion } from 'framer-motion';
 import moment from 'moment';
 import Image from 'next/image';
+import { Microphone, UploadSimple } from 'phosphor-react';
 import { ConnectedProps, connect } from 'react-redux';
 import PostCommentV4 from './PostCommentV4';
 interface PostCardProps extends PropsFromRedux {
@@ -146,7 +146,7 @@ const PostCardV4 = (props: PostCardProps) => {
         variants={list}
         initial="active"
         animate="inActive"
-        className="max-w-3xl w-full shadow-slate-400 shadow-md"
+        className="max-w-3xl w-full shadow-slate-200 shadow-md"
         // style={randomNumber}
         id={`post-card-with-id-${props.post.id}`}
       >
@@ -174,7 +174,7 @@ const PostCardV4 = (props: PostCardProps) => {
           />
         ) : null}
         <div className="p-4 bg-white flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full overflow-hidden">
+          <div className="w-9 h-9 rounded-full overflow-hidden">
             <Image
               width={100}
               height={100}
@@ -183,9 +183,14 @@ const PostCardV4 = (props: PostCardProps) => {
               className="w-full h-full aspect-auto object-cover"
             />
           </div>
-          <div className="bg-grey-100 h-11 py-1 text-sm text-primary-500 rounded-lg flex-1 flex gap-2 items-center p-2">
-            <Record size="26" className="text-accent" weight="fill" />
-            Record or share your comment
+          <div className="bg-grey-200 h-11 py-1 text-sm text-primary-500 rounded-sm flex-1 flex gap-2 items-center p-2">
+            <span className="grow">Record or upload audio</span>
+            <span className="bg-white inline-block p-2 rounded-full hover:cursor-pointer hover:shadow-md shadow-red-200">
+              <Microphone size={18} weight="light" />
+            </span>
+            <span className="bg-white inline-block p-2 rounded-full hover:cursor-pointer hover:shadow-md shadow-red-200">
+              <UploadSimple size={18} weight="light" />
+            </span>
           </div>
         </div>
       </motion.div>
