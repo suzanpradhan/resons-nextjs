@@ -18,7 +18,6 @@ export type CommentDetailType = z.infer<typeof commentDetailSchema>;
 export interface CommentFormType {
   post_id: number;
   file: File;
-  comment: string;
   file_duration?: string | number;
   wave_data?: string;
 }
