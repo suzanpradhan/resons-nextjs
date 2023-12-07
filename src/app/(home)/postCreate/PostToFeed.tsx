@@ -213,7 +213,7 @@ function PostToFeed(props: PostCreateProps) {
       cover_image: undefined,
       color_code: '#000000',
       remember_my_language: '0',
-      tags: undefined,
+      tags: [],
       is_ai_generated: '0',
     },
     validateOnChange: false,
