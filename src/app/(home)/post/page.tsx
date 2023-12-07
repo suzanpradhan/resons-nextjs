@@ -18,8 +18,9 @@ import {
   StopCircle,
   Translate,
   UploadSimple,
+  XCircle,
 } from 'phosphor-react';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MultiValue } from 'react-select';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
@@ -38,9 +39,11 @@ const coverImages = [
   { id: 4, source: '/images/avatar.jpg' },
   { id: 5, source: '/images/cover.webp' },
   { id: 6, source: '/images/avatar.jpg' },
+  { id: 7, source: '/images/cover.webp' },
+  { id: 8, source: '/images/avatar.jpg' },
 ];
 
-const EXPIRATION_OPTIONS = ['Never', '1 day', '1 week', '1 month', '1 year'];
+const EXPIRATION_OPTIONS = ['Never', 'Day', 'Week', 'Month', 'Year'];
 const LOCATION_OPTIONS = [
   'Asia',
   'Africa',
@@ -61,6 +64,7 @@ const PostCreatePage = () => {
   const [selectedTagOptions, setSelectedTagOptions] = useState<
     MultiValue<Option>
   >([]);
+  const [imageFile, setImageFile] = useState<string | undefined>(undefined);
 
   //recorded audio datas
   const [hiddenButton, setHiddenButton] = useState<
@@ -79,6 +83,8 @@ const PostCreatePage = () => {
   const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
 
   const onSubmit = async (data: PostDefaultFormType) => {
+    console.log(selectedTagOptions);
+    console.log(data.expiration_type);
     // setIsLoading(true);
     try {
       const responseData = await Promise.resolve(
@@ -146,14 +152,14 @@ const PostCreatePage = () => {
       audio_file: audioFile!,
       file_duration: (audioDuration as number) / 1000,
       wave_data: audioWaveData,
-      privacy_code: '1',
-      expiration_type: 'Never',
+      privacy_code: '',
+      expiration_type: '',
       language: '',
       cover_image_id: undefined,
       cover_image: undefined,
       color_code: '#000000',
       remember_my_language: '0',
-      tags: undefined,
+      tags: [],
       is_ai_generated: '0',
     },
     validateOnChange: false,
@@ -161,14 +167,23 @@ const PostCreatePage = () => {
     onSubmit,
   });
 
-  const handleChange = (event: any) => {
-    if (event.target) {
-      formik.setFieldValue(event.target.name, event.target.value);
-    } else {
-      console.log(event);
-      formik.setFieldValue('tags', event.value);
-    }
-    console.log(formik.values);
+  // const handleChange = (event: any) => {
+  //   if (event.target) {
+  //     formik.setFieldValue(event.target.name, event.target.value);
+  //   } else {
+  //     formik.setFieldValue('tags', event.value);
+  //     console.log(formik.values.tags);
+  //   }
+  // };
+
+  const handleTagsChange = (e: MultiValue<Option>) => {
+    console.log(e);
+    setSelectedTagOptions((prevStates) => [
+      ...prevStates,
+      { label: e[e.length - 1].label, value: e[e.length - 1].value },
+    ]);
+    // formik.setFieldValue('tags');
+    console.log(formik.values.tags);
   };
 
   const startNewRecording = async () => {
@@ -248,7 +263,6 @@ const PostCreatePage = () => {
     audioRef.current.on('timeupdate', (currentTime: number) => {
       const getRemainaingTime = recordTime - currentTime * 1000;
       setRecordTime(getRemainaingTime);
-      console.log(recordTime);
     });
   }, [audioRef.current]);
 
@@ -270,9 +284,12 @@ const PostCreatePage = () => {
   }, [dispatch]);
 
   const handleFileChange = (e: any) => {
+    // e.preventdefault();
+    console.log(audioRef);
     setHiddenButton('record');
     toggleWavePlayerVisible(true);
     if (audioRef.current != null) {
+      console.log(audioRef);
       audioRef.current.destroy();
       audioRef.current = null;
     }
@@ -303,11 +320,26 @@ const PostCreatePage = () => {
     // setShouldNext(true);
   };
 
+  const handleCancelAudio = () => {
+    console.log(audioRef);
+    toggleWavePlayerVisible(false);
+    audioRef.current.destroy();
+    setHiddenButton(undefined);
+    setAudioFile(undefined);
+    console.log(audioRef);
+  };
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.target.files?.[0] &&
+      setImageFile(URL.createObjectURL(e.target.files?.[0]));
+    formik.setFieldValue(e.target.name, e.target.files?.[0]);
+  };
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.on('ready', () => {
         const getAudioDuration = audioRef.current.getDuration();
-        console.log('audio Duration' + getAudioDuration);
+        // console.log('audio Duration' + getAudioDuration);
         setRecordTime(getAudioDuration * 1000);
         setAudioDuration(getAudioDuration * 1000);
         setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
@@ -323,6 +355,8 @@ const PostCreatePage = () => {
     });
   }, [audioRef.current, audioDuration]);
 
+  // formik.values.cover_image && console.log(formik.values.cover_image);
+
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
       <div className="overflow-y-scroll h-full pb-20">
@@ -334,7 +368,7 @@ const PostCreatePage = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log(e);
+              console.log(e.target);
               formik.handleSubmit(e);
             }}
           >
@@ -362,14 +396,24 @@ const PostCreatePage = () => {
               </div>
               <input
                 type="text"
-                name="title"
+                // name="title"
                 id="title"
                 placeholder="Enter title here"
                 className="-ml-2 bg-transparent !border-0 placeholder:text-slate-400 !focus:border-0 focus:outline-0 text-white"
-                onChange={handleChange}
+                // onChange={handleChange}
+                {...formik.getFieldProps('title')}
               />
-
-              <div className="text-white flex gap-2 h-24 px-3 py-2 items-center rounded-md bg-[#414141] ">
+              {!!formik.errors.title && (
+                <div className="text-red-500 text-sm -mt-2">
+                  {formik.errors.title}
+                </div>
+              )}
+              <div
+                className={classNames(
+                  'text-white flex gap-2 px-3 py-2 items-center rounded-md bg-[#414141] ',
+                  wavePlayerVisible && 'h-24'
+                )}
+              >
                 <span className="grow text-slate-400">
                   {!wavePlayerVisible && <>Record or Upload Audio</>}
                   <PlayPauseWithWave
@@ -395,22 +439,31 @@ const PostCreatePage = () => {
                   )}
                 </button>
 
-                <label
+                <div
                   className={classNames(
                     'rounded-full bg-[#535353] p-2 mb-0',
                     hiddenButton === 'upload' ? 'hidden' : 'block'
                   )}
-                  htmlFor="audioUpload"
                 >
-                  <UploadSimple size={24} />
-                  <input
-                    hidden
-                    id="audioUpload"
-                    type="file"
-                    accept="audio/*"
-                    onChange={(e) => handleFileChange(e)}
-                  />
-                </label>
+                  {!wavePlayerVisible ? (
+                    <label htmlFor="audioUpload">
+                      <UploadSimple height={20} width={24} />
+                    </label>
+                  ) : (
+                    <XCircle
+                      size={24}
+                      role="button"
+                      onClick={handleCancelAudio}
+                    />
+                  )}
+                </div>
+                <input
+                  hidden
+                  id="audioUpload"
+                  type="file"
+                  accept="audio/*"
+                  onChange={(e) => handleFileChange(e)}
+                />
               </div>
             </div>
             {/* <PostCard /> */}
@@ -452,31 +505,78 @@ const PostCreatePage = () => {
                 </button>
               </div>
               {imagesVisibility && coverImages && (
-                <div className="grid grid-cols-2 gap-2 w-80">
-                  {coverImages?.map((item) => (
-                    <div key={item.id} className="w-full h-20 relative">
-                      <label className="mb-0" htmlFor={item.id.toString()}>
-                        <Image
-                          className="rounded"
-                          src={item.source}
-                          alt="cover image"
-                          fill
-                          objectFit="cover"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                      </label>
-                      <input
-                        id={item.id.toString()}
-                        type="radio"
-                        name="cover_image_id"
-                        value={item.id}
-                        onChange={handleChange}
+                <div>
+                  {!imageFile ? (
+                    <div className="grid grid-cols-2 gap-2 w-80 h-64 overflow-y-scroll">
+                      {coverImages?.map((item) => (
+                        <div
+                          key={item.id}
+                          className={classNames(
+                            'w-full h-20 relative',
+                            formik.values.cover_image_id ===
+                              item.id.toString() && 'border-2 border-red-400'
+                          )}
+                        >
+                          <label className="mb-0" htmlFor={item.id.toString()}>
+                            <Image
+                              className="rounded"
+                              src={item.source}
+                              alt="cover image"
+                              fill
+                              objectFit="cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                          </label>
+                          <input
+                            id={item.id.toString()}
+                            type="radio"
+                            // name="cover_image_id"
+                            // value={item.id}
+                            // onChange={handleChange}
+                            {...formik.getFieldProps('cover_image_id')}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 relative">
+                      <Image
+                        className="rounded"
+                        src={imageFile}
+                        alt="cover image"
+                        fill
+                        objectFit="cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </div>
-                  ))}
+                  )}
+                  <div className="flex items-center mt-4">
+                    <label
+                      htmlFor="coverImageInput"
+                      className="text-gray-700 text-sm font-bold flex"
+                    >
+                      <Image
+                        className="mr-2"
+                        width={20}
+                        height={20}
+                        src="/images/search.png"
+                        alt="Search Icon"
+                      />
+                      Choose From your gallery
+                    </label>
+                    <input
+                      id="coverImageInput"
+                      type="file"
+                      accept="image/*" // Specify the file types you want to allow (e.g., images)
+                      style={{ display: 'none' }}
+                      name="cover_image"
+                      onChange={handleImageChange}
+                      // {...formik.getFieldProps('cover_image')} // Hide the input element
+                    />
+                  </div>
                 </div>
               )}
-              {locationInputVisibility && (
+              {/* {locationInputVisibility && (
                 <>
                   <label
                     className="block text-gray-700 text-sm font-bold mb-0"
@@ -490,7 +590,7 @@ const PostCreatePage = () => {
                     id="location"
                     onChange={handleChange}
                   >
-                    <option value={undefined}>Select location</option>
+                    <option>Select location</option>
                     {LOCATION_OPTIONS?.length > 0
                       ? LOCATION_OPTIONS.map((value, index) => (
                           <option value={value} key={index}>
@@ -500,7 +600,7 @@ const PostCreatePage = () => {
                       : null}
                   </select>
                 </>
-              )}
+              )} */}
               {languageInputVisibility && (
                 <>
                   <label
@@ -510,12 +610,13 @@ const PostCreatePage = () => {
                     Language
                   </label>
                   <select
-                    name="language"
+                    // name="language"
                     className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
                     id="language"
-                    onChange={handleChange}
+                    // onChange={handleChange}
+                    {...formik.getFieldProps('language')}
                   >
-                    <option value="0">Select your language</option>
+                    <option>Select your language</option>
                     {language_code?.length > 0
                       ? language_code.map((value, index) => (
                           <option value={value.code} key={index}>
@@ -524,6 +625,11 @@ const PostCreatePage = () => {
                         ))
                       : null}
                   </select>
+                  {!!formik.errors.language && (
+                    <div className="text-red-500 text-sm -mt-2">
+                      {formik.errors.language}
+                    </div>
+                  )}
                 </>
               )}
               <div className="">
@@ -534,12 +640,13 @@ const PostCreatePage = () => {
                   Privacy
                 </label>
                 <select
-                  name="privacy_code"
+                  // name="privacy_code"
                   className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-                  id="privacy"
-                  onChange={handleChange}
+                  id="privacy_code"
+                  // onChange={handleChange}
+                  {...formik.getFieldProps('privacy_code')}
                 >
-                  <option value="0">Privacy</option>
+                  <option>Select Privacy</option>
                   {privacy_code?.length > 0
                     ? privacy_code.map((value, index) => (
                         <option value={value.id} key={index}>
@@ -548,29 +655,37 @@ const PostCreatePage = () => {
                       ))
                     : null}
                 </select>
+                {!!formik.errors.privacy_code && (
+                  <div className="text-red-500 text-sm mt-2">
+                    {formik.errors.privacy_code}
+                  </div>
+                )}
               </div>
               <div>
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="language"
+                  htmlFor="expiration_type"
                 >
                   Expiration
                 </label>
                 <select
                   className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-                  id="language"
-                  defaultValue={'Never'}
-                  name="expiration"
-                  onChange={handleChange}
+                  id="expiration_type"
+                  {...formik.getFieldProps('expiration_type')}
                 >
-                  {EXPIRATION_OPTIONS?.length > 0
-                    ? EXPIRATION_OPTIONS.map((value, index) => (
-                        <option value={value} key={index}>
-                          {value}
-                        </option>
-                      ))
-                    : null}
+                  <option>Select Expiration Type</option>
+                  {EXPIRATION_OPTIONS?.length > 0 &&
+                    EXPIRATION_OPTIONS.map((value, index) => (
+                      <option value={value} key={index}>
+                        {value}
+                      </option>
+                    ))}
                 </select>
+                {!!formik.errors.expiration_type && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {formik.errors.expiration_type}
+                  </div>
+                )}
               </div>
               <div className="mb-4">
                 <label
@@ -580,7 +695,7 @@ const PostCreatePage = () => {
                   Tag
                 </label>
                 <AsyncMultiSelect
-                  // handleChange={handleChange}
+                  handleTagsChange={handleTagsChange}
                   name="tag"
                   id="tag"
                   selectedTagOptions={selectedTagOptions}
