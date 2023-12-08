@@ -16,7 +16,7 @@ export const commentDetailSchema = z.object({
 export type CommentDetailType = z.infer<typeof commentDetailSchema>;
 
 export interface CommentFormType {
-  comment: string;
+  comment?: string;
   post_id: number;
   file: File;
   file_duration?: string | number;
