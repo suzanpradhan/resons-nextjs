@@ -19,7 +19,6 @@ export interface CommentFormType {
   comment?: string;
   post_id: number;
   file: File;
-  file_duration?: string | number;
   wave_data?: string;
 }
 

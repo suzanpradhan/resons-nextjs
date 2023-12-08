@@ -93,7 +93,7 @@ export const apiPaths = {
   postCreateUrl: '/socialnetwork/post/create',
   postAudioDownload: '/socialnetwork/audio/download/',
   // Comment
-  commentUrl: '/socialnetwork/post/comment/create',
+  addCommentUrl: '/socialnetwork/post/comment/create',
   postAllCommentsUrl: '/socialnetwork/post/comment/list',
   // Actions
   likeUrl: '/socialnetwork/post/interact',

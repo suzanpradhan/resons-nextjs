@@ -16,11 +16,9 @@ const commentApi = baseApi
           formData.append('post_id', payload.post_id.toString());
           if (payload.wave_data)
             formData.append('wave_data', payload.wave_data);
-          if (payload.file_duration)
-            formData.append('file_duration', payload.file_duration.toString());
 
           return {
-            url: `${apiPaths.commentUrl}`,
+            url: `${apiPaths.addCommentUrl}`,
             method: 'POST',
             body: formData,
             formData: true,

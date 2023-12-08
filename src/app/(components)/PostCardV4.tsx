@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { PostDetailType } from '@/modules/post/postType';
+import { PostDetailType, PostEachDetailType } from '@/modules/post/postType';
 import { useRouter } from 'next/navigation';
 import PlayAllButton from './PlayAllButton';
 import PostDetailV4 from './PostDetailV4';
 
 import { apiPaths } from '@/core/api/apiConstants';
-import { useAppDispatch } from '@/core/redux/clientStore';
+import { defaultWaveData } from '@/core/constants/appConstants';
+import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import commentApi from '@/modules/comment/commentApi';
 import {
@@ -23,7 +24,13 @@ import { useFormik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import moment from 'moment';
 import Image from 'next/image';
-import { Microphone, StopCircle, UploadSimple } from 'phosphor-react';
+import {
+  Microphone,
+  PaperPlaneRight,
+  StopCircle,
+  UploadSimple,
+  X,
+} from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import WaveSurfer from 'wavesurfer.js';
@@ -53,8 +60,13 @@ const PostCardV4 = (props: PostCardProps) => {
   const waveRef = useRef<any>(null);
   const record = useRef<any>(null);
   const [audioDuration, setAudioDuration] = useState<number>(0);
-  const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
+  const [audioWaveData, setAudioWaveData] = useState<any>(defaultWaveData);
 
+  const eachPostData = useAppSelector(
+    (state: RootState) =>
+      state.baseApi.queries[`getPost(${props.post.id})`]
+        ?.data as PostEachDetailType
+  );
   const handlePlayPauseAllComments = async () => {
     if (
       props.playlistId &&
@@ -254,13 +266,21 @@ const PostCardV4 = (props: PostCardProps) => {
     // setShouldNext(true);
   };
 
+  const handleCancelAudio = () => {
+    console.log(audioRef);
+    toggleWavePlayerVisible(false);
+    audioRef.current.destroy();
+    setHiddenButton(undefined);
+    setAudioFile(undefined);
+    console.log(audioRef);
+  };
+
   const validateForm = () => {
     try {
       // postFormSchema.parse(values);
     } catch (error) {
       if (error instanceof ZodError) {
         console.log(error);
-
         return error.formErrors.fieldErrors;
       }
     }
@@ -268,22 +288,24 @@ const PostCardV4 = (props: PostCardProps) => {
 
   const onSubmit = async (data: CommentFormType) => {
     // setIsLoading(true);
+    // console.log(audioFile);
     try {
       const responseData = await Promise.resolve(
         dispatch(
           commentApi.endpoints.addComment.initiate({
-            post_id: 1,
-            file: audioFile!,
-            file_duration: (audioDuration as number) / 1000,
-            wave_data: audioWaveData,
+            post_id: data.post_id,
+            file: data.file,
+            wave_data: data.wave_data,
           })
         )
       );
       if (Object.prototype.hasOwnProperty.call(responseData, 'data')) {
-        await dispatch(
-          postApi.endpoints.getPostList.initiate(0, { forceRefetch: true })
+        const responseData = await dispatch(
+          postApi.endpoints.getPost.initiate(props.post.id)
         );
-        navigator.push('/');
+        console.log(responseData);
+
+        // navigator.push('/');
       }
     } catch (error) {
       console.log(error);
@@ -293,10 +315,9 @@ const PostCardV4 = (props: PostCardProps) => {
   const formik = useFormik<CommentFormType>({
     enableReinitialize: true,
     initialValues: {
-      post_id: 1,
+      post_id: props.post.id,
       file: audioFile!,
-      file_duration: (audioDuration as number) / 1000,
-      wave_data: audioWaveData,
+      wave_data: JSON.stringify(audioWaveData),
     },
     validateOnChange: false,
     validate: validateForm,
@@ -368,46 +389,27 @@ const PostCardV4 = (props: PostCardProps) => {
               className="w-full h-full aspect-auto object-cover"
             />
           </div>
-          {/* <div className="bg-grey-200 h-11 py-1 text-sm text-primary-500 rounded-sm flex-1 flex gap-2 items-center p-2">
-            <span className="grow">Record or upload audio</span>
-            <span className="bg-white inline-block p-2 rounded-full hover:cursor-pointer hover:shadow-md shadow-red-200">
-              <Microphone size={18} weight="light" />
-            </span>
-            <span className="bg-white inline-block p-2 rounded-full hover:cursor-pointer hover:shadow-md shadow-red-200">
-              <UploadSimple size={18} weight="light" />
-            </span>
-          </div> */}
+          <form
+            className="w-full"
+            onSubmit={(event) => {
+              event.preventDefault();
+              formik.handleSubmit(event);
+            }}
+          >
+            <div className="text-gray-500 flex gap-2 px-3 py-2 w-full items-center rounded-md bg-gray-200 ">
+              <span className="grow text-slate-500 text-sm">
+                {!wavePlayerVisible && <>Record or Upload Audio</>}
+                <PlayPauseWithWave
+                  audio={recordedAudio}
+                  audioTime={recordTime}
+                  isPlaying={isPlaying}
+                  setIsPlaying={setIsPlaying}
+                  audioRef={audioRef}
+                  wavePlayerVisible={wavePlayerVisible}
+                  theme="light"
+                />
+              </span>
 
-          <div className="text-gray-500 flex gap-2 px-3 py-2 w-full items-center rounded-md bg-gray-200 ">
-            <span className="grow text-slate-400">
-              {!wavePlayerVisible && <>Record or Upload Audio</>}
-              <PlayPauseWithWave
-                audio={recordedAudio}
-                audioTime={recordTime}
-                isPlaying={isPlaying}
-                setIsPlaying={setIsPlaying}
-                audioRef={audioRef}
-                wavePlayerVisible={wavePlayerVisible}
-              />
-            </span>
-            <button
-              className={classNames(
-                'rounded-full bg-white p-2 hover:shadow-md shadow-gray-200',
-                hiddenButton === 'record' ? 'hidden' : 'block'
-              )}
-              onClick={recording ? stopTheRecording : startNewRecording}
-            >
-              {recording ? <StopCircle size={18} /> : <Microphone size={18} />}
-            </button>
-
-            <label
-              className={classNames(
-                'rounded-full bg-white p-2 mb-0 hover:shadow-md shadow-gray-200',
-                hiddenButton === 'upload' ? 'hidden' : 'block'
-              )}
-              htmlFor="audioUpload"
-            >
-              <UploadSimple size={18} />
               <input
                 hidden
                 id="audioUpload"
@@ -415,8 +417,60 @@ const PostCardV4 = (props: PostCardProps) => {
                 accept="audio/*"
                 onChange={(e) => handleFileChange(e)}
               />
-            </label>
-          </div>
+              {wavePlayerVisible && !recording ? (
+                <>
+                  <div className="rounded-full bg-white p-2 hover:shadow-md shadow-gray-200">
+                    <X
+                      size={18}
+                      role="button"
+                      type="button"
+                      onClick={handleCancelAudio}
+                      className="text-accent"
+                    />
+                  </div>
+
+                  <button
+                    className="rounded-full bg-white p-2 hover:shadow-md shadow-gray-200"
+                    type="submit"
+                  >
+                    <PaperPlaneRight size={18} weight="fill" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className={classNames(
+                      'rounded-full bg-white p-2 hover:shadow-md shadow-gray-200',
+                      hiddenButton === 'record' ? 'hidden' : 'block'
+                    )}
+                    onClick={recording ? stopTheRecording : startNewRecording}
+                  >
+                    {recording ? (
+                      <StopCircle size={18} />
+                    ) : (
+                      <Microphone size={18} />
+                    )}
+                  </button>
+
+                  <div
+                    className={classNames(
+                      'rounded-full bg-white p-2 hover:shadow-md shadow-gray-200',
+                      hiddenButton === 'upload' ? 'hidden' : 'block'
+                    )}
+                  >
+                    {!wavePlayerVisible ? (
+                      <label htmlFor="audioUpload" className="mb-0">
+                        <UploadSimple size={18} />
+                      </label>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </form>
         </div>
       </motion.div>
     </AnimatePresence>
