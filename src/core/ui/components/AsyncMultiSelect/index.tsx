@@ -15,13 +15,14 @@ interface AsyncMultiSelectType {
   name: string;
   selectedTagOptions: MultiValue<Option>;
   setSelectedTagOptions: Dispatch<SetStateAction<MultiValue<Option>>>;
+  // eslint-disable-next-line no-unused-vars
+  handleTagsChange: (e: MultiValue<Option>) => void;
 }
 
 const AsyncMultiSelect = ({
   name,
   id,
-  selectedTagOptions,
-  setSelectedTagOptions,
+  handleTagsChange,
 }: AsyncMultiSelectType) => {
   const [query, setQuery] = useState<string>('');
   const dispatch = useAppDispatch();
@@ -54,15 +55,6 @@ const AsyncMultiSelect = ({
 
   const loadOptions = async (inputValue: string) => {
     return Promise.resolve(getTagsSelectorData(inputValue));
-  };
-
-  const handleTagsChange = (e: MultiValue<Option>) => {
-    console.log(e.length);
-    setSelectedTagOptions((prevStates) => [
-      ...prevStates,
-      { label: e[e.length - 1].label, value: e[e.length - 1].value },
-    ]);
-    console.log(selectedTagOptions);
   };
 
   // const myoptions = loadOptions();
