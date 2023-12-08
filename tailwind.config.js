@@ -46,6 +46,9 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-poppins)'],
       },
+      boxShadow: {
+        upper: '0px -1px 5px 0px rgba(0,0,0,0.26)',
+      },
     },
   },
   plugins: [],

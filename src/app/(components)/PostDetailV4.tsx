@@ -21,6 +21,7 @@ import {
 import { useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import LikeList from './(popUpComponent)/LikeList';
+import AddToPlaylistPopup from './(popups)/AddToPlaylistPopup';
 import WavePlayer from './WavePlayer';
 
 interface PostDetailProps extends PropsFromRedux {
@@ -65,6 +66,7 @@ const PostDetailV4 = ({
 }: PostDetailProps) => {
   const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, toggleModelOpen] = useState(false);
   const handleViewPostLikes = (e: any) => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     document.body.style.overflow = 'hidden';
@@ -289,14 +291,15 @@ const PostDetailV4 = ({
             >
               <ChatTeardropDots size="26" color="white" weight="regular" />
             </div>
-            <div
+            <button
               className="button cursor-pointer"
               onClick={(e) => {
                 e?.stopPropagation();
+                toggleModelOpen(true);
               }}
             >
               <Playlist size="26" color="white" weight="regular" />
-            </div>
+            </button>
           </div>
           <div className="mt-2">
             <div className="text-sm text-white font-light">
@@ -339,6 +342,10 @@ const PostDetailV4 = ({
       {isOpen ? (
         <LikeList onClose={handleOnLikeViewClose} postId={props.post.id!} />
       ) : null}
+      <AddToPlaylistPopup
+        isModalOpen={isModalOpen}
+        toggleModelOpen={toggleModelOpen}
+      />
     </>
   );
 };
