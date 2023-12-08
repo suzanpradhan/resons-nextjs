@@ -14,7 +14,6 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
-import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
 import Button from '@/core/ui/components/Button';
 import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import 'swiper/css';
@@ -276,7 +275,7 @@ function PostToFeed(props: PostCreateProps) {
         >
           Tag
         </label>
-        <AsyncMultiSelect setSelectedTagOptions={setSelectedTagOptions} />
+        {/* <AsyncMultiSelect setSelectedTagOptions={setSelectedTagOptions} /> */}
       </div>
 
       <div className="mb-4">
