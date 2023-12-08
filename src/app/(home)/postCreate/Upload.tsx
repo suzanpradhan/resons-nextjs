@@ -2,7 +2,6 @@
 
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
-import PlayPauseWithWave from './PlayPauseWithWave';
 
 type UploadPropType = {
   audioDuration: number;
@@ -83,13 +82,13 @@ const Upload = ({
   return (
     <>
       <div className={`flex flex-col`}>
-        <PlayPauseWithWave
+        {/* <PlayPauseWithWave
           audioTime={uploadTime}
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
           audio={uploadedAudio}
           audioRef={audioRef}
-        />
+        /> */}
       </div>
       <div className="mt-4 text-center">
         <label htmlFor="audio" className="text-center">
