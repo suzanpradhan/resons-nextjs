@@ -77,36 +77,37 @@ const AddToPlaylistPopup = ({
     >
       <input type="text" placeholder="search" />
       <div className="flex flex-col gap-2 my-4 h-[300px] overflow-y-scroll">
-        {PLAYLIST_LIST.map((item, index) => (
-          <div
-            key={index}
-            className={classNames(
-              'flex gap-2 items-center p-3 rounded-md',
-              selectedPlaylist == item.id && 'bg-[#e9e7e7]'
-            )}
-            onClick={() => setSelectedPlaylist(item.id)}
-          >
-            <div className="w-14 h-14 relative">
-              <Image
-                className="rounded"
-                src={item.image}
-                alt="Playlist Image"
-                fill
-                objectFit="cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+        {playlistList &&
+          playlistList.map((item, index) => (
+            <div
+              key={index}
+              className={classNames(
+                'flex gap-2 items-center p-3 rounded-md',
+                selectedPlaylist == item.id && 'bg-[#e9e7e7]'
+              )}
+              onClick={() => setSelectedPlaylist(item.id!)}
+            >
+              <div className="w-14 h-14 relative">
+                <Image
+                  className="rounded"
+                  src="/images/cover.webp"
+                  alt="Playlist Image"
+                  fill
+                  objectFit="cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
+              <span className="w-44 font-semibold">{item.title!}</span>
+              {selectedPlaylist == item.id && (
+                <button
+                  className="bg-red-400 px-4 py-1 rounded text-white"
+                  onClick={(e) => handleAddButtonClick(item.id!)}
+                >
+                  Add
+                </button>
+              )}
             </div>
-            <span className="w-44 font-semibold">{item.name}</span>
-            {selectedPlaylist == item.id && (
-              <button
-                className="bg-red-400 px-4 py-1 rounded text-white"
-                onClick={(e) => handleAddButtonClick(item.id)}
-              >
-                Add
-              </button>
-            )}
-          </div>
-        ))}
+          ))}
       </div>
       <div className="shadow-upper -mx-4 pt-4 px-4 -mb-4 pb-4">
         <Link
