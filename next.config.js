@@ -29,6 +29,12 @@ module.exports = withPWA({
       },
       {
         protocol: 'https',
+        hostname: 'source.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'api.social-dev.cloud',
         port: '',
         pathname: '/**',

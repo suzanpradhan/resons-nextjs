@@ -426,6 +426,7 @@ const PostCreatePage = () => {
                   />
                 </span>
                 <button
+                  type="button"
                   className={classNames(
                     'rounded-full bg-[#535353] p-2',
                     hiddenButton === 'record' ? 'hidden' : 'block'
