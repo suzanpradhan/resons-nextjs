@@ -9,15 +9,18 @@ import { useFormik } from 'formik';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toFormikValidate } from 'zod-formik-adapter';
 import { GoogleSignInButton } from '../(components)/authButtons';
 
 export default function SignIn() {
   const navigator = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callback');
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
   // const [authenticateChecked, setAuthenticateChecked] = useState(false);
   // const [isAllow, setIsAllow] = useState(() => {
   //   // Check if the authentication cookie is present
@@ -66,9 +69,12 @@ export default function SignIn() {
     })
       .then((response) => {
         if (response?.ok) {
-          navigator.push('/');
+          console.log(response);
+          navigator.push(callbackUrl ? callbackUrl : '/');
         } else {
-          alert(JSON.stringify(response));
+          // console.log(response);
+          // alert(JSON.stringify(response));
+          setError(response?.error!);
         }
       })
       .catch((errorResponse) => {
@@ -211,6 +217,7 @@ export default function SignIn() {
               e.preventDefault();
               formik.handleSubmit(e);
             }}
+            onChange={(e) => setError(undefined)}
           >
             <div className="flex flex-col mb-4">
               <TextField
@@ -241,6 +248,11 @@ export default function SignIn() {
                 </div>
               )}
             </div>
+            {error && (
+              <div className="text-accent text-sm mb-4">
+                Please input valid credentials
+              </div>
+            )}
 
             <div className="mb-4">
               <Button
