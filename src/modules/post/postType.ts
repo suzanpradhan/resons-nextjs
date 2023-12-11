@@ -28,7 +28,7 @@ import { profileDetailSchema } from '../profile/profileType';
 
 
 export const postDetailSchema = z.object({
-  id: z.number().optional(),
+  id: z.number(),
   title: z.string().pipe(nonempty),
   description: z.string(),
   privacy_code: z.number().optional(),

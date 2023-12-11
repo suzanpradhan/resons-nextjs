@@ -18,7 +18,14 @@ import { updateHomePage } from '@/modules/post/homePageReducer';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { CaretRight, Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
+import {
+  CaretRight,
+  Pause,
+  Play,
+  Queue,
+  SkipBack,
+  SkipForward,
+} from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import MarqueeText from '../MarqueeText';
@@ -564,6 +571,9 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
                     <CaretRight size={15} weight="light" />
                   </div>
                 )}
+                <div className="flex items-center gap-1 text-xs text-gray-900 text-medium cursor-pointer">
+                  <Queue size={24} weight="light" />
+                </div>
               </motion.div>
             ) : null}
             <div className="flex items-center justify-between gap-4 px-4 h-12">

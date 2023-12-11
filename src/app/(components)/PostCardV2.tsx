@@ -45,7 +45,7 @@ export interface PostCardV2Props {
 
 /* eslint-disable @next/next/no-img-element */
 const PostCardV2 = (props: PostCardV2Props) => {
-  console.log("props", props);
+  console.log('props', props);
   const dispatch = useAppDispatch();
   const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
@@ -189,7 +189,6 @@ const PostCardV2 = (props: PostCardV2Props) => {
               comment: formData.comment,
               file: file,
               post_id: formData.post_id!,
-              file_duration: audioDuration,
               wave_data: audioWaveData,
             })
           )
@@ -322,7 +321,8 @@ const PostCardV2 = (props: PostCardV2Props) => {
     if (window !== undefined && props.postData.audio.id) {
       window
         .open(
-          `${apiPaths.baseUrl + apiPaths.postAudioDownload}${props.postData.audio.id
+          `${apiPaths.baseUrl + apiPaths.postAudioDownload}${
+            props.postData.audio.id
           }`,
           '_blank'
         )
@@ -337,10 +337,11 @@ const PostCardV2 = (props: PostCardV2Props) => {
           <div className="flex flex-col bg-white w-[100%] rounded-sm mt-5 sm:mb-5">
             <div className="relative flex justify-between items-center px-4">
               <Link
-                href={`${props.postData.id
-                  ? '/profile'
-                  : `/profile/${props.postData.id}`
-                  }`}
+                href={`${
+                  props.postData.id
+                    ? '/profile'
+                    : `/profile/${props.postData.id}`
+                }`}
               >
                 <div className="flex items-center gap-2">
                   <div className="w-max h-max border-solid border-2 border-gray-300 rounded-full p-[2px]">
@@ -348,10 +349,10 @@ const PostCardV2 = (props: PostCardV2Props) => {
                       <img
                         src={
                           props.postData.owner?.profile_image &&
-                            props.postData.owner?.profile_image != null
+                          props.postData.owner?.profile_image != null
                             ? apiPaths.rootPath +
-                            '/storage/' +
-                            props.postData.owner?.profile_image
+                              '/storage/' +
+                              props.postData.owner?.profile_image
                             : '/images/avatar.jpg'
                         }
                         alt="post_owner_avatar"
@@ -384,7 +385,7 @@ const PostCardV2 = (props: PostCardV2Props) => {
                     <div className="flex items-center text-xs md:text-sm text-gray-500">
                       {props.postData.owner.country?.name ?? 'United Kingdom'}{' '}
                       {props.postData.owner.language &&
-                        props.postData.owner.language != null ? (
+                      props.postData.owner.language != null ? (
                         <span className="mx-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-sky-500 text-[.5rem] text-white">
                           {props.postData.owner.language ?? 'N/A'}
                         </span>
@@ -397,7 +398,7 @@ const PostCardV2 = (props: PostCardV2Props) => {
                 <More size="28" className="text-dark-500" variant="Outline" />
                 <div className="group-hover:block hidden absolute top-full right-0 bg-white w-max z-50 drop-shadow-2xl">
                   {isLoggedIn &&
-                    session.data?.user?.id === props.postData.owner.id ? (
+                  session.data?.user?.id === props.postData.owner.id ? (
                     <>
                       <div
                         onClick={handlePostDelete}
@@ -439,7 +440,8 @@ const PostCardV2 = (props: PostCardV2Props) => {
                     url:
                       apiPaths.baseUrl +
                       '/socialnetwork/audio/stream/' +
-                      props.postData.audio?.id + "?isPostAudio=YES",
+                      props.postData.audio?.id +
+                      '?isPostAudio=YES',
                     duration: props.postData.audio?.file_duration
                       ? parseFloat(props.postData.audio.file_duration)
                       : 0,
@@ -553,8 +555,8 @@ const PostCardV2 = (props: PostCardV2Props) => {
                       onClick={handlePlayPauseAllComments}
                     >
                       {playlistId &&
-                        playlistId == props.postData.id?.toString() &&
-                        isPlaying ? (
+                      playlistId == props.postData.id?.toString() &&
+                      isPlaying ? (
                         <Pause size="20" color="#fff" variant="Bulk" />
                       ) : (
                         <Play size="20" color="#fff" variant="Bulk" />

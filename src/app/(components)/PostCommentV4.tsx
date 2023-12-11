@@ -91,12 +91,13 @@ export default function PostCommentV4(props: PostCommentProps) {
   return (
     <>
       <div
-        className={`px-4 py-4 flex border-0 border-gray-100 border-b last-of-type:border-b-0 transition-all duration-700 ease-in-out ${playlist &&
+        className={`px-4 py-4 flex border-0 border-gray-100 border-b last-of-type:border-b-0 transition-all duration-700 ease-in-out ${
+          playlist &&
           playlist[currentPlaylistIndex]?.info?.cid === props.commentData.id &&
           isPlaying
-          ? 'bg-blue-100 bg-opacity-[.1]'
-          : 'bg-white bg-opacity-100'
-          }`}
+            ? 'bg-blue-100 bg-opacity-[.1]'
+            : 'bg-white bg-opacity-100'
+        }`}
         id={`post-card-comment-id-${props.commentData.id}`}
       >
         <div className="w-max h-max border-solid border-2 border-gray-300 rounded-full p-[2px]">
@@ -106,7 +107,7 @@ export default function PostCommentV4(props: PostCommentProps) {
               height={100}
               src={
                 props.commentData.owner?.profile_image &&
-                  props.commentData.owner?.profile_image != null
+                props.commentData.owner?.profile_image != null
                   ? props.commentData.owner?.profile_image
                   : '/images/avatar.jpg'
               }
@@ -125,9 +126,9 @@ export default function PostCommentV4(props: PostCommentProps) {
               <h3 className="flex items-center gap-4 text-base text-black font-medium leading-4">
                 {props.commentData.owner.name}
                 {playlist &&
-                  playlist[currentPlaylistIndex]?.info?.cid ===
+                playlist[currentPlaylistIndex]?.info?.cid ===
                   props.commentData.id &&
-                  isPlaying ? (
+                isPlaying ? (
                   <Image
                     alt="wave-icon"
                     src="/images/wave.gif"
