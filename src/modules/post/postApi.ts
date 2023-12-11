@@ -3,10 +3,10 @@ import { baseApi } from '@/core/api/apiQuery';
 import { PaginatedResponseType } from '@/core/types/reponseTypes';
 import { toast } from 'react-toastify';
 import {
+  PostDefaultFormType,
   PostDetailType,
   PostEachDetailType,
-  PostFormType,
-  SearchDetailType,
+  SearchDetailType
 } from './postType';
 
 const postApi = baseApi.injectEndpoints({
@@ -182,7 +182,7 @@ const postApi = baseApi.injectEndpoints({
     //     "is_ai_generated": 0
     // }
     // Add Post
-    addPost: builder.mutation<any, PostFormType>({
+    addPost: builder.mutation<any, PostDefaultFormType>({
       query: ({ ...payload }) => {
         var formData = new FormData();
         formData.append('title', payload.title);
@@ -196,7 +196,7 @@ const postApi = baseApi.injectEndpoints({
         formData.append('audio_file', payload.audio_file);
         formData.append('is_ai_generated', payload?.is_ai_generated);
         formData.append('expiration_type', payload.expiration_type);
-        formData.append('language', payload.language);
+        formData.append('language', payload.language!);
         // if (payload.cover_image) {
         //   console.log(["here", payload.cover_image])
         if (payload.cover_image) {

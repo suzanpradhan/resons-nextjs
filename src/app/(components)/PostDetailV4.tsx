@@ -8,7 +8,7 @@ import { PostDetailType } from '@/modules/post/postType';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   ChatTeardropDots,
   DownloadSimple,
@@ -21,6 +21,7 @@ import {
 import { useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import LikeList from './(popUpComponent)/LikeList';
+import AddToPlaylistPopup from './(popups)/AddToPlaylistPopup';
 import WavePlayer from './WavePlayer';
 
 interface PostDetailProps extends PropsFromRedux {
@@ -65,6 +66,9 @@ const PostDetailV4 = ({
 }: PostDetailProps) => {
   const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, toggleModelOpen] = useState(false);
+  const navigator = useRouter();
+
   const handleViewPostLikes = (e: any) => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     document.body.style.overflow = 'hidden';
@@ -289,14 +293,19 @@ const PostDetailV4 = ({
             >
               <ChatTeardropDots size="26" color="white" weight="regular" />
             </div>
-            <div
+            <button
               className="button cursor-pointer"
               onClick={(e) => {
                 e?.stopPropagation();
+                if (session.data?.user != undefined) {
+                  toggleModelOpen(true);
+                } else {
+                  navigator.push('/login');
+                }
               }}
             >
               <Playlist size="26" color="white" weight="regular" />
-            </div>
+            </button>
           </div>
           <div className="mt-2">
             <div className="text-sm text-white font-light">
@@ -339,6 +348,12 @@ const PostDetailV4 = ({
       {isOpen ? (
         <LikeList onClose={handleOnLikeViewClose} postId={props.post.id!} />
       ) : null}
+      {session.data?.user && (
+        <AddToPlaylistPopup
+          isModalOpen={isModalOpen}
+          toggleModelOpen={toggleModelOpen}
+        />
+      )}
     </>
   );
 };

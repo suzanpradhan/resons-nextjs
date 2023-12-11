@@ -25,7 +25,8 @@ const playlistApi = baseApi
           return currentArg !== previousArg;
         },
         transformResponse: (response: any) => {
-          return response?.data?.playlist as PlaylistDetailType[];
+          console.log(response.data)
+          return response?.data as PlaylistDetailType[];
         },
       }),
 

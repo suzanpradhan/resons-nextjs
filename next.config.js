@@ -16,6 +16,12 @@ module.exports = withPWA({
         pathname: '/**',
       },
       {
+        protocol: 'http',
+        hostname: 'localhost', //local
+        port: '3000',
+        pathname: '/**',
+      },
+      {
         protocol: 'https',
         hostname: 'resons.iionstech.com',
         port: '',

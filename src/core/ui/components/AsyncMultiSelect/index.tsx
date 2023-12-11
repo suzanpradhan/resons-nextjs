@@ -4,16 +4,26 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { MultiValue } from 'react-select';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 // Define an interface for the option type
+
 interface Option {
-  value: string;
   label: string;
+  value: string;
 }
 
 interface AsyncMultiSelectType {
+  id: string;
+  name: string;
+  selectedTagOptions: MultiValue<Option>;
   setSelectedTagOptions: Dispatch<SetStateAction<MultiValue<Option>>>;
+  // eslint-disable-next-line no-unused-vars
+  handleTagsChange: (e: MultiValue<Option>) => void;
 }
 
-const AsyncMultiSelect = ({ setSelectedTagOptions }: AsyncMultiSelectType) => {
+const AsyncMultiSelect = ({
+  name,
+  id,
+  handleTagsChange,
+}: AsyncMultiSelectType) => {
   const [query, setQuery] = useState<string>('');
   const dispatch = useAppDispatch();
 
@@ -49,19 +59,17 @@ const AsyncMultiSelect = ({ setSelectedTagOptions }: AsyncMultiSelectType) => {
 
   // const myoptions = loadOptions();
 
-  const onChange = (value: any) => {
-    setSelectedTagOptions(value);
-  };
   return (
     <AsyncCreatableSelect
       cacheOptions
       isMulti
       placeholder="Select or type..."
-      id="tag"
+      id={id}
       loadOptions={loadOptions}
       onInputChange={(value) => setQuery(value)}
-      onChange={(value) => onChange(value)}
+      onChange={(e: MultiValue<Option>) => handleTagsChange(e)}
       defaultOptions
+      name={name}
     />
   );
 };

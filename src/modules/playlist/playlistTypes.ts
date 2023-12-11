@@ -1,3 +1,4 @@
+import { nonempty } from '@/core/utils/formUtils';
 import { z } from 'zod';
 
 export const playlistDetailSchema = z.object({
@@ -17,3 +18,11 @@ export interface RemovePlaylistFormType {
   playlist_id: number;
   audio_id: number;
 }
+
+export const addPlaylistFormSchema = z.object({
+  privacy_code: z.string(),
+  playlist_cover: z.custom<File>((val) => (val instanceof File), "optional").optional(),
+  title: z.string().pipe(nonempty)
+})
+
+// export type AddPlaylistFormType = z.infer<typeof addPlaylistFormSchema>

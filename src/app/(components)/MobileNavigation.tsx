@@ -67,7 +67,7 @@ const MobileNavigation = () => {
           </Link>
         </li>
         <li title="Create Post" className="basis-[20%]">
-          <Link href="/postCreate" className={`flex items-center px-4 h-full`}>
+          <Link href="/post" className={`flex items-center px-4 h-full`}>
             <div className="w-max mx-auto">
               <Record
                 size="24"

@@ -1,5 +1,4 @@
 'use client';
-import AppBar from '@/app/(components)/AppBar';
 import React, { useRef } from 'react';
 
 import MobileNavigation from '@/app/(components)/MobileNavigation';
@@ -38,7 +37,7 @@ export default function PostcreateLayout({
   return (
     <>
       <div className="relative h-[calc(100dvh)] max-h-screen overflow-hidden">
-        <AppBar />
+        {/* <AppBar /> */}
         <div
           className="w-full flex flex-col items-center h-screen max-h-screen overflow-hidden"
           ref={scrollableDivRef}
