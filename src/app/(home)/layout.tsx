@@ -17,6 +17,7 @@ export default function HomeLayout({
   view?: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
+
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage
   );
@@ -99,6 +100,7 @@ export default function HomeLayout({
         </div>
         <NowPlayingBarV3 />
       </div>
+
       {currentPage == 1 ? <MobileNavigation /> : <></>}
     </>
   );

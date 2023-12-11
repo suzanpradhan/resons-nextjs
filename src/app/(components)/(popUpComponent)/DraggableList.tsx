@@ -3,18 +3,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DraggableItem from './DraggableItem';
 
-const DraggableList: React.FC = () => {
-  const [items, setItems] = useState<string[]>([
-    'Song name 1',
-    'Song name 2',
-    'Song name 3',
-    'Song name 1',
-    'Song name 2',
-    'Song name 3',
-    'Song name 1',
-    'Song name 2',
-    'Song name 3',
-  ]);
+const DraggableList = () => {
+  const [items, setItems] = useState<string[]>(['item 1']);
 
   const moveItem = (dragIndex: number, hoverIndex: number) => {
     const newItems = [...items];

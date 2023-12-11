@@ -26,6 +26,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
   const currentPage = useAppSelector(
     (state: RootState) => state.postListing.currentPage
   );
+
   const [hasMoreData, setHasMoreData] = useState(true);
 
   useEffect(() => {
