@@ -9,12 +9,15 @@ import { useFormik } from 'formik';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toFormikValidate } from 'zod-formik-adapter';
 import { GoogleSignInButton } from '../(components)/authButtons';
 
 export default function SignIn() {
   // const navigator = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callback');
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   // const [authenticateChecked, setAuthenticateChecked] = useState(false);
@@ -62,6 +65,7 @@ export default function SignIn() {
       password: values.password,
       platform: 'mobile',
       redirect: true,
+      callbackUrl: callbackUrl ? callbackUrl : '/',
     })
       .then(() => {
         // if (response?.ok) {
