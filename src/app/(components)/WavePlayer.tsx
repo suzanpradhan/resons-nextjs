@@ -127,7 +127,7 @@ const WavePlayer = ({
       };
     };
     create();
-  }, []);
+  }, [audioItem]);
 
   const handlePlayPause = async (e: any) => {
     e?.stopPropagation();
@@ -158,7 +158,7 @@ const WavePlayer = ({
             className={`border-none rounded-full p-2 ${
               theme == 'dark' ? 'bg-white' : 'bg-primary-900'
             }`}
-            onClick={handlePlayPause}
+            onClick={onPlay ?? handlePlayPause}
           >
             {playlist[currentPlaylistIndex]?.url == audioItem.url &&
             isPlaying ? (

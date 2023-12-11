@@ -92,6 +92,7 @@ export const apiPaths = {
   postSingleUrl: '/socialnetwork/post/display',
   postCreateUrl: '/socialnetwork/post/create',
   postAudioDownload: '/socialnetwork/audio/download/',
+  getGenrePlaylist: '/socialnetwork/post/list/by-genre',
   // Comment
   commentUrl: '/socialnetwork/post/comment/create',
   postAllCommentsUrl: '/socialnetwork/post/comment/list',
@@ -115,6 +116,8 @@ export const apiPaths = {
   addPlaylistUrl: '/socialnetwork/playlist/create',
   // Geners
   getGenresUrl: '/socialnetwork/list-genre',
+  getGenreCurrentItem: '/socialnetwork/genre/current/playing',
+
   // Notification
   setNotificationUrl: '/socialnetwork/settings/update',
   getNotificationListUrl: '/notification/list',

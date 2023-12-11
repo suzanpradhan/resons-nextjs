@@ -6,8 +6,8 @@ import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { updateHomePage } from '@/modules/post/homePageReducer';
 import React, { useCallback, useEffect } from 'react';
-import PostDetailComponent from '../(components)/PostDetailComponent';
-import NowPlayingBarV3 from '../../(components)/(nowPlayingPlayer)/NowPlayingBarV3';
+import NowPlayingBarV3 from '../(components)/(nowPlayingPlayer)/NowPlayingBarV3';
+import PostDetailComponent from './(components)/PostDetailComponent';
 
 export default function HomeLayout({
   children,
