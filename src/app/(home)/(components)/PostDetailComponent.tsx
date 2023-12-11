@@ -401,12 +401,10 @@ export default function PostDetailComponent({
   });
 
   const handleCancelAudio = () => {
-    console.log(audioRef);
     toggleWavePlayerVisible(false);
     audioRef.current.destroy();
     setHiddenButton(undefined);
     setAudioFile(undefined);
-    console.log(audioRef);
   };
 
   return (

@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { PostDetailType, PostEachDetailType } from '@/modules/post/postType';
-import { useRouter } from 'next/navigation';
 import PlayAllButton from './PlayAllButton';
 import PostDetailV4 from './PostDetailV4';
 
@@ -23,7 +22,9 @@ import classNames from 'classnames';
 import { useFormik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import moment from 'moment';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   Microphone,
   PaperPlaneRight,
@@ -44,8 +45,8 @@ interface PostCardProps extends PropsFromRedux {
 
 const PostCardV4 = (props: PostCardProps) => {
   moment.relativeTimeThreshold('s', 60);
-  const navigator = useRouter();
   const dispatch = useAppDispatch();
+  const navigator = useRouter();
   //recorded audio datas
   const [hiddenButton, setHiddenButton] = useState<
     'upload' | 'record' | undefined
@@ -59,6 +60,7 @@ const PostCardV4 = (props: PostCardProps) => {
   const [recording, setRecording] = useState(false);
   const waveRef = useRef<any>(null);
   const record = useRef<any>(null);
+  const session = useSession();
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const [audioWaveData, setAudioWaveData] = useState<any>(defaultWaveData);
 
@@ -67,6 +69,7 @@ const PostCardV4 = (props: PostCardProps) => {
       state.baseApi.queries[`getPost(${props.post.id})`]
         ?.data as PostEachDetailType
   );
+
   const handlePlayPauseAllComments = async () => {
     if (
       props.playlistId &&
@@ -162,6 +165,9 @@ const PostCardV4 = (props: PostCardProps) => {
   }
 
   const startNewRecording = async () => {
+    if (session.data?.user == undefined) {
+      navigator.push('/login');
+    }
     setHiddenButton('upload');
     toggleWavePlayerVisible(true);
     if (audioRef.current) {
@@ -213,6 +219,9 @@ const PostCardV4 = (props: PostCardProps) => {
   };
 
   const stopTheRecording = () => {
+    if (session.data?.user == undefined) {
+      navigator.push('/login');
+    }
     if (waveRef.current) {
       waveRef.current.on('decode', () => {
         const getAudioDuration = waveRef.current.getDuration();
@@ -233,6 +242,11 @@ const PostCardV4 = (props: PostCardProps) => {
   };
 
   const handleFileChange = (e: any) => {
+    console.log('session checking:' + session.data?.user);
+
+    if (session.data?.user == undefined) {
+      navigator.push('/login');
+    }
     setHiddenButton('record');
     toggleWavePlayerVisible(true);
     if (audioRef.current != null) {
@@ -267,12 +281,10 @@ const PostCardV4 = (props: PostCardProps) => {
   };
 
   const handleCancelAudio = () => {
-    console.log(audioRef);
     toggleWavePlayerVisible(false);
     audioRef.current.destroy();
     setHiddenButton(undefined);
     setAudioFile(undefined);
-    console.log(audioRef);
   };
 
   const validateForm = () => {
@@ -453,20 +465,15 @@ const PostCardV4 = (props: PostCardProps) => {
                     )}
                   </button>
 
-                  <div
+                  <label
+                    htmlFor="audioUpload"
                     className={classNames(
-                      'rounded-full bg-white p-2 hover:shadow-md shadow-gray-200',
+                      'rounded-full bg-white p-2 hover:shadow-md mb-0 hover:cursor-pointer shadow-gray-200',
                       hiddenButton === 'upload' ? 'hidden' : 'block'
                     )}
                   >
-                    {!wavePlayerVisible ? (
-                      <label htmlFor="audioUpload" className="mb-0">
-                        <UploadSimple size={18} />
-                      </label>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                    {!wavePlayerVisible ? <UploadSimple size={18} /> : <></>}
+                  </label>
                 </>
               )}
             </div>
