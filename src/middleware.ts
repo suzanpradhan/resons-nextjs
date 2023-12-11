@@ -18,6 +18,8 @@ export async function middleware(req: any) {
   //   return NextResponse.redirect(new URL('/login', req.url));
   // }
 
+  console.log(req.nextUrl.origin);
+
 
   if (req.nextUrl.pathname.startsWith('/_next/')) {
     return;
@@ -25,14 +27,14 @@ export async function middleware(req: any) {
 
   if (token) {
     if (pathname === '/login') {
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/', req.nextUrl.origin));
     }
     return;
   } else {
     if (pathname === '/login') {
       return;
     }
-    return NextResponse.redirect(new URL('/login', req.url));
+    return NextResponse.redirect(new URL('/login' + "?callback=" + req.url, req.nextUrl.origin));
   }
 }
 
