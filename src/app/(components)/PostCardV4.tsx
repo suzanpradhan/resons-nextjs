@@ -422,13 +422,24 @@ const PostCardV4 = (props: PostCardProps) => {
                 />
               </span>
 
-              <input
-                hidden
-                id="audioUpload"
-                type="file"
-                accept="audio/*"
-                onChange={(e) => handleFileChange(e)}
-              />
+              {session.data?.user ? (
+                <input
+                  hidden
+                  id="audioUpload"
+                  type="file"
+                  accept="audio/*"
+                  onChange={(e) => handleFileChange(e)}
+                />
+              ) : (
+                <button
+                  id="audioUpload"
+                  hidden
+                  type="button"
+                  onClick={() => {
+                    navigator.push('/login');
+                  }}
+                ></button>
+              )}
               {wavePlayerVisible && !recording ? (
                 <>
                   <div className="rounded-full bg-white p-2 hover:shadow-md shadow-gray-200">

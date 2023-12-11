@@ -67,11 +67,11 @@ const MobileNavigation = () => {
           </Link>
         </li>
         <li title="Create Post" className="basis-[20%]">
-          <Link href="/post" className={`flex items-center px-4 h-full`}>
+          <Link href="/postCreate" className={`flex items-center px-4 h-full`}>
             <div className="w-max mx-auto">
               <Record
                 size="24"
-                color={`${pathName === '/postCreate' ? '#cf4a4a' : '#cf4a4a'}`}
+                color={`${pathName === '/post' ? '#cf4a4a' : '#cf4a4a'}`}
                 weight="duotone"
               />
             </div>
