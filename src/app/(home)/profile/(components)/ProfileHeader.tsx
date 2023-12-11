@@ -48,7 +48,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
             {props.viewProfile.name}
           </h2>
           <div className="flex gap-1 text-slate-500">
-            <Link href="/settings">
+            <Link href="/accountSettings">
               <GearSix size={24} />
             </Link>
           </div>
