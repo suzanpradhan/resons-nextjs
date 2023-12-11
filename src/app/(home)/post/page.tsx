@@ -7,6 +7,7 @@ import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
 import postApi from '@/modules/post/postApi';
 import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
+import { ProfileDetailType } from '@/modules/profile/profileType';
 import { default as classNames, default as classnames } from 'classnames';
 import { useFormik } from 'formik';
 import Image from 'next/image';
@@ -126,7 +127,8 @@ const PostCreatePage = () => {
   };
 
   const myProfile = useAppSelector((state: RootState) => {
-    return state.baseApi.queries[`getMyProfileData("?load=true")`]?.data as any;
+    return state.baseApi.queries[`getMyProfileData("?load=true")`]
+      ?.data as ProfileDetailType;
   });
 
   // const coverImages = useAppSelector((state: RootState) => {
@@ -380,7 +382,7 @@ const PostCreatePage = () => {
                     src={
                       myProfile?.profile_image &&
                       myProfile.profile_image != null
-                        ? myProfile.viewProfile.profile_image
+                        ? myProfile.profile_image
                         : '/images/avatar.jpg'
                     }
                     alt="post_owner_avatar"
@@ -391,7 +393,9 @@ const PostCreatePage = () => {
                 </div>
                 <div className="text-white">
                   <h3>{myProfile.name}</h3>
-                  <p className="text-sm">{myProfile.country}Afganistan</p>
+                  <p className="text-sm">
+                    {myProfile?.country?.name ?? ''}Afganistan
+                  </p>
                 </div>
               </div>
               <input

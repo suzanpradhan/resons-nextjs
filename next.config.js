@@ -7,7 +7,7 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 
 module.exports = withPWA({
   images: {
-    domains: ['127.0.0.1', 'resons.iionstech.com', 'localhost'],
+    domains: ['127.0.0.1', 'resons.iionstech.com', 'source.unsplash.com'],
     remotePatterns: [
       {
         protocol: 'http',

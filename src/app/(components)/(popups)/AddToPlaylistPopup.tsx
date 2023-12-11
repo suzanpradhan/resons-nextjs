@@ -31,7 +31,6 @@ const AddToPlaylistPopup = ({
   const dispatch = useAppDispatch();
 
   const handleAddButtonClick = async (id: number) => {
-    console.log(id);
     try {
       const responseData = await Promise.resolve(
         dispatch(

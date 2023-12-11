@@ -8,7 +8,7 @@ import { PostDetailType } from '@/modules/post/postType';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   ChatTeardropDots,
   DownloadSimple,
@@ -67,6 +67,8 @@ const PostDetailV4 = ({
   const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, toggleModelOpen] = useState(false);
+  const navigator = useRouter();
+
   const handleViewPostLikes = (e: any) => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     document.body.style.overflow = 'hidden';
@@ -295,7 +297,11 @@ const PostDetailV4 = ({
               className="button cursor-pointer"
               onClick={(e) => {
                 e?.stopPropagation();
-                toggleModelOpen(true);
+                if (session.data?.user != undefined) {
+                  toggleModelOpen(true);
+                } else {
+                  navigator.push('/login');
+                }
               }}
             >
               <Playlist size="26" color="white" weight="regular" />
@@ -342,10 +348,12 @@ const PostDetailV4 = ({
       {isOpen ? (
         <LikeList onClose={handleOnLikeViewClose} postId={props.post.id!} />
       ) : null}
-      <AddToPlaylistPopup
-        isModalOpen={isModalOpen}
-        toggleModelOpen={toggleModelOpen}
-      />
+      {session.data?.user && (
+        <AddToPlaylistPopup
+          isModalOpen={isModalOpen}
+          toggleModelOpen={toggleModelOpen}
+        />
+      )}
     </>
   );
 };

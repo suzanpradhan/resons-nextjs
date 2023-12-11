@@ -400,8 +400,8 @@ export default function SettingPage() {
   // const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <div className="sm:container md:container lg:container mx-auto md:px-4 min-h-screen pb-12 pt-12">
-      <div className="">
+    <div className="sm:container md:container lg:container mx-auto flex flex-col h-full">
+      <div className="overflow-y-scroll pb-16 md:pb-0 pt-11">
         <div className="flex flex-col md:flex-row md:justify-start md:items-start px-5 py-5 border-0 border-b border-gray-300 bg-white mb-5">
           <div className="rounded-sm py-2 basis-2/6 w-full md:mr-5">
             <h3 className="text-base text-gray-700 font-bold">
