@@ -63,8 +63,8 @@ const postApi = baseApi.injectEndpoints({
     }),
 
     // Get List of Posts
-    getMyPostList: builder.query<PaginatedResponseType<PostDetailType>, void>({
-      query: () => `${apiPaths.myPostUrl}`,
+    getMyPostList: builder.query<PaginatedResponseType<PostDetailType>, number>({
+      query: (page) => `${apiPaths.myPostUrl}?page=${page}&paginate=5`,
       providesTags: (result) =>
         result
           ? [
@@ -75,11 +75,14 @@ const postApi = baseApi.injectEndpoints({
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
+      merge: (currentCache, newItems) => {
+        currentCache.pagination = newItems.pagination;
+        currentCache.data.push(...newItems.data);
+      },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
       transformResponse: (response: any) => {
-        console.log(response?.data);
         return response?.data as PaginatedResponseType<PostDetailType>;
       },
     }),
@@ -109,7 +112,8 @@ const postApi = baseApi.injectEndpoints({
     // Get Post
     getPost: builder.query<PostEachDetailType, number>({
       query: (id) => `${apiPaths.postSingleUrl}/${id}`,
-      providesTags: ['Posts'],
+      // providesTags: ['Posts'],
+      providesTags: (result, error, id) => [{ type: 'Posts', id }],
       async onQueryStarted(payload, { queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -118,6 +122,14 @@ const postApi = baseApi.injectEndpoints({
           toast.error(JSON.stringify(err));
         }
       },
+      transformResponse: (response: any) => {
+        return response?.data?.data as PostEachDetailType;
+      },
+    }),
+
+    getPostMutate: builder.mutation<PostEachDetailType, number>({
+      query: (id) => `${apiPaths.postSingleUrl}/${id}`,
+      invalidatesTags: (result, error, id) => [{ type: 'Posts', id }],
       transformResponse: (response: any) => {
         return response?.data?.data as PostEachDetailType;
       },

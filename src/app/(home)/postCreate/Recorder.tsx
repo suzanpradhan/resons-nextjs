@@ -4,7 +4,6 @@ import { Microphone, StopCircle } from 'phosphor-react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
-import PlayPauseWithWave from './PlayPauseWithWave';
 
 type RecorderPropType = {
   setAudioDuration: Dispatch<SetStateAction<number>>;
@@ -119,13 +118,13 @@ const Recorder = ({
 
   return (
     <div className="flex flex-col">
-      <PlayPauseWithWave
+      {/* <PlayPauseWithWave
         audio={recordedAudio}
         audioTime={recordTime}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         audioRef={audioRef}
-      />
+      /> */}
       <div className="mt-4 text-right flex flex-col items-center">
         <h2 className="text-gray-900 text-2xl font-thin min-w-[140px] inline-flex justify-center items-center">
           <>

@@ -27,7 +27,7 @@ const profileApi = baseApi
             }),
 
             getMyProfileData: builder.query<ProfileDetailType, string>({
-                query: (query: string) => `${apiPaths.profileUrl}${query}`,
+                query: (query: string) => `${apiPaths.profileUrl}/${query}`,
                 providesTags: ['Profile'],
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {

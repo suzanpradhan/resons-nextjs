@@ -13,15 +13,12 @@ const commentApi = baseApi
         query: ({ ...payload }) => {
           var formData = new FormData();
           formData.append('audio_file', payload.file);
-          formData.append('comment', payload.comment);
           formData.append('post_id', payload.post_id.toString());
           if (payload.wave_data)
             formData.append('wave_data', payload.wave_data);
-          if (payload.file_duration)
-            formData.append('file_duration', payload.file_duration.toString());
 
           return {
-            url: `${apiPaths.commentUrl}`,
+            url: `${apiPaths.addCommentUrl}`,
             method: 'POST',
             body: formData,
             formData: true,
@@ -53,11 +50,11 @@ const commentApi = baseApi
         providesTags: (result) =>
           result
             ? [
-                ...result.data.map(
-                  ({ id }) => ({ type: 'Comments', id } as const)
-                ),
-                { type: 'Comments', id: 'LIST' },
-              ]
+              ...result.data.map(
+                ({ id }) => ({ type: 'Comments', id } as const)
+              ),
+              { type: 'Comments', id: 'LIST' },
+            ]
             : [{ type: 'Comments', id: 'LIST' }],
         serializeQueryArgs: ({ queryArgs, endpointName }) => {
           return endpointName + '-' + queryArgs.postId;
@@ -88,11 +85,11 @@ const commentApi = baseApi
         providesTags: (result) =>
           result
             ? [
-                ...result.map(
-                  ({ id }) => ({ type: 'CommentsAudio', id } as const)
-                ),
-                { type: 'CommentsAudio', id: 'LIST' },
-              ]
+              ...result.map(
+                ({ id }) => ({ type: 'CommentsAudio', id } as const)
+              ),
+              { type: 'CommentsAudio', id: 'LIST' },
+            ]
             : [{ type: 'CommentsAudio', id: 'LIST' }],
         serializeQueryArgs: ({ endpointName }) => {
           return endpointName;

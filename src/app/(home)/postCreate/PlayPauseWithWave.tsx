@@ -1,5 +1,4 @@
-'use client';
-
+import classNames from 'classnames';
 import { Pause, Play } from 'phosphor-react';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
@@ -9,6 +8,8 @@ type PlayPauseWithWavePropType = {
   audio: MutableRefObject<any>;
   audioRef: MutableRefObject<any>;
   setIsPlaying: Dispatch<SetStateAction<boolean>>;
+  wavePlayerVisible: boolean;
+  theme: 'light' | 'dark';
 };
 
 const PlayPauseWithWave = ({
@@ -17,6 +18,8 @@ const PlayPauseWithWave = ({
   audio,
   audioRef,
   setIsPlaying,
+  wavePlayerVisible,
+  theme,
 }: PlayPauseWithWavePropType) => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -35,20 +38,48 @@ const PlayPauseWithWave = ({
   };
   return (
     <div
-      className={`bg-slate-200 pl-10 pr-[80px] mt-4 relative h-[150px] flex flex-col justify-center`}
+      className={classNames(
+        `rounded pl-12 pr-14 relative flex flex-col justify-center`,
+        wavePlayerVisible ? 'block' : 'hidden',
+        theme === 'dark' ? 'bg-slate-400' : 'transparent'
+      )}
       ref={audio}
     >
       <button
-        className="inline-flex absolute left-[10px]"
+        className="inline-flex absolute left-[0px] top-1/2 transform -translate-y-1/2"
         onClick={() => handlePlayPause()}
       >
         {isPlaying ? (
-          <Pause size="24" className="text-white" weight="fill" />
+          <div
+            className={`${
+              theme === 'dark'
+                ? ''
+                : 'rounded-full bg-white p-2 hover:shadow-md shadow-gray-200'
+            } `}
+          >
+            <Pause
+              size="21"
+              className={`${theme === 'dark' ? 'text-white' : 'text-accent'} `}
+              weight="fill"
+            />
+          </div>
         ) : (
-          <Play size="24" className="text-white" weight="fill" />
+          <div
+            className={`${
+              theme === 'dark'
+                ? ''
+                : 'rounded-full bg-white p-2 hover:shadow-md shadow-gray-200'
+            } `}
+          >
+            <Play
+              size="21"
+              className={`${theme === 'dark' ? 'text-white' : 'text-accent'} `}
+              weight="fill"
+            />
+          </div>
         )}
       </button>
-      <div className="inline-flex absolute right-[15px] py-0.5 px-2 bg-gray-600 text-white rounded-md">
+      <div className="inline-flex absolute right-[3px] top-1/2 transform -translate-y-1/2 py-0.5 px-2 bg-gray-600 text-white rounded-md">
         {audioTime ? formatTime(audioTime / 1000) : '0:00'}
       </div>
     </div>

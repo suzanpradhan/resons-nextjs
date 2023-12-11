@@ -94,7 +94,7 @@ export const apiPaths = {
   postAudioDownload: '/socialnetwork/audio/download/',
   getGenrePlaylist: '/socialnetwork/post/list/by-genre',
   // Comment
-  commentUrl: '/socialnetwork/post/comment/create',
+  addCommentUrl: '/socialnetwork/post/comment/create',
   postAllCommentsUrl: '/socialnetwork/post/comment/list',
   // Actions
   likeUrl: '/socialnetwork/post/interact',

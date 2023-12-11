@@ -21,8 +21,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
       detailNumber: props.viewProfile.following,
     },
     {
-      detailName: 'Posts',
-      detailNumber: props.viewProfile.total_posts,
+      detailName: 'Tracks',
+      detailNumber: props.viewProfile.total_tracks,
     },
   ];
 

@@ -9,15 +9,13 @@ import { useFormik } from 'formik';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toFormikValidate } from 'zod-formik-adapter';
 import { GoogleSignInButton } from '../(components)/authButtons';
 
 export default function SignIn() {
-  // const navigator = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callback');
+  const navigator = useRouter();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   // const [authenticateChecked, setAuthenticateChecked] = useState(false);
@@ -64,15 +62,14 @@ export default function SignIn() {
       email: values.email,
       password: values.password,
       platform: 'mobile',
-      redirect: true,
-      callbackUrl: callbackUrl ? callbackUrl : '/',
+      redirect: false,
     })
-      .then(() => {
-        // if (response?.ok) {
-        //   // router.push('/');
-        // } else {
-        //   alert(JSON.stringify(response));
-        // }
+      .then((response) => {
+        if (response?.ok) {
+          navigator.push('/');
+        } else {
+          alert(JSON.stringify(response));
+        }
       })
       .catch((errorResponse) => {
         // alert(JSON.stringify(errorResponse));
