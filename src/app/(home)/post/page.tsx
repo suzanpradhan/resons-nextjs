@@ -478,6 +478,7 @@ const PostCreatePage = () => {
                   Add to your post
                 </span>
                 <button
+                  type="button"
                   className={imagesVisibility ? `text-red-400` : `text-black`}
                   onClick={() =>
                     toggleImagesVisibility((prevState) => !prevState)
@@ -486,6 +487,7 @@ const PostCreatePage = () => {
                   <ImageSquare size={24} weight="fill" />
                 </button>
                 <button
+                  type="button"
                   className={
                     locationInputVisibility ? `text-red-400` : `text-black`
                   }
@@ -496,6 +498,7 @@ const PostCreatePage = () => {
                   <MapPin size={24} weight="fill" />
                 </button>
                 <button
+                  type="button"
                   onClick={() =>
                     toggleLanguageInputVisibility((prevState) => !prevState)
                   }
