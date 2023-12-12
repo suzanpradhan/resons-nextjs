@@ -26,12 +26,14 @@ const FeedPostListing = (props: FeedPostListingProps) => {
   const currentPage = useAppSelector(
     (state: RootState) => state.postListing.currentPage
   );
+
   const [hasMoreData, setHasMoreData] = useState(true);
 
   useEffect(() => {
     const patchCollection = dispatch(
       postApi.util.upsertQueryData('getPostList', 1, props.preloadedPosts!)
     );
+
     if (window) {
       window.onbeforeunload = function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
