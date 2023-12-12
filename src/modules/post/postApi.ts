@@ -205,7 +205,7 @@ const postApi = baseApi.injectEndpoints({
           formData.append('file_duration', payload.file_duration.toString());
         }
         formData.append('privacy_code', payload.privacy_code);
-        formData.append('audio_file', payload.audio_file);
+        formData.append('audio_file', payload.audio_file!);
         formData.append('is_ai_generated', payload?.is_ai_generated);
         formData.append('expiration_type', payload.expiration_type);
         formData.append('language', payload.language!);
