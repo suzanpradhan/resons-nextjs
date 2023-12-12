@@ -20,12 +20,12 @@ export default function AccountSettingPage() {
 
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
-      <h2 className="h-11 w-full px-4 bg-white shadow-sm flex gap-2 mb-0 fixed z-10">
+      {/* <h2 className="h-11 w-full px-4 bg-white shadow-sm flex gap-2 mb-0 fixed z-10">
         <span className="text-3xl font-light flex items-center">&#60;</span>
         <span className="text-sm font-medium flex items-center">
           Account Settings
         </span>
-      </h2>
+      </h2> */}
 
       <div className="overflow-y-scroll h-screen px-4 bg-white pt-11">
         <h3 className="text-sm font-semibold text-gray-700 my-4">
@@ -35,7 +35,7 @@ export default function AccountSettingPage() {
           <ul className="bg-slate-100 rounded-lg overflow-hidden py-2">
             <li className="hover:bg-slate-200 rounded-md">
               <Link
-                href="/"
+                href="/accountSettings/personalDetails"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
               >
                 <p className="flex gap-2 items-center">
