@@ -51,7 +51,7 @@ export default function AccountSettingPage() {
             </li>
             <li className="relative hover:bg-slate-200 rounded-md">
               <Link
-                href="/"
+                href="/accountSettings/security"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
               >
                 <p className="flex gap-2 items-center">
@@ -96,7 +96,7 @@ export default function AccountSettingPage() {
             </li>
             <li className="relative hover:bg-slate-200 rounded-md">
               <Link
-                href="/"
+                href="/accountSettings/deactivation"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
               >
                 <p className="flex gap-2 items-center">

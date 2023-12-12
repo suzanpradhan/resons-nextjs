@@ -1,12 +1,44 @@
 'use client';
-import { useAppDispatch } from '@/core/redux/clientStore';
+import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
+import { RootState } from '@/core/redux/store';
 import notificationApi from '@/modules/notification/notificationApi';
-import { useState } from 'react';
+import profileApi from '@/modules/profile/profileApi';
+import { ProfileDetailType } from '@/modules/profile/profileType';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function NotificationPage() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(() => {
+    dispatch(profileApi.endpoints.getMyProfile.initiate());
+  }, [dispatch]);
+
+  const myProfile = useAppSelector(
+    (state: RootState) =>
+      state.baseApi.queries['getMyProfile(undefined)']
+        ?.data as ProfileDetailType
+  );
+
+  useEffect(() => {
+    if (myProfile) {
+      const notificationValue =
+        myProfile.settings &&
+        myProfile.settings.find((setting) => setting.key === 'NOTIFICATION')
+          ?.value;
+
+      if (notificationValue === 'allow') {
+        setIsChecked(true);
+      }
+
+      if (notificationValue === 'deny') {
+        setIsChecked(false);
+      }
+    }
+  }, [myProfile]);
 
   const handleNotificationToggleChange = () => {
     setIsChecked(!isChecked);
@@ -46,7 +78,12 @@ export default function NotificationPage() {
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
       <h2 className="h-11 w-full px-4 bg-white shadow-sm flex gap-2 mb-0 fixed z-50">
-        <span className="text-3xl font-light flex items-center">&#60;</span>
+        <span
+          onClick={() => router.back()}
+          className="text-3xl font-light flex items-center"
+        >
+          &#60;
+        </span>
         <span className="text-sm font-medium flex items-center">
           Notifications Settings
         </span>
@@ -58,7 +95,7 @@ export default function NotificationPage() {
         </h3>
         <div className="flex flex-col gap-5">
           <div className="bg-slate-100 rounded-lg overflow-hidden px-4 py-2">
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between gap-6">
               <div className="flex flex-col gap-2">
                 <h3 className="text-sm font-medium text-gray-700 block">
                   Enable Notification
