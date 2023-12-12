@@ -33,6 +33,15 @@ export const profileDetailSchema = z.object({
     follow_status: z.boolean(),
 });
 
+export const passwordChangeSchema = z.object({
+    current_password: z.string().pipe(nonempty),
+    password: z.string().pipe(nonempty),
+    password_confirmation: z.string().pipe(nonempty),
+}).refine((data) => data.password === data.password_confirmation, {
+    message: 'Passwords do not match',
+    path: ['password_confirmation']
+});
+
 export type ProfileDetailType = z.infer<typeof profileDetailSchema>;
 
 export type ProfileUpdateResponseType = {
@@ -53,8 +62,10 @@ export const profileUpdateFormSchema = z.object({
 
 export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>
 
-export interface ChangePasswordFormType {
-    current_password: string;
-    password: string;
-    password_confirmation: string;
-}
+export type ChangePasswordFormType = z.infer<typeof passwordChangeSchema>;
+
+// export interface ChangePasswordFormType {
+//     current_password: string;
+//     password: string;
+//     password_confirmation: string;
+// }

@@ -434,8 +434,6 @@ input.global-player[type='range']:focus::-ms-fill-upper {
 .copyright {
 }
 
-
-
 /* Temporary Block */
 .login-container {
   display: flex;
@@ -448,7 +446,7 @@ input.global-player[type='range']:focus::-ms-fill-upper {
 .login-box {
   background-color: #ffffff;
   padding: 20px;
- 
+
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -470,11 +468,10 @@ label {
   margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type='text'],
+input[type='password'] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
 }
@@ -508,13 +505,10 @@ input[type="password"] {
 .image-button {
   cursor: pointer; /* Add a pointer cursor for better UX */
 }
-.cover-image-size
-{
-  width: 100px!important;
+.cover-image-size {
+  width: 100px !important;
   height: 40px;
-
 }
-
 
 /* components popup css */
 .popup {
