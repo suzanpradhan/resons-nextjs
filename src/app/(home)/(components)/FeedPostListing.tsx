@@ -33,6 +33,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
     const patchCollection = dispatch(
       postApi.util.upsertQueryData('getPostList', 1, props.preloadedPosts!)
     );
+
     if (window) {
       window.onbeforeunload = function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });

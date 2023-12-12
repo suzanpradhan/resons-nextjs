@@ -9,13 +9,17 @@ const commentApi = baseApi
   .injectEndpoints({
     endpoints: (builder) => ({
       // Upload Ticket Attachments
-      addComment: builder.mutation<any, CommentFormType>({
+      addComment: builder.mutation<CommentDetailType, CommentFormType>({
         query: ({ ...payload }) => {
           var formData = new FormData();
           formData.append('audio_file', payload.file);
           formData.append('post_id', payload.post_id.toString());
-          if (payload.wave_data)
+          if (payload.wave_data) {
             formData.append('wave_data', payload.wave_data);
+          }
+          if (payload.file_duration != undefined) {
+            formData.append('file_duration', payload.file_duration.toString());
+          }
 
           return {
             url: `${apiPaths.addCommentUrl}`,
@@ -34,9 +38,9 @@ const commentApi = baseApi
             toast.error('Failed uploading comment.');
           }
         },
-        transformResponse: (response) => {
+        transformResponse: (response: any) => {
           console.log(response);
-          return response as any;
+          return response.data as CommentDetailType;
         },
       }),
 
