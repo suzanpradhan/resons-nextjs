@@ -84,8 +84,8 @@ const PostCreatePage = () => {
   const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
 
   const onSubmit = async (data: PostDefaultFormType) => {
-    console.log(selectedTagOptions);
-    console.log(data.expiration_type);
+    console.log(data);
+
     // setIsLoading(true);
     try {
       const responseData = await Promise.resolve(
@@ -151,9 +151,9 @@ const PostCreatePage = () => {
     enableReinitialize: true,
     initialValues: {
       title: '',
-      audio_file: audioFile!,
-      file_duration: (audioDuration as number) / 1000,
-      wave_data: audioWaveData,
+      audio_file: undefined,
+      file_duration: 0,
+      wave_data: '',
       privacy_code: '',
       expiration_type: '',
       language: '',
@@ -232,7 +232,7 @@ const PostCreatePage = () => {
 
         const file = new File([blob], 'audio.wav');
         setAudioFile(file);
-        formik.setFieldValue('audioFile', audioFile);
+        formik.setFieldValue('audio_file', file);
         setRecording(false);
       });
     };
@@ -317,6 +317,7 @@ const PostCreatePage = () => {
     });
 
     setAudioFile(file);
+    formik.setFieldValue('audio_file', file);
 
     // setIsNextUploadVisible(true);
     // setShouldNext(true);
@@ -478,6 +479,7 @@ const PostCreatePage = () => {
                   Add to your post
                 </span>
                 <button
+                  type="button"
                   className={imagesVisibility ? `text-red-400` : `text-black`}
                   onClick={() =>
                     toggleImagesVisibility((prevState) => !prevState)
@@ -486,6 +488,7 @@ const PostCreatePage = () => {
                   <ImageSquare size={24} weight="fill" />
                 </button>
                 <button
+                  type="button"
                   className={
                     locationInputVisibility ? `text-red-400` : `text-black`
                   }
@@ -496,6 +499,7 @@ const PostCreatePage = () => {
                   <MapPin size={24} weight="fill" />
                 </button>
                 <button
+                  type="button"
                   onClick={() =>
                     toggleLanguageInputVisibility((prevState) => !prevState)
                   }
