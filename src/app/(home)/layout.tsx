@@ -77,7 +77,7 @@ export default function HomeLayout({
 
   return (
     <>
-      <div className="relative h-[calc(100dvh)] max-h-screen overflow-hidden">
+      <div className="relative h-[calc(100vh)] max-h-screen overflow-hidden">
         <AppBar />
         <div
           id="homePageScroller"
