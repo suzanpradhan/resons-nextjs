@@ -26,7 +26,7 @@ export default function AccountSettingPage() {
         <span className="text-sm font-medium flex items-center">
           Account Settings
         </span>
-      </h2> */}
+      </h2>
 
       <div className="overflow-y-scroll h-screen px-4 bg-white pt-11">
         <h3 className="text-sm font-semibold text-gray-700 my-4">
