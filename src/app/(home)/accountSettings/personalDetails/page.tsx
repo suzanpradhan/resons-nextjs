@@ -2,6 +2,7 @@
 import { language_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
+import TextField from '@/core/ui/components/TextField';
 import countriesApi from '@/modules/countries/countriesApi';
 import { CountriesDetailType } from '@/modules/countries/countriesType';
 import profileApi from '@/modules/profile/profileApi';
@@ -165,19 +166,27 @@ const PersonalDetailsPage = () => {
           }}
         >
           {FORM_DETAILS.map((item, index) => (
-            <div key={index}>
-              <label
-                htmlFor={item.formikName}
-                className="text-base font-normal"
-              >
-                {item.datailName}
-              </label>
-              <input
-                id={item.formikName}
-                type="text"
-                {...formik.getFieldProps(item.formikName)}
-              />
-            </div>
+            <TextField
+              label={item.datailName}
+              isLabelBold={false}
+              key={index}
+              id={item.formikName}
+              type="text"
+              {...formik.getFieldProps(item.formikName)}
+            />
+            // <div key={index}>
+            //   <label
+            //     htmlFor={item.formikName}
+            //     className="text-base font-normal"
+            //   >
+            //     {item.datailName}
+            //   </label>
+            //   <input
+            //     id={item.formikName}
+            //     type="text"
+            //     {...formik.getFieldProps(item.formikName)}
+            //   />
+            // </div>
           ))}
           <div className="flex flex-col">
             <label className="text-base font-normal " htmlFor="language">
@@ -199,11 +208,11 @@ const PersonalDetailsPage = () => {
                   ))
                 : null}
             </select>
-            {!!formik.errors.user_language && (
+            {/* {!!formik.errors.user_language && (
               <div className="text-red-500 text-sm -mt-2">
                 {formik.errors.user_language}
               </div>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col pb-2">
             <label htmlFor="country" className="text-base font-normal">

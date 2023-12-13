@@ -4,6 +4,7 @@ import { language_code, privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
+import Button from '@/core/ui/components/Button';
 import postApi from '@/modules/post/postApi';
 import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
@@ -711,12 +712,16 @@ const PostCreatePage = () => {
                 />
               </div>
             </div>
-            <button
+            <div className="mx-4">
+              <Button text="Create" type="submit" className="hover:shadow-lg" />
+            </div>
+
+            {/* <button
               type="submit"
               className="bg-red-400 ml-4 px-20 py-2 text-white font-semibold rounded w-[91%]"
             >
               Create
-            </button>
+            </button> */}
           </form>
         )}
       </div>
