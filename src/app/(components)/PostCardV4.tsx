@@ -96,7 +96,7 @@ const PostCardV4 = (props: PostCardProps) => {
               apiPaths.baseUrl +
               '/socialnetwork/audio/stream/' +
               comment.audio.id +
-              '?isPostAudio=NO'!,
+              '?isPostAudio=NO',
             duration: comment.audio.file_duration
               ? parseFloat(comment.audio.file_duration)
               : 0,
@@ -280,6 +280,7 @@ const PostCardV4 = (props: PostCardProps) => {
     audioRef.current = null;
     setHiddenButton(undefined);
     setAudioFile(undefined);
+    console.log('cancelled');
   };
 
   const validateForm = () => {
@@ -336,6 +337,7 @@ const PostCardV4 = (props: PostCardProps) => {
     audioRef.current.on('ready', () => {
       const getAudioDuration = audioRef.current.getDuration();
       formik.setFieldValue('file_duration', getAudioDuration * 1000);
+      setRecordTime(getAudioDuration * 1000);
       // setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
     });
 
