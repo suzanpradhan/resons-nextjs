@@ -47,14 +47,9 @@ const TopicGenres = ({ title }: { title: string }) => {
     targetGenres.slides = newGenres;
 
     // console.log(targetGenres);
-    console.log(getGenresListRaw);
   }
 
-  return (
-    <>
-      <MultiCarousel slides={group} routeName="genres" />
-    </>
-  );
+  return <MultiCarousel slides={group} routeName="genres" />;
 };
 
 export default TopicGenres;

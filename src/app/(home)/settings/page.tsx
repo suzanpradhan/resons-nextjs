@@ -374,6 +374,7 @@ export default function SettingPage() {
             value: 'allow',
           })
         );
+        toast.success('Notification disable');
       } catch (error) {
         // Handle error
         toast.success('Opps! cant set notification');
@@ -388,6 +389,7 @@ export default function SettingPage() {
             value: 'deny',
           })
         );
+        toast.success('Notification enable');
       } catch (error) {
         // Handle error
         toast.success('Opps! cant set notification');

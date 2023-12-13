@@ -40,6 +40,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           objectFit="cover"
+          onError={(e) => {
+            (e.target as any).onError = null;
+            (e.target as any).src = '/images/avatar.jpg';
+          }}
         />
       </div>
       <div className="flex flex-col grow gap-1 max-w-2xl">

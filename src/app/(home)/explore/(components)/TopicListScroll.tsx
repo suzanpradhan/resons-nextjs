@@ -103,11 +103,7 @@ const TopicListScroll = ({ title }: { title: string }) => {
   //   console.log(newGenres);
   // }
 
-  return (
-    <>
-      <MultiCarousel slides={group} routeName="likes" />
-    </>
-  );
+  return <MultiCarousel slides={group} routeName="likes" />;
 };
 
 export default TopicListScroll;
