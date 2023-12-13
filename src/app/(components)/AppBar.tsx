@@ -3,14 +3,13 @@
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import Button from '@/core/ui/components/Button';
-import notificationApi from '@/modules/notification/notificationApi';
 import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Bell, UploadSimple } from 'phosphor-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SearchBar from './SearchBar';
 import useScrollDirection from './useScrollDirection';
 //import useScrollDirection from './useScrollDirection';
@@ -37,15 +36,15 @@ const Header = () => {
     signOut({ callbackUrl: '/login', redirect: true });
   };
 
-  useEffect(() => {
-    if (session.data?.user) {
-      dispatch(
-        notificationApi.endpoints.unreadNotificationCount.initiate(undefined, {
-          subscriptionOptions: { pollingInterval: 10000 },
-        })
-      );
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (session.data?.user) {
+  //     dispatch(
+  //       notificationApi.endpoints.unreadNotificationCount.initiate(undefined, {
+  //         subscriptionOptions: { pollingInterval: 10000 },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch]);
 
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage

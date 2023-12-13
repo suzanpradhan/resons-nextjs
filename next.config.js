@@ -7,7 +7,12 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 
 module.exports = withPWA({
   images: {
-    domains: ['127.0.0.1', 'resons.iionstech.com', 'source.unsplash.com'],
+    domains: [
+      '127.0.0.1',
+      'resons.iionstech.com',
+      'source.unsplash.com',
+      'resons.weihosting.com',
+    ],
     remotePatterns: [
       {
         protocol: 'http',
@@ -23,10 +28,17 @@ module.exports = withPWA({
       },
       {
         protocol: 'https',
+        hostname: 'resons.weihosting.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'resons.iionstech.com',
         port: '',
         pathname: '/**',
       },
+
       {
         protocol: 'https',
         hostname: 'source.unsplash.com',
