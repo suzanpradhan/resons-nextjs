@@ -76,7 +76,7 @@ export default function PostDetailComponent({
   );
   const postListData = useAppSelector(
     (state: RootState) =>
-      state.baseApi.queries.getPostList
+      state.baseApi.queries.feedListing
         ?.data as PaginatedResponseType<PostDetailType>
   );
 
@@ -199,7 +199,8 @@ export default function PostDetailComponent({
           url:
             apiPaths.baseUrl +
             '/socialnetwork/audio/stream/' +
-            comment.audio.id!,
+            comment.audio.id! +
+            '?isPostAudio=NO',
           duration: comment.audio.file_duration
             ? parseFloat(comment.audio.file_duration)
             : 0,
@@ -220,7 +221,8 @@ export default function PostDetailComponent({
                 url:
                   apiPaths.baseUrl +
                   '/socialnetwork/audio/stream/' +
-                  cachedPostData.audio?.id,
+                  cachedPostData.audio?.id +
+                  '?isPostAudio=YES',
                 duration: cachedPostData.audio.file_duration
                   ? parseFloat(cachedPostData.audio.file_duration)
                   : 0,

@@ -93,7 +93,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
 
   const postListData = useAppSelector(
     (state: RootState) =>
-      state.baseApi.queries.getPostList
+      state.baseApi.queries.feedListing
         ?.data as PaginatedResponseType<PostDetailType>
   );
 
