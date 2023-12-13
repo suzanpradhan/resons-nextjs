@@ -22,7 +22,7 @@ const postApi = baseApi.injectEndpoints({
           ]
           : [{ type: 'Posts', id: 'LIST' }],
       serializeQueryArgs: ({ endpointName }) => {
-        return endpointName;
+        return "feedListing";
       },
       merge: (currentCache, newItems) => {
         currentCache.pagination = newItems.pagination;
@@ -36,6 +36,26 @@ const postApi = baseApi.injectEndpoints({
         return response?.data as PaginatedResponseType<PostDetailType>;
       },
     }),
+
+    // getPostRefetch: builder.query<PostDetailType, number>({
+    //   query: (id) => `${apiPaths.postSingleUrl}/${id}`,
+    //   providesTags: (result) => {
+    //     var id = result?.id;
+    //     return result
+    //       ? [{ type: 'Posts', id }, { type: 'Posts', id: 'LIST' }]
+    //       : [{ type: 'Posts', id: 'LIST' }]
+    //   },
+    //   serializeQueryArgs: ({ endpointName }) => {
+    //     return "feedListing";
+    //   },
+    //   merge: (currentCache, newItems) => {
+    //     currentCache.pagination = newItems.pagination;
+    //     currentCache.data.push(...newItems.data);
+    //   },
+    //   transformResponse: (response: any) => {
+    //     return response?.data as PostDetailType;
+    //   },
+    // }),
 
     getPopularPostList: builder.query<PaginatedResponseType<PostDetailType>, void>({
       query: () => `${apiPaths.popularPostUrl}?page=1&paginate=10`,
@@ -127,13 +147,7 @@ const postApi = baseApi.injectEndpoints({
       },
     }),
 
-    getPostMutate: builder.mutation<PostEachDetailType, number>({
-      query: (id) => `${apiPaths.postSingleUrl}/${id}`,
-      invalidatesTags: (result, error, id) => [{ type: 'Posts', id }],
-      transformResponse: (response: any) => {
-        return response?.data?.data as PostEachDetailType;
-      },
-    }),
+
 
     // Get Paginated Comments for a Post
     // getPaginatedComments: builder.query<PaginatedResponseType<CommentDetailType>, { postId: number, page: number, perPage: number }>({

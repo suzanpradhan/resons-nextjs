@@ -64,7 +64,6 @@ const MusicPlayer = ({ params }: MusicPlayerType) => {
         genresApi.endpoints.requestGenrePlaylist.initiate(categoryName)
       );
     };
-
     fetchData();
   }, [categoryName]);
 
@@ -76,7 +75,9 @@ const MusicPlayer = ({ params }: MusicPlayerType) => {
         )
       );
     };
-    fetchData();
+    if (playlist[currentPlaylistIndex]?.info?.cid != undefined) {
+      fetchData();
+    }
   }, [currentPlaylistIndex]);
 
   const newCurrentItem = useAppSelector(

@@ -42,8 +42,9 @@ const PlayAllButton = (props: PlayAllButtonProps) => {
     </div>
   ) : (
     <div
-      className={`border-y border-y-grey-200 bg-white px-4 py-3 flex items-center gap-2 cursor-pointer hover:bg-grey-100 active:bg-grey-200 ${isPlaying ? 'hidden' : ''
-        }`}
+      className={`border-y border-y-grey-200 bg-white px-4 py-3 flex items-center gap-2 cursor-pointer hover:bg-grey-100 active:bg-grey-200 ${
+        isPlaying ? 'hidden' : ''
+      }`}
       onClick={props.onClick}
     >
       <div className={`border-none rounded-full p-2 bg-primary-900`}>

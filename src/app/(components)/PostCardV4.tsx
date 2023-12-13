@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { PostDetailType, PostEachDetailType } from '@/modules/post/postType';
+import { PostDetailType } from '@/modules/post/postType';
 import PlayAllButton from './PlayAllButton';
 import PostDetailV4 from './PostDetailV4';
 
 import { apiPaths } from '@/core/api/apiConstants';
 import { defaultWaveData } from '@/core/constants/appConstants';
-import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
+import { useAppDispatch } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import commentApi from '@/modules/comment/commentApi';
 import {
@@ -17,7 +17,6 @@ import {
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
 import { updateHomePage } from '@/modules/post/homePageReducer';
-import postApi from '@/modules/post/postApi';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -63,11 +62,8 @@ const PostCardV4 = (props: PostCardProps) => {
   const session = useSession();
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const [audioWaveData, setAudioWaveData] = useState<any>(defaultWaveData);
-
-  const eachPostData = useAppSelector(
-    (state: RootState) =>
-      state.baseApi.queries[`getPost(${props.post.id})`]
-        ?.data as PostEachDetailType
+  const [featComments, setFeatComments] = useState<CommentDetailType[]>(
+    props.post.comments ?? []
   );
 
   const handlePlayPauseAllComments = async () => {
@@ -100,7 +96,7 @@ const PostCardV4 = (props: PostCardProps) => {
               apiPaths.baseUrl +
               '/socialnetwork/audio/stream/' +
               comment.audio.id +
-              '?isPostAudio=NO'!,
+              '?isPostAudio=NO',
             duration: comment.audio.file_duration
               ? parseFloat(comment.audio.file_duration)
               : 0,
@@ -226,8 +222,8 @@ const PostCardV4 = (props: PostCardProps) => {
       waveRef.current.on('decode', () => {
         const getAudioDuration = waveRef.current.getDuration();
         setRecordTime(getAudioDuration * 1000);
-        setAudioDuration(recordTime);
-        console.log(waveRef.current.exportPeaks()[0]);
+        setAudioDuration(getAudioDuration * 1000);
+        formik.setFieldValue('file_duration', getAudioDuration * 1000);
         setAudioWaveData?.(waveRef.current.exportPeaks()[0]);
         // setShouldNext(true);
       });
@@ -242,13 +238,12 @@ const PostCardV4 = (props: PostCardProps) => {
   };
 
   const handleFileChange = (e: any) => {
-    console.log('session checking:' + session.data?.user);
-
     if (session.data?.user == undefined) {
       navigator.push('/login');
     }
     setHiddenButton('record');
     toggleWavePlayerVisible(true);
+
     if (audioRef.current != null) {
       audioRef.current.destroy();
       audioRef.current = null;
@@ -275,7 +270,6 @@ const PostCardV4 = (props: PostCardProps) => {
     });
 
     setAudioFile(file);
-
     // setIsNextUploadVisible(true);
     // setShouldNext(true);
   };
@@ -283,8 +277,10 @@ const PostCardV4 = (props: PostCardProps) => {
   const handleCancelAudio = () => {
     toggleWavePlayerVisible(false);
     audioRef.current.destroy();
+    audioRef.current = null;
     setHiddenButton(undefined);
     setAudioFile(undefined);
+    console.log('cancelled');
   };
 
   const validateForm = () => {
@@ -308,17 +304,15 @@ const PostCardV4 = (props: PostCardProps) => {
             post_id: data.post_id,
             file: data.file,
             wave_data: data.wave_data,
+            file_duration: (data.file_duration ?? 0) / 1000,
           })
         )
       );
       if (Object.prototype.hasOwnProperty.call(responseData, 'data')) {
-        const responseData = await dispatch(
-          postApi.endpoints.getPost.initiate(props.post.id)
-        );
-        console.log(responseData);
-
+        setFeatComments([...featComments, (responseData as any).data]);
         // navigator.push('/');
       }
+      handleCancelAudio();
     } catch (error) {
       console.log(error);
     }
@@ -330,6 +324,7 @@ const PostCardV4 = (props: PostCardProps) => {
       post_id: props.post.id,
       file: audioFile!,
       wave_data: JSON.stringify(audioWaveData),
+      file_duration: 0,
     },
     validateOnChange: false,
     validate: validateForm,
@@ -339,10 +334,16 @@ const PostCardV4 = (props: PostCardProps) => {
   useEffect(() => {
     if (!audioRef.current) return;
 
+    audioRef.current.on('ready', () => {
+      const getAudioDuration = audioRef.current.getDuration();
+      formik.setFieldValue('file_duration', getAudioDuration * 1000);
+      setRecordTime(getAudioDuration * 1000);
+      // setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
+    });
+
     audioRef.current.on('timeupdate', (currentTime: number) => {
       const getRemainaingTime = recordTime - currentTime * 1000;
       setRecordTime(getRemainaingTime);
-      console.log(recordTime);
     });
   }, [audioRef.current]);
 
@@ -375,13 +376,17 @@ const PostCardV4 = (props: PostCardProps) => {
             // navigator.push(`/post/${props.post.id}`);
           }}
         />
-        {props.post.comments && props.post.comments.length > 0 ? (
-          <PostCommentV4
-            commentData={props.post.comments[0]}
-            postId={props.post.id!}
-          />
-        ) : null}
-        {props.post.comments && props.post.comments.length > 0 ? (
+        {featComments?.map((comment, index) => {
+          return (
+            <PostCommentV4
+              commentData={comment}
+              postId={props.post.id!}
+              key={'feat_comment_' + index}
+            />
+          );
+        })}
+
+        {featComments && featComments.length > 0 ? (
           <PlayAllButton
             totalComment={props.post.total_comments}
             totalTime={secondsToString(props.post.total_duration)}
@@ -391,6 +396,7 @@ const PostCardV4 = (props: PostCardProps) => {
             }}
           />
         ) : null}
+
         <div className="p-4 bg-white flex items-center gap-3">
           <div className="w-9 h-9 rounded-full overflow-hidden">
             <Image
