@@ -63,7 +63,7 @@ const BrowseCategoriesPage = () => {
                     alt="category image"
                     fill
                     objectFit="cover"
-                    src={`/${item.image!}`}
+                    src={`${item.image!}`}
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   {/* {item.image} */}
