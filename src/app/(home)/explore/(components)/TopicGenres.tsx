@@ -49,11 +49,7 @@ const TopicGenres = ({ title }: { title: string }) => {
     // console.log(targetGenres);
   }
 
-  return (
-    <>
-      <MultiCarousel slides={group} routeName="genres" />
-    </>
-  );
+  return <MultiCarousel slides={group} routeName="genres" />;
 };
 
 export default TopicGenres;

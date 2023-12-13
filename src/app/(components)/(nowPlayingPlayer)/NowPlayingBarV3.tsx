@@ -522,8 +522,8 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
             scrollDirection === 'down' && props.currentPage == 1
               ? 'bottom-0'
               : props.currentPage == 1
-              ? 'bottom-[3.5rem]'
-              : 'bottom-[3.2rem]'
+              ? 'bottom-[3rem]'
+              : 'bottom-[3rem]'
           }`}
         >
           {props.playlist[props.currentPlaylistIndex]?.info ? (
