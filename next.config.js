@@ -28,16 +28,17 @@ module.exports = withPWA({
       },
       {
         protocol: 'https',
-        hostname: 'resons.iionstech.com',
+        hostname: 'resons.weihosting.com',
         port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'resons.weihosting.com',
+        hostname: 'resons.iionstech.com',
         port: '',
         pathname: '/**',
       },
+
       {
         protocol: 'https',
         hostname: 'source.unsplash.com',
