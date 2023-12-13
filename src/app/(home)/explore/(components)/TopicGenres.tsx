@@ -47,7 +47,6 @@ const TopicGenres = ({ title }: { title: string }) => {
     targetGenres.slides = newGenres;
 
     // console.log(targetGenres);
-    console.log(getGenresListRaw);
   }
 
   return (

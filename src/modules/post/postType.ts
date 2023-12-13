@@ -68,7 +68,7 @@ export type PostEachDetailType = {
 
 export const postFormSchema = z.object({
   title: z.string().min(2).pipe(nonempty),
-  audio_file: z.custom<File>(),
+  audio_file: z.custom<File | undefined>().optional(),
   file_duration: z.number().optional(),
   wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)).optional(),
   privacy_code: z.string(),

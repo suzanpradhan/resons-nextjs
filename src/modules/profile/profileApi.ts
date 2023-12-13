@@ -67,7 +67,7 @@ const profileApi = baseApi
                     if (payload.phone_number !== undefined) {
                         formData.append('phone_number', payload.phone_number);
                     }
-                    if (payload.profile_image instanceof File) {
+                    if (payload.profile_image) {
                         formData.append('profile_image', payload.profile_image);
                     }
                     if (payload.date_of_birth !== undefined) {
@@ -76,14 +76,14 @@ const profileApi = baseApi
                     if (payload.nickname !== undefined) {
                         formData.append('nickname', payload.nickname);
                     }
-                    if (payload.religion !== undefined) {
-                        formData.append('religion', payload.religion);
-                    }
-                    if (payload.about !== undefined) {
-                        formData.append('about', payload.about);
-                    }
+                    // if (payload.religion !== undefined) {
+                    //     formData.append('religion', payload.religion);
+                    // }
+                    // if (payload.about !== undefined) {
+                    //     formData.append('about', payload.about);
+                    // }
                     if (payload.country_id !== undefined) {
-                        formData.append('country_id', payload.country_id.toString());
+                        formData.append('country', payload.country_id.toString());
                     }
                     if (payload.user_language !== undefined) {
                         formData.append('user_language', payload.user_language);

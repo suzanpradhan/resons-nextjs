@@ -10,6 +10,7 @@ import postApi from '@/modules/post/postApi';
 import { updatedCurrentPage } from '@/modules/post/postListingReducer';
 import { PostDetailType } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
+import { ProfileDetailType } from '@/modules/profile/profileType';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ProfileHeader from './(components)/ProfileHeader';
@@ -32,7 +33,8 @@ export default function ProfilePage() {
   }, [dispatch]);
 
   const myProfile = useAppSelector((state: RootState) => {
-    return state.baseApi.queries[`getMyProfile(undefined)`]?.data as any;
+    return state.baseApi.queries[`getMyProfile(undefined)`]
+      ?.data as ProfileDetailType;
   });
 
   const handleTabChange = (tab: string) => {

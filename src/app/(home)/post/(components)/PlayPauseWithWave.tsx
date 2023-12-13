@@ -45,6 +45,7 @@ const PlayPauseWithWave = ({
       <button
         className="inline-flex absolute left-[0px] bottom-7"
         onClick={() => handlePlayPause()}
+        type="button"
       >
         {isPlaying ? (
           <Pause size="24" className="text-white" weight="fill" />
