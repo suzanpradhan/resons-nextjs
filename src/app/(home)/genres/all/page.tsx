@@ -6,19 +6,19 @@ import genresApi from '@/modules/genres/genresApi';
 import { GenresDetailType } from '@/modules/genres/genresType';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 const BrowseCategoriesPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const params = useParams();
-  console.log(params);
-  const getCategoryName = params.browseCategories;
-  let convertToString: string;
-  if (!Array.isArray(getCategoryName)) {
-    convertToString = getCategoryName.replace(/%20/g, ' ');
-  }
+  // const params = useParams();
+  // console.log(params);
+  // const getCategoryName = params.browseCategories;
+  // let convertToString: string;
+  // if (!Array.isArray(getCategoryName)) {
+  //   convertToString = getCategoryName.replace(/%20/g, ' ');
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +42,7 @@ const BrowseCategoriesPage = () => {
           >
             &#60;
           </button>
-          <span className="font-medium">{convertToString!}</span>
+          <span className="font-medium">Top Categories</span>
         </h2>
         <div className="px-4">
           <input
@@ -54,7 +54,7 @@ const BrowseCategoriesPage = () => {
             {getGenresListRaw?.length > 0 &&
               getGenresListRaw.map((item) => (
                 <Link
-                  href={`/explore/${convertToString}/${item.title}`}
+                  href={`/genres/${item.title}`}
                   key={item.id}
                   className="h-44 relative rounded-md"
                 >

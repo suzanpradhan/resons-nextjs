@@ -19,7 +19,7 @@ export default function CardOne({
   return (
     <>
       <Link
-        href={`/explore/${routeName}/${slide.title}`}
+        href={`/${routeName}/${slide.title}`}
         className={'flex flex-col items-center last-of-type:mr-0 ' + classnames}
       >
         <div className="w-full h-28 sm:h-36 rounded-md overflow-hidden drop-shadow-xl">

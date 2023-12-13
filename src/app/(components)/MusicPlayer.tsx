@@ -14,23 +14,20 @@ import {
   addNewPlaylist,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import Image from 'next/image';
 import { DotsThreeOutlineVertical, PlayCircle, ThumbsUp } from 'phosphor-react';
 import { useEffect, useState } from 'react';
 import WavePlayer from './WavePlayer';
 
 interface MusicPlayerType {
-  params: Params;
+  name: string;
 }
 
-const MusicPlayer = ({ params }: MusicPlayerType) => {
+const MusicPlayer = ({ name }: MusicPlayerType) => {
   // const getCategoryName = params.categories[1];
   // const convertToString = getCategoryName.replace(/%20/g, ' '); //Replace %20 by " "
 
-  const [categoryName, setCategoryName] = useState(
-    params.categories[1].replace(/%20/g, ' ')
-  );
+  const [categoryName, setCategoryName] = useState(name.replace(/%20/g, ' '));
   const [genreDetail, setGenreDetail] = useState<GenresDetailType | undefined>(
     undefined
   );
