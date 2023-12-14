@@ -37,6 +37,32 @@ const postApi = baseApi.injectEndpoints({
       },
     }),
 
+    // Get List of Posts
+    getMyFeed: builder.query<PaginatedResponseType<PostDetailType>, number>({
+      query: (page) => `${apiPaths.myFeedUrl}?page=${page}&paginate=10`,
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.data.map(({ id }) => ({ type: 'Posts', id } as const)),
+            { type: 'Posts', id: 'LIST' },
+          ]
+          : [{ type: 'Posts', id: 'LIST' }],
+      serializeQueryArgs: ({ endpointName }) => {
+        return "feedListing";
+      },
+      merge: (currentCache, newItems) => {
+        currentCache.pagination = newItems.pagination;
+        currentCache.data.push(...newItems.data);
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+      transformResponse: (response: any) => {
+        console.log(response.data);
+        return response?.data as PaginatedResponseType<PostDetailType>;
+      },
+    }),
+
     // getPostRefetch: builder.query<PostDetailType, number>({
     //   query: (id) => `${apiPaths.postSingleUrl}/${id}`,
     //   providesTags: (result) => {
