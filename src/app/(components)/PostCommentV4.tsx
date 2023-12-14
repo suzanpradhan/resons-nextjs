@@ -66,7 +66,7 @@ export default function PostCommentV4(props: PostCommentProps) {
         await Promise.resolve(
           dispatch(
             likeApi.endpoints.addLikedComment.initiate({
-              comment_id: props.commentData.id,
+              post_comment_id: props.commentData.id,
               like: true,
             })
           )
@@ -79,7 +79,7 @@ export default function PostCommentV4(props: PostCommentProps) {
         await Promise.resolve(
           dispatch(
             likeApi.endpoints.addLikedComment.initiate({
-              comment_id: props.commentData.id,
+              post_comment_id: props.commentData.id,
               like: false,
             })
           )

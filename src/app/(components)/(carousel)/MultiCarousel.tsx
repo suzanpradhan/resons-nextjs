@@ -47,7 +47,7 @@ export default function MultiCarousel({
   return (
     <div className="flex flex-col mb-4 py-4 bg-white overflow-x-hidden last-of-type:mb-28">
       <Link
-        href={`/explore/${slides[0].groupTitle}`}
+        href={`/genres/all`}
         className="text-base font-medium text-gray-800 mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0 mx-4"
       >
         {slides[0].groupTitle}

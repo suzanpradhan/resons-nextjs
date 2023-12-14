@@ -36,7 +36,7 @@ export default function AccountSettingPage() {
           <ul className="bg-slate-100 rounded-lg overflow-hidden py-2">
             <li className="relative hover:bg-slate-200 rounded-md">
               <Link
-                href="/"
+                href="/accountSettings/personalDetails"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
               >
                 <p className="flex gap-2 items-center">

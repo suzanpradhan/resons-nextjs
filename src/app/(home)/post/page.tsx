@@ -14,7 +14,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   ImageSquare,
-  MapPin,
   Microphone,
   StopCircle,
   Translate,
@@ -485,9 +484,9 @@ const PostCreatePage = () => {
                     toggleImagesVisibility((prevState) => !prevState)
                   }
                 >
-                  <ImageSquare size={24} weight="fill" />
+                  <ImageSquare size={28} weight="fill" className="-mb-[1px]" />
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className={
                     locationInputVisibility ? `text-red-400` : `text-black`
@@ -497,7 +496,7 @@ const PostCreatePage = () => {
                   }
                 >
                   <MapPin size={24} weight="fill" />
-                </button>
+                </button> */}
                 <button
                   type="button"
                   onClick={() =>

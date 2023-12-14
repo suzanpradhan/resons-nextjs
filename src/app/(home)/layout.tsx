@@ -4,7 +4,7 @@ import AppBar from '@/app/(components)/AppBar';
 import MobileNavigation from '@/app/(components)/MobileNavigation';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
-import { updateHomePage } from '@/modules/post/homePageReducer';
+import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect } from 'react';
 import NowPlayingBarV3 from '../(components)/(nowPlayingPlayer)/NowPlayingBarV3';
 import PostDetailComponent from './(components)/PostDetailComponent';
@@ -17,6 +17,7 @@ export default function HomeLayout({
   view?: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
+  const navigator = useRouter();
 
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage
@@ -26,15 +27,15 @@ export default function HomeLayout({
   );
 
   useEffect(() => {
-    history.pushState(null, '', location.href);
-    window.onpopstate = function () {
-      if (currentPage == 2) {
-        history.go(1);
-        dispatch(updateHomePage({ page: 1 }));
-      } else {
-        history.back();
-      }
-    };
+    // history.pushState(null, '', location.href);
+    // window.onpopstate = function () {
+    //   if (currentPage == 2) {
+    //     history.go(1);
+    //     dispatch(updateHomePage({ page: 1 }));
+    //   } else {
+    //     navigator.back();
+    //   }
+    // };
   }, [currentPage]);
 
   const handleScroll = useCallback(() => {

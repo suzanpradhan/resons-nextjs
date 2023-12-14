@@ -48,17 +48,19 @@ export type ProfileUpdateResponseType = {
     user?: ProfileDetailType
 }
 
-export interface ProfileUpdateFormType {
-    name: string;
-    phone_number: string | undefined;
-    profile_image: File | undefined;
-    date_of_birth: string | undefined;
-    nickname: string | undefined;
-    religion: string | undefined;
-    about: string | undefined;
-    user_language: string | undefined;
-    country_id: number | undefined;
-}
+export const profileUpdateFormSchema = z.object({
+    name: z.string().pipe(nonempty),
+    phone_number: z.string().optional(),
+    profile_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
+    date_of_birth: z.string().optional(),
+    nickname: z.string().optional(),
+    religion: z.string().optional(),
+    about: z.string().optional(),
+    user_language: z.string().optional(),
+    country_id: z.number().optional(),
+})
+
+export type ProfileUpdateFormType = z.infer<typeof profileUpdateFormSchema>
 
 export type ChangePasswordFormType = z.infer<typeof passwordChangeSchema>;
 
