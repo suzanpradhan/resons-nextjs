@@ -78,12 +78,12 @@ const profileApi = baseApi
                     formData.append('user_language', payload.user_language!);
                     return {
                         url: `${apiPaths.profileUpdateUrl}`,
-                        method: 'PATCH',
+                        method: 'POST',
                         body: formData,
                         formData: true,
                     };
                 },
-                invalidatesTags: ['Profile'],
+                invalidatesTags: ['Profile', 'Posts'],
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {
                         await queryFulfilled;
