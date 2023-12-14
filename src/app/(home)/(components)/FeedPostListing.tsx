@@ -65,7 +65,9 @@ const FeedPostListing = (props: FeedPostListingProps) => {
     const fetchData = async () => {
       setIsLoading(true); // Set isLoading to true before making the API request
       const response = await dispatch(
-        postApi.endpoints.getPostList.initiate(currentPage)
+        session.data?.user?.token
+          ? postApi.endpoints.getMyFeed.initiate(currentPage)
+          : postApi.endpoints.getPostList.initiate(currentPage)
       );
       setIsLoading(false); // Set isLoading to false after the request is completed
       if (response.data) {
@@ -96,8 +98,6 @@ const FeedPostListing = (props: FeedPostListingProps) => {
       state.baseApi.queries.feedListing
         ?.data as PaginatedResponseType<PostDetailType>
   );
-
-  console.log(postListData);
 
   return (
     <div

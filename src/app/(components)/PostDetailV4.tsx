@@ -3,7 +3,9 @@
 import PostDropdown, { ItemComponent } from '@/app/(components)/PostDropdown';
 import { apiPaths } from '@/core/api/apiConstants';
 import { defaultWaveData } from '@/core/constants/appConstants';
+import { useAppDispatch } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
+import likeApi from '@/modules/liked/likeApi';
 import { PostDetailType } from '@/modules/post/postType';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
@@ -66,8 +68,11 @@ const PostDetailV4 = ({
 }: PostDetailProps) => {
   const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [liked, setIsLiked] = useState(props.post.my_like);
+  const [totalLike, setTotalLike] = useState(props.post.total_likes ?? 0);
   const [isModalOpen, toggleModelOpen] = useState(false);
   const navigator = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleViewPostLikes = (e: any) => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
@@ -88,6 +93,21 @@ const PostDetailV4 = ({
   const handleOnLikeViewClose = async () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     document.body.style.overflow = 'auto';
+  };
+
+  const handleLiked = async () => {
+    if (props.post?.id) {
+      setIsLiked(!liked);
+      setTotalLike(!liked ? totalLike + 1 : totalLike - 1);
+      await Promise.resolve(
+        dispatch(
+          likeApi.endpoints.addLiked.initiate({
+            post_id: props.post!.id,
+            like: !liked,
+          })
+        )
+      );
+    }
   };
 
   return (
@@ -279,11 +299,16 @@ const PostDetailV4 = ({
           <div className="flex gap-3 items-center">
             <div
               className="button cursor-pointer"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e?.stopPropagation();
+                await handleLiked();
               }}
             >
-              <ThumbsUp size="26" color="white" weight="regular" />
+              <ThumbsUp
+                size="26"
+                color="white"
+                weight={liked ? 'fill' : 'regular'}
+              />
             </div>
             <div
               className="button cursor-pointer"
@@ -310,16 +335,14 @@ const PostDetailV4 = ({
           <div className="mt-2">
             <div className="text-sm text-white font-light">
               <span onClick={handleViewPostLikes} className="cursor-pointer">
-                {props?.post?.total_likes > 0
-                  ? props?.post?.total_likes > 1
-                    ? props?.post?.total_likes + ' likes'
-                    : props?.post?.total_likes + ' like'
+                {totalLike > 0
+                  ? totalLike > 1
+                    ? totalLike + ' likes'
+                    : totalLike + ' like'
                   : null}
               </span>
 
-              {props?.post?.total_likes > 0 && props?.post?.total_comments > 0
-                ? ' • '
-                : null}
+              {totalLike > 0 && props?.post?.total_comments > 0 ? ' • ' : null}
               {props?.post?.total_comments && props?.post?.total_comments > 1
                 ? props?.post?.total_comments + ' comments'
                 : props.post.total_comments > 0

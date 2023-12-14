@@ -84,6 +84,7 @@ export const apiPaths = {
   myStoryListUrl: '/socialnetwork/story/my-story',
   // Post
   postUrl: '/socialnetwork/post/list',
+  myFeedUrl: '/socialnetwork/post/feed',
   popularPostUrl: '/socialnetwork/post/list/popular',
   postDeleteUrl: '/socialnetwork/post/delete',
   allPostDeleteUrl: '/socialnetwork/settings/delete-all-posts',

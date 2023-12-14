@@ -18,6 +18,6 @@ export interface LikeFormType {
 }
 
 export interface LikeFormCommentType {
-    comment_id: number;
+    post_comment_id: number;
     like: boolean;
 }
