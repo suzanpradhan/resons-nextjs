@@ -1,6 +1,9 @@
 import Link from 'next/link';
-import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+// import Swiper core and required modules
+import { EffectFade } from 'swiper/modules';
 import CardOne from './CardOne';
 
 interface Slide {
@@ -23,36 +26,57 @@ export default function MultiCarousel({
   slides,
   routeName,
 }: MainCarouselProps) {
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 8,
-      slidesToSlide: 4, // optional, default to 1.
-      partialVisibilityGutter: 20,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 3,
-      slidesToSlide: 2, // optional, default to 1.
-      partialVisibilityGutter: 10,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 2,
-      slidesToSlide: 2, // optional, default to 1.
-      partialVisibilityGutter: 10,
-    },
-  };
-
   return (
-    <div className="flex flex-col mb-4 py-4 bg-white overflow-x-hidden last-of-type:mb-28">
+    <div className="bg-white overflow-x-hidden px-4 py-4 mb-4 last-of-type:mb-28">
       <Link
         href={`/genres/all`}
-        className="text-base font-medium text-gray-800 mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0 mx-4"
+        className="block text-base font-medium text-gray-800 capitalize border-0 border-solid border-b border-gray-300 mb-4 pb-2"
       >
         {slides[0].groupTitle}
       </Link>
-      <Carousel
+
+      <Swiper
+        // install Swiper modules
+        modules={[EffectFade]}
+        spaceBetween={15}
+        slidesPerView={2.15}
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        // onSwiper={(swiper) => console.log(swiper)}
+        // onSlideChange={() => console.log('slide change')}
+        breakpoints={{
+          // when window width is >= 480px
+          480: {
+            width: 480,
+            slidesPerView: 3,
+          },
+          // when window width is >= 640px
+          640: {
+            width: 640,
+            slidesPerView: 4,
+          },
+          // when window width is >= 768px
+          768: {
+            width: 768,
+            slidesPerView: 5,
+          },
+        }}
+      >
+        {slides[0].slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            {({ isActive }) => (
+              <CardOne
+                classnames={`${isActive ? '' : ''}`}
+                slide={slide}
+                routeName={routeName}
+              />
+            )}
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+
+    /* <Carousel
         swipeable={true}
         draggable={true}
         responsive={responsive}
@@ -62,6 +86,7 @@ export default function MultiCarousel({
         removeArrowOnDeviceType={['tablet', 'mobile']}
         itemClass="pl-4"
         partialVisible={true}
+        focusOnSelect={true}
         // Uncomment Extra Features
         //  showDots={false}
         //  ssr={true} // means to render carousel on server-side.
@@ -80,7 +105,6 @@ export default function MultiCarousel({
             routeName={routeName}
           />
         ))}
-      </Carousel>
-    </div>
+      </Carousel> */
   );
 }
