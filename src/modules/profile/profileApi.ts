@@ -78,7 +78,7 @@ const profileApi = baseApi
                     formData.append('user_language', payload.user_language!);
                     return {
                         url: `${apiPaths.profileUpdateUrl}`,
-                        method: 'POST',
+                        method: 'PATCH',
                         body: formData,
                         formData: true,
                     };

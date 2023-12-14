@@ -428,6 +428,7 @@ const PostCreatePage = () => {
                     setIsPlaying={setIsPlaying}
                     audioRef={audioRef}
                     wavePlayerVisible={wavePlayerVisible}
+                    theme="light"
                   />
                 </span>
                 <button

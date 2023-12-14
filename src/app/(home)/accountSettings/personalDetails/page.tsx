@@ -22,8 +22,8 @@ import { ZodError } from 'zod';
 const FORM_DETAILS = [
   { datailName: 'Name', formikName: 'name' },
   { datailName: 'Phone Number', formikName: 'phone_number' },
-  { datailName: 'Username', formikName: 'nickname' },
-  { datailName: 'Date of Birth', formikName: 'date_of_birth' },
+  // { datailName: 'Username', formikName: 'nickname' },
+  // { datailName: 'Date of Birth', formikName: 'date_of_birth' },
 ];
 
 const PersonalDetailsPage = () => {
@@ -177,27 +177,42 @@ const PersonalDetailsPage = () => {
               type="text"
               {...formik.getFieldProps(item.formikName)}
             />
-            // <div key={index}>
-            //   <label
-            //     htmlFor={item.formikName}
-            //     className="text-base font-normal"
-            //   >
-            //     {item.datailName}
-            //   </label>
-            //   <input
-            //     id={item.formikName}
-            //     type="text"
-            //     {...formik.getFieldProps(item.formikName)}
-            //   />
-            // </div>
           ))}
+
+          <div className="flex flex-col py-2">
+            <label htmlFor="username" className="mb-1 font-normal">
+              Username
+            </label>
+            <div className="">
+              <label
+                htmlFor="username"
+                className="flex rounded-md border-gray-200 border-[1px] items-center m-0 text-sm text-gray-400 font-normal pl-3  "
+              >
+                <span>https://resons.com/</span>
+                <input
+                  id="nickname"
+                  type="text"
+                  {...formik.getFieldProps('nickname')}
+                  className="!border-0 bg-slate-100 inline w-full text-sm text-gray-700 border-gray-200 font-normal py-2 pr-3 rounded-sm outline-none "
+                  autoComplete=""
+                />
+              </label>
+            </div>
+          </div>
+          <TextField
+            label="Date of Birth"
+            isLabelBold={false}
+            id="date_of_birth"
+            type="text"
+            {...formik.getFieldProps('date_of_birth')}
+          />
           <div className="flex flex-col">
             <label className="text-base font-normal " htmlFor="language">
               Language
             </label>
             <select
               // name="language"
-              className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none w-full border-gray-200 bg-white border  text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
               id="language"
               // onChange={handleChange}
               {...formik.getFieldProps('user_language')}
@@ -223,7 +238,7 @@ const PersonalDetailsPage = () => {
             </label>
             <select
               id="country_id"
-              className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
               name="country_id"
               value={formik.values.country_id}
               // onChange={(e) => handleCountryChange(e)}
