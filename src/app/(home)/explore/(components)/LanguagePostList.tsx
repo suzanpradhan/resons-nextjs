@@ -62,11 +62,7 @@ const LanguagePostList = ({ title }: LanggatePostListType) => {
       ],
     },
   ];
-  return (
-    <div>
-      <MultiCarousel slides={group} routeName="languages" />
-    </div>
-  );
+  return <MultiCarousel slides={group} routeName="languages" />;
 };
 
 export default LanguagePostList;

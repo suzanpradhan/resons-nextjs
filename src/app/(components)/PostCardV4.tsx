@@ -280,7 +280,6 @@ const PostCardV4 = (props: PostCardProps) => {
     audioRef.current = null;
     setHiddenButton(undefined);
     setAudioFile(undefined);
-    console.log('cancelled');
   };
 
   const validateForm = () => {
