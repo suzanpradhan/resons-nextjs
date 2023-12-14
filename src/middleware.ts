@@ -18,8 +18,6 @@ export async function middleware(req: any) {
   //   return NextResponse.redirect(new URL('/login', req.url));
   // }
 
-  console.log(req.nextUrl.origin);
-
 
   if (req.nextUrl.pathname.startsWith('/_next/')) {
     return;
