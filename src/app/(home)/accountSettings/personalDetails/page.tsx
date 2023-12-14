@@ -5,6 +5,7 @@ import { RootState } from '@/core/redux/store';
 import TextField from '@/core/ui/components/TextField';
 import countriesApi from '@/modules/countries/countriesApi';
 import { CountriesDetailType } from '@/modules/countries/countriesType';
+import postApi from '@/modules/post/postApi';
 import profileApi from '@/modules/profile/profileApi';
 import {
   ProfileDetailType,
@@ -29,6 +30,9 @@ const PersonalDetailsPage = () => {
   const navigate = useRouter();
   const dispatch = useAppDispatch();
   const [imageFile, setImageFile] = useState<string | undefined>(undefined);
+  const currentPage = useAppSelector(
+    (state: RootState) => state.postListing.currentPage
+  );
 
   useEffect(() => {
     dispatch(profileApi.endpoints.getMyProfile.initiate());
@@ -61,7 +65,7 @@ const PersonalDetailsPage = () => {
       );
       if (Object.prototype.hasOwnProperty.call(responseData, 'data')) {
         await dispatch(
-          profileApi.endpoints.getMyProfileData.initiate('?load=true', {
+          postApi.endpoints.getMyPostList.initiate(currentPage, {
             forceRefetch: true,
           })
         );
@@ -83,7 +87,6 @@ const PersonalDetailsPage = () => {
     } catch (error) {
       if (error instanceof ZodError) {
         console.log(error);
-        console.log(typeof formik.values.country_id);
         return error.formErrors.fieldErrors;
       }
     }
@@ -93,11 +96,11 @@ const PersonalDetailsPage = () => {
     enableReinitialize: true,
     initialValues: {
       name: myProfile?.name!,
-      phone_number: myProfile?.phone_number,
-      date_of_birth: myProfile?.date_of_birth,
-      nickname: myProfile?.nickname,
-      user_language: myProfile?.user_language,
-      country_id: myProfile?.country?.id,
+      phone_number: myProfile?.phone_number!,
+      date_of_birth: myProfile?.date_of_birth!,
+      nickname: myProfile?.nickname!,
+      user_language: myProfile?.user_language!,
+      country_id: myProfile?.country?.id!,
     },
     validateOnChange: false,
     validate: validateForm,

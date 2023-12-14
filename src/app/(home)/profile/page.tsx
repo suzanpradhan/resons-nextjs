@@ -95,7 +95,6 @@ export default function ProfilePage() {
     return state.baseApi.queries[`getMyPostList`]
       ?.data as PaginatedResponseType<PostDetailType>;
   });
-  console.log(myProfile);
 
   return (
     <div className="sm:container md:container lg:container mx-auto mb-20 sm:mb-0 md:px-4">

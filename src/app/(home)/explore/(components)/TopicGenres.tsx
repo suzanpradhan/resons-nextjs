@@ -33,6 +33,8 @@ const TopicGenres = ({ title }: { title: string }) => {
       state.baseApi.queries[`getGenres`]?.data as GenresDetailType[]
   );
 
+  console.log(getGenresListRaw);
+
   if (getGenresListRaw && getGenresListRaw.length > 0) {
     var newGenres = getGenresListRaw.map((item: any) => ({
       id: item.id,
