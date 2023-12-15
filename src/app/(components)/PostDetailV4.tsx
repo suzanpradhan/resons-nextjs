@@ -374,6 +374,7 @@ const PostDetailV4 = ({
         <AddToPlaylistPopup
           isModalOpen={isModalOpen}
           toggleModelOpen={toggleModelOpen}
+          audioId={props.post.id}
         />
       )}
     </>

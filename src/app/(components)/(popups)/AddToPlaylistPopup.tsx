@@ -12,6 +12,7 @@ import CommonPopup from './CommonPopup';
 interface AddToPlaylistPopupType {
   toggleModelOpen: Dispatch<SetStateAction<boolean>>;
   isModalOpen: boolean;
+  audioId: number;
 }
 
 const PLAYLIST_LIST = [
@@ -26,6 +27,7 @@ const PLAYLIST_LIST = [
 const AddToPlaylistPopup = ({
   toggleModelOpen,
   isModalOpen,
+  audioId,
 }: AddToPlaylistPopupType) => {
   const [selectedPlaylist, setSelectedPlaylist] = useState(0);
   const dispatch = useAppDispatch();
@@ -35,8 +37,8 @@ const AddToPlaylistPopup = ({
       const responseData = await Promise.resolve(
         dispatch(
           playlistApi.endpoints.addAudioOnPlaylist.initiate({
-            audio_id: id,
-            playlist_id: '1',
+            audio_id: audioId,
+            playlist_id: id.toString(),
           })
         )
       );
@@ -66,6 +68,7 @@ const AddToPlaylistPopup = ({
   // console.log(playlistList);
   // const playlistList = playlistApi.endpoints.getMyPlaylistList.initiate();
   // console.log(playlistList);
+  console.log(playlistList);
 
   return (
     <CommonPopup

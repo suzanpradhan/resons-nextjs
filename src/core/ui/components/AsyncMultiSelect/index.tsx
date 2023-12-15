@@ -35,7 +35,6 @@ const AsyncMultiSelect = ({
 
       if ('data' in response) {
         if (response.data.length > 0) {
-          console.log(response.data);
           return response.data.map((item: { title: string; id: number }) => {
             return {
               value: item.id,
@@ -44,7 +43,7 @@ const AsyncMultiSelect = ({
           });
         }
       } else {
-        console.log('Error fetching:', response.error);
+        // console.log('Error fetching:', response.error);
         throw new Error('Error fetching data');
       }
     } catch (error) {
