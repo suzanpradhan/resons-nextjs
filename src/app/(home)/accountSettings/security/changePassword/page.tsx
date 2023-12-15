@@ -7,10 +7,13 @@ import {
   passwordChangeSchema,
 } from '@/modules/profile/profileType';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import { CaretLeft } from 'phosphor-react';
 import { ZodError } from 'zod';
 
 export default function ChangePasswordPage() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const onSubmit = async (data: ChangePasswordFormType) => {
     try {
@@ -54,7 +57,12 @@ export default function ChangePasswordPage() {
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
       <h2 className="h-11 w-full px-4 bg-white shadow-sm flex gap-2 mb-0 fixed z-50">
-        <span className="text-3xl font-light flex items-center">&#60;</span>
+        <span
+          onClick={() => router.back()}
+          className="text-3xl font-light flex items-center"
+        >
+          <CaretLeft size={18} weight="bold" />
+        </span>
         <span className="text-sm font-medium flex items-center">
           Change Password
         </span>

@@ -396,8 +396,8 @@ const PostCardV4 = (props: PostCardProps) => {
           />
         ) : null}
 
-        <div className="p-4 bg-white flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full overflow-hidden">
+        <div className="bg-white flex items-center gap-2">
+          <div className="ml-4 w-9 h-9 rounded-full overflow-hidden">
             <Image
               width={100}
               height={100}
@@ -407,14 +407,14 @@ const PostCardV4 = (props: PostCardProps) => {
             />
           </div>
           <form
-            className="w-full"
+            className="grow"
             onSubmit={(event) => {
               event.preventDefault();
               formik.handleSubmit(event);
             }}
           >
-            <div className="text-gray-500 flex gap-2 px-3 py-2 w-full items-center rounded-md bg-gray-200 ">
-              <span className="grow text-slate-500 text-sm">
+            <div className="text-gray-500 flex gap-2 px-3 py-2 w-full items-center bg-gray-100">
+              <span className="grow text-slate-500 text-xs md:text-sm">
                 {!wavePlayerVisible && <>Record or Upload Audio</>}
                 <PlayPauseWithWave
                   audio={recordedAudio}

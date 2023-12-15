@@ -78,7 +78,11 @@ const PostDropdown = (props: PostDropDownProps) => {
         onClick={handleDropdownClick}
         ref={dropdownRef}
       >
-        <DotsThreeOutline size="24" color={props.variant} weight="fill" />
+        <DotsThreeOutline
+          size={props.variant == 'dark' ? '21' : '24'}
+          className={props.variant == 'dark' ? 'text-slate-600' : 'text-white'}
+          weight="fill"
+        />
         {isOpen && (
           <motion.div
             initial="hidden"

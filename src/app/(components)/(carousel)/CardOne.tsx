@@ -22,14 +22,14 @@ export default function CardOne({
         href={`/${routeName}/${slide.title}`}
         className={'flex flex-col items-center last-of-type:mr-0 ' + classnames}
       >
-        <div className="w-full h-28 sm:h-36 rounded-md overflow-hidden drop-shadow-xl">
+        <div className="w-full h-32 sm:h-40 overflow-hidden drop-shadow-md">
           <img
             src={slide.img_url}
             alt={slide.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full aspect-auto object-cover"
           />
         </div>
-        <h4 className="text-sm w-full text-center text-gray-800 font-medium py-0 mt-3 capitalize truncate">
+        <h4 className="text-sm w-full text-center text-gray-900 font-medium py-2 capitalize truncate">
           {slide.title}
         </h4>
       </Link>
