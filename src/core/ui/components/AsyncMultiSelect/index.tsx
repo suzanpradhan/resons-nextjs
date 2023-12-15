@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/core/redux/clientStore';
-import postApi from '@/modules/post/postApi';
+import genresApi from '@/modules/genres/genresApi';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { MultiValue } from 'react-select';
 import AsyncCreatableSelect from 'react-select/async-creatable';
@@ -30,15 +30,15 @@ const AsyncMultiSelect = ({
   const getTagsSelectorData = async (inputValue: string) => {
     try {
       const response = await dispatch(
-        postApi.endpoints.searchTopics.initiate(inputValue)
+        genresApi.endpoints.searchGenres.initiate(inputValue)
       );
 
       if ('data' in response) {
-        console.log(response.data);
-        if (response.data.data.length > 0) {
-          return response.data.data.map((item: { title: string }) => {
+        if (response.data.length > 0) {
+          console.log(response.data);
+          return response.data.map((item: { title: string; id: number }) => {
             return {
-              value: item.title,
+              value: item.id,
               label: item.title,
             };
           });

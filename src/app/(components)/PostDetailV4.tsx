@@ -160,8 +160,7 @@ const PostDetailV4 = ({
               props.currentPage == 2 ? 'hidden' : ''
             }`}
           >
-            {moment.duration(props.post.time_duration, 'seconds').humanize() +
-              ' ago'}
+            {props.post.created_at_human}
           </div>
           <div className="flex items-center">
             <div className="flex-1 flex items-center gap-2">

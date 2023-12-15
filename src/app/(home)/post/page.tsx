@@ -102,7 +102,7 @@ const PostCreatePage = () => {
             cover_image: data.cover_image!,
             remember_my_language: data.remember_my_language,
             color_code: data.color_code,
-            tags: selectedTagOptions.map((tag: Option) => tag.value),
+            genres: data.genres,
           })
         )
       );
@@ -161,7 +161,7 @@ const PostCreatePage = () => {
       cover_image: undefined,
       color_code: '#000000',
       remember_my_language: '0',
-      tags: [],
+      genres: [],
       is_ai_generated: '0',
     },
     validateOnChange: false,
@@ -179,13 +179,14 @@ const PostCreatePage = () => {
   // };
 
   const handleTagsChange = (e: MultiValue<Option>) => {
-    console.log(e);
-    setSelectedTagOptions((prevStates) => [
-      ...prevStates,
-      { label: e[e.length - 1].label, value: e[e.length - 1].value },
-    ]);
-    // formik.setFieldValue('tags');
-    console.log(formik.values.tags);
+    // setSelectedTagOptions((prevStates) => [
+    //   ...prevStates,
+    //   { label: e[e.length - 1].label, value: e[e.length - 1].value },
+    // ]);
+    formik.setFieldValue(
+      'genres',
+      e.map((genre) => genre.value)
+    );
   };
 
   const startNewRecording = async () => {
