@@ -374,6 +374,7 @@ export default function PostDetailComponent({
             post_id: data.post_id,
             file: data.file,
             wave_data: data.wave_data,
+            file_duration: 0,
           })
         )
       );
@@ -393,9 +394,10 @@ export default function PostDetailComponent({
   const formik = useFormik<CommentFormType>({
     enableReinitialize: true,
     initialValues: {
-      post_id: 1,
+      post_id: cachedPostData?.id,
       file: audioFile!,
       wave_data: JSON.stringify(audioWaveData),
+      file_duration: 0,
     },
     validateOnChange: false,
     validate: validateForm,
@@ -468,8 +470,8 @@ export default function PostDetailComponent({
               />
             ) : null}
 
-            <div className="px-4 py-2 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden">
+            <div className="bg-white flex items-center gap-2">
+              <div className="ml-4 w-9 h-9 rounded-full overflow-hidden">
                 <Image
                   width={100}
                   height={100}
@@ -479,14 +481,14 @@ export default function PostDetailComponent({
                 />
               </div>
               <form
-                className="w-full"
+                className="grow"
                 onSubmit={(event) => {
                   event.preventDefault();
                   formik.handleSubmit(event);
                 }}
               >
-                <div className="text-gray-500 flex gap-2 px-3 py-2 w-full items-center rounded-md bg-gray-200 ">
-                  <span className="grow text-slate-500 text-sm">
+                <div className="text-gray-500 flex gap-2 px-3 py-2 w-full items-center bg-gray-100">
+                  <span className="grow text-slate-500 text-xs md:text-sm">
                     {!wavePlayerVisible && <>Record or Upload Audio</>}
                     <PlayPauseWithWave
                       audio={recordedAudio}

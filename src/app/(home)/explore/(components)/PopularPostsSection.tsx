@@ -4,6 +4,7 @@ import { defaultWaveData } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { PaginatedResponseType } from '@/core/types/reponseTypes';
+import { updateHomePage } from '@/modules/post/homePageReducer';
 import postApi from '@/modules/post/postApi';
 import { PostDetailType } from '@/modules/post/postType';
 import Image from 'next/image';
@@ -12,6 +13,9 @@ import { useEffect } from 'react';
 
 const PopularPostsSection = () => {
   const dispatch = useAppDispatch();
+  const currentPage = useAppSelector(
+    (state: RootState) => state.homepage.currentPage
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +41,14 @@ const PopularPostsSection = () => {
           return (
             <div
               key={`popular_post_${index}`}
+              onClick={() => {
+                if (currentPage == 2) {
+                  return;
+                }
+                if (currentPage == 1) {
+                  dispatch(updateHomePage({ page: 2, id: post.id }));
+                }
+              }}
               className="relative mb-4 mx-4 px-4 rounded-lg overflow-hidden last-of-type:mb-0"
             >
               {post.cover_image ? (

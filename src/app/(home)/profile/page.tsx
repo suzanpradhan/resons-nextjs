@@ -104,10 +104,10 @@ export default function ProfilePage() {
       >
         {myProfile ? <ProfileHeader viewProfile={myProfile} /> : <></>}
 
-        <div className="px-4 md:px-0">
+        <div className="">
           {/* Render the Tabs component and pass the activeTab and handleTabChange as props */}
           <Tabs activeTab={activeTab} setTab={setActiveTab} />
-          <div className="py-5 flex gap-6 flex-col">
+          <div className="mb-24 flex gap-5 flex-col">
             {activeTab === 'Posts' ? (
               activeTab === 'Posts' && myPostList?.data?.length > 0 ? (
                 <>

@@ -13,7 +13,7 @@ const commentApi = baseApi
         query: ({ ...payload }) => {
           var formData = new FormData();
           formData.append('audio_file', payload.file);
-          formData.append('post_id', payload.post_id.toString());
+          formData.append('post_id', payload.post_id!.toString());
           if (payload.wave_data) {
             formData.append('wave_data', payload.wave_data);
           }

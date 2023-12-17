@@ -156,7 +156,7 @@ const PostDetailV4 = ({
             <></>
           )}
           <div
-            className={`absolute -top-4 right-4 rounded-full bg-slate-100 py-1 px-3 text-xs sm:text-sm font-medium text-black shadow-lg border-0 border-white border-t-2 border-b border-b-gray-500 ${
+            className={`absolute top-0 right-4 bg-white/10 backdrop-blur-sm py-1 px-2 text-xs font-normal text-white ${
               props.currentPage == 2 ? 'hidden' : ''
             }`}
           >
@@ -164,16 +164,10 @@ const PostDetailV4 = ({
               ' ago'}
           </div>
           <div className="flex items-center">
-            <div className="flex-1 flex items-center gap-2">
-              {/* <div
-            className="w-14 h-14 rounded-full overflow-hidden cursor-pointer"
-            onClick={(e) => {
-              console.log('clicked');
-            }}
-          > */}
-              <div className="w-max h-max border-solid border-0 border-white rounded-full p-1">
+            <div className="grow flex items-center gap-2">
+              <div className="w-max h-max border-solid border border-white rounded-full">
                 <div
-                  className="w-14 h-14 rounded-full overflow-hidden cursor-pointer"
+                  className="w-12 md:w-14 h-12 md:h-14 rounded-full overflow-hidden cursor-pointer"
                   onClick={(e) => {}}
                 >
                   <Image
@@ -190,7 +184,7 @@ const PostDetailV4 = ({
                     }}
                     width={100}
                     height={100}
-                    className="w-14 h-14 object-cover"
+                    className="w-full h-full aspect-auto object-cover"
                   />
                 </div>
               </div>
@@ -258,15 +252,10 @@ const PostDetailV4 = ({
               </PostDropdown>
             </div>
           </div>
-          <h1 className="text-sm sm:text-base text-white font-light mt-3 line-clamp-2">
+          <h1 className="text-sm sm:text-base text-white font-light mt-2 line-clamp-2">
             {props.post.title}
           </h1>
-          {/* <TextWrapper
-        text={props.post.description}
-        ellipsis={descriptionEllipsis}
-        className="text-sm font-normal text-white mt-1"
-      /> */}
-          <div className="rounded-lg bg-white/10 backdrop-blur-sm my-3 px-4 py-1">
+          <div className="rounded-lg bg-white/10 backdrop-blur-sm my-2 px-4 py-1">
             <WavePlayer
               audioItem={{
                 url: props?.post?.audio
@@ -332,23 +321,28 @@ const PostDetailV4 = ({
               <Playlist size="26" color="white" weight="regular" />
             </button>
           </div>
-          <div className="mt-2">
-            <div className="text-sm text-white font-light">
-              <span onClick={handleViewPostLikes} className="cursor-pointer">
-                {totalLike > 0
-                  ? totalLike > 1
-                    ? totalLike + ' likes'
-                    : totalLike + ' like'
-                  : null}
-              </span>
+          {totalLike > 0 &&
+          props?.post?.total_comments &&
+          props?.post?.total_comments > 1 ? (
+            <div className="mt-2">
+              <div className="text-sm text-white font-light">
+                <span onClick={handleViewPostLikes} className="cursor-pointer">
+                  {totalLike > 0
+                    ? totalLike > 1
+                      ? totalLike + ' likes'
+                      : totalLike + ' like'
+                    : null}
+                </span>
 
-              {totalLike > 0 && props?.post?.total_comments > 0 ? ' • ' : null}
-              {props?.post?.total_comments && props?.post?.total_comments > 1
-                ? props?.post?.total_comments + ' comments'
-                : props.post.total_comments > 0
-                ? props.post.total_comments + ' comment'
-                : null}
-              {/* <div
+                {totalLike > 0 && props?.post?.total_comments > 0
+                  ? ' • '
+                  : null}
+                {props?.post?.total_comments && props?.post?.total_comments > 1
+                  ? props?.post?.total_comments + ' comments'
+                  : props.post.total_comments > 0
+                  ? props.post.total_comments + ' comment'
+                  : null}
+                {/* <div
             className="flex items-center absolute bottom-[-8px] left-2/3"
             style={{ transform: 'translateX(-50%)' }}
           >
@@ -363,8 +357,9 @@ const PostDetailV4 = ({
               : null}
             <span className="text-xs w-max ml-1">+33 comments</span>
           </div> */}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
 
