@@ -2,10 +2,8 @@
 
 import SearchBar from '@/app/(components)/SearchBar';
 import { useState } from 'react';
-import LanguagePostList from './(components)/LanguagePostList';
 import PopularPostsSection from './(components)/PopularPostsSection';
 import TopicGenres from './(components)/TopicGenres';
-import TopicListScroll from './(components)/TopicListScroll';
 
 export default function TopicPage() {
   const [tabIndex, setTabIndex] = useState(1);
@@ -45,9 +43,9 @@ export default function TopicPage() {
         <PopularPostsSection />
         {/* <TopicListScroll title="Newest" /> */}
         {/* <TopicListScroll title="Professionals" /> */}
-        <TopicListScroll title="More you like" />
+        {/* <TopicListScroll title="More you like" /> */}
         {/* <Suggestion title="Artist to Follow" /> */}
-        <LanguagePostList title="Explore by language" />
+        {/* <LanguagePostList title="Explore by language" /> */}
       </div>
     </div>
   );

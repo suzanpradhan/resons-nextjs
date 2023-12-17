@@ -6,19 +6,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectFade } from 'swiper/modules';
 import CardOne from './CardOne';
 
-interface Slide {
+export interface Slide {
   id?: number;
   img_url: string;
   title: string;
 }
 
-interface Group {
-  groupTitle: string;
-  slides: Slide[];
-}
-
 interface MainCarouselProps {
-  slides: Group[];
+  slides: Slide[];
   routeName: string;
 }
 
@@ -32,7 +27,7 @@ export default function MultiCarousel({
         href={`/genres/all`}
         className="block text-base font-medium text-gray-800 capitalize border-0 border-solid border-b border-gray-300 mb-4 pb-2"
       >
-        {slides[0].groupTitle}
+        Top Categories
       </Link>
 
       <Swiper
@@ -42,27 +37,29 @@ export default function MultiCarousel({
         slidesPerView={2.15}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
+        speed={600}
+        resistanceRatio={1}
         // onSwiper={(swiper) => console.log(swiper)}
-        // onSlideChange={() => console.log('slide change')}
-        breakpoints={{
-          // when window width is >= 480px
-          480: {
-            width: 480,
-            slidesPerView: 3,
-          },
-          // when window width is >= 640px
-          640: {
-            width: 640,
-            slidesPerView: 4,
-          },
-          // when window width is >= 768px
-          768: {
-            width: 768,
-            slidesPerView: 5,
-          },
-        }}
+        // // onSlideChange={() => console.log('slide change')}
+        // breakpoints={{
+        //   // when window width is >= 480px
+        //   480: {
+        //     width: 480,
+        //     slidesPerView: 3,
+        //   },
+        //   // when window width is >= 640px
+        //   640: {
+        //     width: 640,
+        //     slidesPerView: 4,
+        //   },
+        //   // when window width is >= 768px
+        //   768: {
+        //     width: 768,
+        //     slidesPerView: 5,
+        //   },
+        // }}
       >
-        {slides[0].slides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             {({ isActive }) => (
               <CardOne
