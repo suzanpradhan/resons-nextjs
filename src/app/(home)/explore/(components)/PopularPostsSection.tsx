@@ -1,39 +1,25 @@
+'use client';
+
 import WavePlayer from '@/app/(components)/WavePlayer';
 import { apiPaths } from '@/core/api/apiConstants';
 import { defaultWaveData } from '@/core/constants/appConstants';
-import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
-import { RootState } from '@/core/redux/store';
-import { PaginatedResponseType } from '@/core/types/reponseTypes';
-import postApi from '@/modules/post/postApi';
 import { PostDetailType } from '@/modules/post/postType';
 import Image from 'next/image';
 import { ChatTeardropDots, Playlist, ThumbsUp } from 'phosphor-react';
-import { useEffect } from 'react';
 
-const PopularPostsSection = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(postApi.endpoints.getPopularPostList.initiate());
-    };
-
-    fetchData();
-  }, [dispatch]);
-
-  const postsListData = useAppSelector(
-    (state: RootState) =>
-      state.baseApi.queries[`getPopularPostList`]
-        ?.data as PaginatedResponseType<PostDetailType>
-  );
-
+const PopularPostsSection = ({
+  postsListData,
+}: {
+  postsListData: PostDetailType[];
+}) => {
+  console.log(postsListData);
   return (
     <>
       <div className="flex flex-col mb-4 py-4 bg-white overflow-x-hidden last-of-type:mb-28">
         <h3 className="text-base font-medium text-gray-800 mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0 mx-4">
           Popular Posts
         </h3>
-        {postsListData?.data.map((post, index) => {
+        {postsListData?.map((post, index) => {
           return (
             <div
               key={`popular_post_${index}`}

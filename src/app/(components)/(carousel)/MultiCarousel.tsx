@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import 'react-multi-carousel/lib/styles.css';
 import 'swiper/css';
@@ -8,7 +10,7 @@ import CardOne from './CardOne';
 
 interface Slide {
   id?: number;
-  img_url: string;
+  image: string;
   title: string;
 }
 
@@ -62,7 +64,7 @@ export default function MultiCarousel({
           },
         }}
       >
-        {slides[0].slides.map((slide, index) => (
+        {slides[0].slides?.map((slide, index) => (
           <SwiperSlide key={index}>
             {({ isActive }) => (
               <CardOne
