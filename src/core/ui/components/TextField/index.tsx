@@ -1,5 +1,8 @@
+import classNames from 'classnames';
+
 export interface TextFieldProps {
   label?: string;
+  isLabelBold?: boolean;
   placeholder?: string;
   id: string;
   name?: string;
@@ -19,7 +22,13 @@ const TextField = ({
   return (
     <div className={`flex flex-col last-of-type:mb-0 ` + className}>
       {props.label ? (
-        <label htmlFor={props.id} className="text-sm mb-2 text-dark-500">
+        <label
+          htmlFor={props.id}
+          className={classNames(
+            'mb-2 text-dark-500',
+            props.isLabelBold ? 'text-sm ' : 'text-base font-normal'
+          )}
+        >
           {props.label}
           {props.required ? '*' : ''}
         </label>

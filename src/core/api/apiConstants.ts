@@ -118,7 +118,7 @@ export const apiPaths = {
   // Geners
   getGenresUrl: '/socialnetwork/list-genre',
   getGenreCurrentItem: '/socialnetwork/genre/current/playing',
-
+  searchGenresUrl: '/socialnetwork/genres/search',
   // Notification
   setNotificationUrl: '/socialnetwork/settings/update',
   getNotificationListUrl: '/notification/list',

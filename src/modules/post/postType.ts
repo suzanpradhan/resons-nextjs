@@ -78,7 +78,7 @@ export const postFormSchema = z.object({
   cover_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
   remember_my_language: z.string(),
   color_code: z.string(),
-  tags: z.array(z.string()),
+  genres: z.array(z.number()),
   is_ai_generated: z.string().or(z.instanceof(Blob)),
 });
 

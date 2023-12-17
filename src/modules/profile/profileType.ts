@@ -49,7 +49,7 @@ export type ProfileUpdateResponseType = {
 }
 
 export const profileUpdateFormSchema = z.object({
-    name: z.string().pipe(nonempty),
+    name: z.string().pipe(nonempty).optional(),
     phone_number: z.string().optional(),
     profile_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
     date_of_birth: z.string().optional(),

@@ -160,8 +160,7 @@ const PostDetailV4 = ({
               props.currentPage == 2 ? 'hidden' : ''
             }`}
           >
-            {moment.duration(props.post.time_duration, 'seconds').humanize() +
-              ' ago'}
+            {props.post.created_at_human}
           </div>
           <div className="flex items-center">
             <div className="grow flex items-center gap-2">
@@ -370,6 +369,7 @@ const PostDetailV4 = ({
         <AddToPlaylistPopup
           isModalOpen={isModalOpen}
           toggleModelOpen={toggleModelOpen}
+          audioId={props.post.id}
         />
       )}
     </>

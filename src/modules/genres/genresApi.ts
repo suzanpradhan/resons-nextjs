@@ -51,6 +51,21 @@ const genresApi = baseApi
                     return response?.data as NowPlayingType;
                 },
             }),
+            searchGenres: builder.mutation<any, string>({
+                query: (query) => {
+                    var formData = new FormData();
+                    formData.append('title', query);
+                    return {
+                        url: `${apiPaths.searchGenresUrl}`,
+                        method: 'POST',
+                        body: formData,
+                        formData: true,
+                    };
+                },
+                transformResponse: (response: any) => {
+                    return response?.data as any;
+                },
+            }),
         }),
         overrideExisting: true,
     });

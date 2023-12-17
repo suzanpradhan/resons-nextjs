@@ -236,6 +236,7 @@ const postApi = baseApi.injectEndpoints({
     // Add Post
     addPost: builder.mutation<any, PostDefaultFormType>({
       query: ({ ...payload }) => {
+
         var formData = new FormData();
         formData.append('title', payload.title);
         if (payload.wave_data) {
@@ -258,7 +259,9 @@ const postApi = baseApi.injectEndpoints({
         // formData.append('cover_image_id', payload.cover_image_id);
         formData.append('remember_my_language', payload.remember_my_language);
         formData.append('color_code', payload.color_code);
-        formData.append('tags', payload.tags as any);
+        payload.genres.map((genre) => formData.append('genres[]', genre as any));
+
+        console.log("formData", formData.get)
 
         return {
           url: `${apiPaths.postCreateUrl}`,

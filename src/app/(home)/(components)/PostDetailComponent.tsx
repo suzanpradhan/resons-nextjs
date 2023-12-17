@@ -37,7 +37,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
 import { ZodError } from 'zod';
-import PlayPauseWithWave from '../postCreate/PlayPauseWithWave';
+import PlayPauseWithWave from '../post/(components)/PlayPauseWithWave';
 
 export default function PostDetailComponent({
   params,
