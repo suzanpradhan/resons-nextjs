@@ -30,9 +30,12 @@ const FeedPostListing = (props: FeedPostListingProps) => {
   const [hasMoreData, setHasMoreData] = useState(true);
 
   useEffect(() => {
-    const patchCollection = dispatch(
-      postApi.util.upsertQueryData('getPostList', 1, props.preloadedPosts!)
-    );
+    // dispatch(
+    //   postApi.util.upsertQueryData('getPostList', 1, props.preloadedPosts!)
+    // );
+    // dispatch(
+    //   postApi.util.upsertQueryData('getMyFeed', 1, props.preloadedPosts!)
+    // );
 
     if (window) {
       window.onbeforeunload = function () {

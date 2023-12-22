@@ -10,6 +10,7 @@ export interface TextFieldProps {
   isMulti?: boolean;
   rows?: number;
   className?: string;
+  decorationClassName?: string;
   required?: boolean;
   onChange?: (e: any) => void;
 }
@@ -44,7 +45,10 @@ const TextField = ({
         ></textarea>
       ) : (
         <input
-          className="py-3 px-4 h-11 border rounded-sm bg-slate-100 text-sm focus:outline-none placeholder:text-sm text-gray-700 font-normal border-gray-200"
+          className={classNames(
+            'py-3 px-4 h-11 border rounded-md focus:outline-none placeholder:text-sm text-sm text-gray-700 font-normal border-gray-200',
+            props.decorationClassName
+          )}
           autoComplete="true"
           {...props}
         />

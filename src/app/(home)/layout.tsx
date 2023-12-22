@@ -1,11 +1,11 @@
 // Import necessary libraries and components
 'use client';
 import AppBar from '@/app/(components)/AppBar';
-import MobileNavigation from '@/app/(components)/MobileNavigation';
 import { useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import React, { useCallback, useEffect } from 'react';
 import NowPlayingBarV3 from '../(components)/(nowPlayingPlayer)/NowPlayingBarV3';
+import MobileNavigation from '../(components)/MobileNavigation';
 import PostDetailComponent from './(components)/PostDetailComponent';
 
 export default function HomeLayout({
@@ -47,7 +47,7 @@ export default function HomeLayout({
 
   return (
     <>
-      <div className="relative h-[calc(100vh)] max-h-screen overflow-hidden">
+      <div className="relative h-[calc(100vh)] max-h-screen overflow-hidden overscroll-y-contain">
         <AppBar />
         <div
           id="homePageScroller"
@@ -68,9 +68,8 @@ export default function HomeLayout({
             <PostDetailComponent />
           )}
         </div>
-        <NowPlayingBarV3 />
       </div>
-
+      <NowPlayingBarV3 />
       {currentPage == 1 ? <MobileNavigation /> : <></>}
     </>
   );

@@ -1,8 +1,10 @@
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
+import { PaginatedResponseType } from '@/core/types/reponseTypes';
+import TextField from '@/core/ui/components/TextField';
 import playlistApi from '@/modules/playlist/playlistApi';
 import { PlaylistDetailType } from '@/modules/playlist/playlistTypes';
-import classNames from 'classnames';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Plus } from 'phosphor-react';
@@ -12,37 +14,28 @@ import CommonPopup from './CommonPopup';
 interface AddToPlaylistPopupType {
   toggleModelOpen: Dispatch<SetStateAction<boolean>>;
   isModalOpen: boolean;
-  audioId: number;
+  postId: number;
 }
-
-const PLAYLIST_LIST = [
-  { id: 0, name: 'Playlist 1', image: '/images/avatar.jpg' },
-  { id: 1, name: 'Playlist 1', image: '/images/cover.webp' },
-  { id: 2, name: 'Playlist 1', image: '/images/avatar.jpg' },
-  { id: 3, name: 'Playlist 1', image: '/images/avatar.jpg' },
-  { id: 4, name: 'Playlist 1', image: '/images/cover.webp' },
-  { id: 5, name: 'Playlist 1', image: '/images/avatar.jpg' },
-];
 
 const AddToPlaylistPopup = ({
   toggleModelOpen,
   isModalOpen,
-  audioId,
+  postId,
 }: AddToPlaylistPopupType) => {
-  const [selectedPlaylist, setSelectedPlaylist] = useState(0);
   const dispatch = useAppDispatch();
+  const session = useSession();
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleAddButtonClick = async (id: number) => {
     try {
       const responseData = await Promise.resolve(
         dispatch(
-          playlistApi.endpoints.addAudioOnPlaylist.initiate({
-            audio_id: audioId,
+          playlistApi.endpoints.addPostOnPlaylist.initiate({
+            post_id: postId,
             playlist_id: id.toString(),
           })
         )
       );
-      console.log(responseData);
       toggleModelOpen(false);
     } catch (error) {
       console.log(error);
@@ -51,16 +44,15 @@ const AddToPlaylistPopup = ({
 
   const playlistList = useAppSelector(
     (state: RootState) =>
-      state.baseApi.queries['getMyPlaylistList']?.data as PlaylistDetailType[]
+      state.baseApi.queries['getMyPlaylistList']
+        ?.data as PaginatedResponseType<PlaylistDetailType>
   );
 
   useEffect(() => {
-    dispatch(
-      playlistApi.endpoints.getMyPlaylistList.initiate(undefined, {
-        forceRefetch: true,
-      })
-    );
-  }, [dispatch]);
+    if (session?.data?.user != undefined && playlistList == undefined) {
+      dispatch(playlistApi.endpoints.getMyPlaylistList.initiate());
+    }
+  }, [dispatch, session.data?.user]);
 
   // const playlistList = async () => {
   //   const response = await playlistApi.endpoints.getMyPlaylistList;
@@ -68,59 +60,69 @@ const AddToPlaylistPopup = ({
   // console.log(playlistList);
   // const playlistList = playlistApi.endpoints.getMyPlaylistList.initiate();
   // console.log(playlistList);
-  console.log(playlistList);
 
   return (
     <CommonPopup
       isModalOpen={isModalOpen}
       toggleModelOpen={toggleModelOpen}
-      popupName="Add To Playlist"
-      className="rounded-lg"
+      popupName="Add to playlist"
+      className="rounded-lg w-screen"
     >
-      <div className="w-80">
-        <input type="text" placeholder="search" />
-        <div className="flex flex-col gap-2 my-4 h-[300px] overflow-y-scroll">
+      <div className="w-full">
+        <div className="px-4">
+          <TextField
+            id="search"
+            type="text"
+            placeholder="Search"
+            decorationClassName="bg-transparent border-gray-400 placeholder:text-gray-400"
+            // {...formik.getFieldProps('date_of_birth')}
+          />
+        </div>
+        <div className="flex flex-col min-h-[200px] overflow-y-scroll pt-2 px-2">
           {playlistList &&
-            playlistList.map((item, index) => (
+            playlistList?.data.map((item, index) => (
               <div
                 key={index}
-                className={classNames(
-                  'flex gap-2 items-center p-3 rounded-md',
-                  selectedPlaylist == item.id && 'bg-[#e9e7e7]'
-                )}
-                onClick={() => setSelectedPlaylist(item.id!)}
+                className={
+                  'flex p-2 items-center rounded-md group cursor-pointer hover:bg-white ' +
+                  (selectedIndex == item.id ? 'bg-white' : 'bg-transparent')
+                }
+                onClick={() => {
+                  setSelectedIndex(selectedIndex != item.id ? item.id ?? 0 : 0);
+                }}
               >
                 <div className="w-14 h-14 relative">
                   <Image
                     className="rounded"
-                    src="/images/cover.webp"
+                    src={item.image ?? '/images/cover.webp'}
                     alt="Playlist Image"
                     fill
                     objectFit="cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
-                <span className="w-44 font-semibold">{item.title!}</span>
-                {selectedPlaylist == item.id && (
-                  <button
-                    className="bg-red-400 px-4 py-1 rounded text-white"
-                    onClick={() => handleAddButtonClick(item.id!)}
-                  >
-                    Add
-                  </button>
-                )}
+                <span className="flex-1 font-normal pl-2">{item.title!}</span>
+                <button
+                  className={
+                    'bg-accent px-4 py-1 rounded text-white group-hover:visible ' +
+                    (selectedIndex == item.id ? 'visible' : 'invisible')
+                  }
+                  onClick={() => handleAddButtonClick(item.id!)}
+                >
+                  Add
+                </button>
               </div>
             ))}
         </div>
-        <div className="shadow-upper -mx-4 pt-4 px-4 -mb-4 pb-4">
+        <div className="">
           <Link
             href="/library/createNewPlaylist"
-            className="flex items-center gap-2 "
+            className="flex items-center gap-2 px-4 py-2 bg-white"
           >
-            <span className="bg-[#e9e7e7] p-2 rounded">
-              <Plus size={32} />
+            <span className="p-2 rounded bg-gray-100">
+              <Plus size={24} />
             </span>
-            <span className="text-lg">Create New Playlist</span>
+            <span className="text-base font-medium">Create New Playlist</span>
           </Link>
         </div>
       </div>

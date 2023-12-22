@@ -110,6 +110,9 @@ export const apiPaths = {
   userFollowing: '/socialnetwork/profile/list-following',
   // Playlist
   myPlaylistsUrl: '/socialnetwork/playlist/list',
+  getPlaylistDetail: '/socialnetwork/playlist/each',
+  popularPlaylistsUrl: '/socialnetwork/playlist/popular',
+  newReleasesPlaylistsUrl: '/socialnetwork/playlist/new',
   playlistAudioUrl: '/socialnetwork/playlist/list-audio',
   playlistMinUrl: '/socialnetwork/playlist/min-list',
   addAudioToPlaylistUrl: '/socialnetwork/playlist/add-audio',

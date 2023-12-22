@@ -1,20 +1,37 @@
 import { apiPaths } from '@/core/api/apiConstants';
 import { baseApi } from '@/core/api/apiQuery';
+import { PaginatedResponseType } from '@/core/types/reponseTypes';
 import { toast } from 'react-toastify';
-import { AudioDetailType } from '../audio/audioType';
+import { GenrePlaylistItemType } from '../genres/genresType';
 import { AddPlaylistFormType, PlaylistDetailType, RemovePlaylistFormType } from './playlistTypes';
 
 const playlistApi = baseApi
   .enhanceEndpoints({ addTagTypes: ['Playlists', 'PlaylistAudios'] })
   .injectEndpoints({
     endpoints: (builder) => ({
-      // Get List of My Playlists
-      getMyPlaylistList: builder.query<PlaylistDetailType[], void>({
-        query: () => `${apiPaths.myPlaylistsUrl}`,
+      getPlaylistFromId: builder.query<PlaylistDetailType, number>({
+        query: (id) => `${apiPaths.getPlaylistDetail}/${id}`,
+        providesTags: (result, error, id) => [{ type: 'Playlists', id }],
+        async onQueryStarted(payload, { queryFulfilled }) {
+          try {
+            await queryFulfilled;
+          } catch (err) {
+            console.log(err);
+            toast.error(JSON.stringify(err));
+          }
+        },
+        transformResponse: (response: any) => {
+          return response?.data as PlaylistDetailType;
+        },
+      }),
+
+      // Get List of Popular Playlists
+      getPopularPlaylistList: builder.query<PaginatedResponseType<PlaylistDetailType>, void>({
+        query: () => `${apiPaths.popularPlaylistsUrl}`,
         providesTags: (result) =>
           result
             ? [
-              ...result.map(({ id }) => ({ type: 'Playlists', id } as const)),
+              ...result.data.map(({ id }) => ({ type: 'Playlists', id } as const)),
               { type: 'Playlists', id: 'LIST' },
             ]
             : [{ type: 'Playlists', id: 'LIST' }],
@@ -25,17 +42,59 @@ const playlistApi = baseApi
           return currentArg !== previousArg;
         },
         transformResponse: (response: any) => {
-          return response?.data as PlaylistDetailType[];
+          return response?.data as PaginatedResponseType<PlaylistDetailType>;
+        },
+      }),
+
+      // Get List of New Releases Playlists
+      getNewReleasesPlaylistList: builder.query<PaginatedResponseType<PlaylistDetailType>, void>({
+        query: () => `${apiPaths.newReleasesPlaylistsUrl}`,
+        providesTags: (result) =>
+          result
+            ? [
+              ...result.data.map(({ id }) => ({ type: 'Playlists', id } as const)),
+              { type: 'Playlists', id: 'LIST' },
+            ]
+            : [{ type: 'Playlists', id: 'LIST' }],
+        serializeQueryArgs: ({ endpointName }) => {
+          return endpointName;
+        },
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg;
+        },
+        transformResponse: (response: any) => {
+          return response?.data as PaginatedResponseType<PlaylistDetailType>;
+        },
+      }),
+
+      // Get List of My Playlists
+      getMyPlaylistList: builder.query<PaginatedResponseType<PlaylistDetailType>, void>({
+        query: () => `${apiPaths.myPlaylistsUrl}`,
+        providesTags: (result) =>
+          result
+            ? [
+              ...result.data.map(({ id }) => ({ type: 'Playlists', id } as const)),
+              { type: 'Playlists', id: 'LIST' },
+            ]
+            : [{ type: 'Playlists', id: 'LIST' }],
+        serializeQueryArgs: ({ endpointName }) => {
+          return endpointName;
+        },
+        forceRefetch({ currentArg, previousArg }) {
+          return currentArg !== previousArg;
+        },
+        transformResponse: (response: any) => {
+          return response?.data as PaginatedResponseType<PlaylistDetailType>;
         },
       }),
 
       // Get List of Playlist Audio
-      getPlaylistAudioList: builder.query<AudioDetailType[], number>({
+      getPlaylistAudioList: builder.query<PaginatedResponseType<GenrePlaylistItemType>, number>({
         query: (id) => `${apiPaths.playlistAudioUrl}/${id}`,
         providesTags: (result) =>
           result
             ? [
-              ...result.map(({ id }) => ({ type: 'Playlists', id } as const)),
+              ...result.data.map(({ id }) => ({ type: 'PlaylistAudios', id } as const)),
               { type: 'PlaylistAudios', id: 'LIST' },
             ]
             : [{ type: 'PlaylistAudios', id: 'LIST' }],
@@ -46,7 +105,7 @@ const playlistApi = baseApi
           return currentArg !== previousArg;
         },
         transformResponse: (response: any) => {
-          return response?.data?.audio as AudioDetailType[];
+          return response?.data as PaginatedResponseType<GenrePlaylistItemType>;
         },
       }),
 
@@ -72,8 +131,8 @@ const playlistApi = baseApi
         },
       }),
 
-      // Add Audio on Playlist
-      addAudioOnPlaylist: builder.mutation<any, AddPlaylistFormType>({
+      // Add Post on Playlist
+      addPostOnPlaylist: builder.mutation<any, AddPlaylistFormType>({
         query: ({ ...payload }) => {
           return {
             url: `${apiPaths.addAudioToPlaylistUrl}`,
@@ -81,7 +140,7 @@ const playlistApi = baseApi
             body: payload,
           };
         },
-        invalidatesTags: ['Playlists'],
+        invalidatesTags: ['Playlists', 'PlaylistAudios'],
         async onQueryStarted(payload, { queryFulfilled }) {
           try {
             await queryFulfilled;

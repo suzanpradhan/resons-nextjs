@@ -5,6 +5,7 @@ import {
 import { X } from 'phosphor-react';
 import { ZodError } from 'zod';
 
+import classNames from 'classnames';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 
 interface CommonPopupType {
@@ -52,9 +53,15 @@ const CommonPopup = ({
 
   return (
     isModalOpen && (
-      <dialog ref={dialogRef} className={className}>
-        <div className="flex mb-4">
-          <h3 className="grow font-semibold">{popupName}</h3>
+      <dialog
+        ref={dialogRef}
+        className={classNames(
+          'p-0 bg-white/90 backdrop-filter backdrop-blur-lg',
+          className
+        )}
+      >
+        <div className="flex mb-4 px-4 pt-3">
+          <h3 className="grow font-semibold text-base">{popupName}</h3>
           <button onClick={() => toggleModelOpen(false)}>
             <X size={20} weight="bold" />
           </button>
