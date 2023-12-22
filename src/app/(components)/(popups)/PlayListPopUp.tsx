@@ -63,9 +63,9 @@ const PlayListPopUp = (props: PlayListProps) => {
       try {
         await Promise.resolve(
           dispatch(
-            playlistApi.endpoints.addAudioOnPlaylist.initiate({
+            playlistApi.endpoints.addPostOnPlaylist.initiate({
               playlist_id: selectedValue,
-              audio_id: props.postData!.audio_id,
+              post_id: props.postData!.audio_id,
             })
           )
         );

@@ -1,4 +1,3 @@
-import MultiCarousel from '@/app/(components)/(carousel)/MultiCarousel';
 import { useAppDispatch } from '@/core/redux/clientStore';
 
 /* eslint-disable @next/next/no-img-element */
@@ -63,7 +62,8 @@ const TopicListScroll = ({ title }: { title: string }) => {
     },
   ];
 
-  return <MultiCarousel slides={group} routeName="likes" />;
+  // return <MultiCarousel slides={group} routeName="likes" />;
+  return <></>;
 };
 
 export default TopicListScroll;
