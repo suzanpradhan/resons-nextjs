@@ -1,10 +1,7 @@
 import Link from 'next/link';
 import 'react-multi-carousel/lib/styles.css';
 import 'swiper/css';
-import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required modules
-import { EffectFade } from 'swiper/modules';
-import CardOne from './CardOne';
 
 export interface Slide {
   id?: number;
@@ -22,19 +19,19 @@ export default function MultiCarousel({
   routeName,
 }: MainCarouselProps) {
   return (
-    <div className="bg-white overflow-x-hidden px-4 py-4 mb-4 last-of-type:mb-28">
+    <div className="bg-white overflow-x-hidden py-4 mb-4 last-of-type:mb-28">
       <Link
         href={`/genres/all`}
-        className="block text-base font-medium text-gray-800 capitalize border-0 border-solid border-b border-gray-300 mb-4 pb-2"
+        className="block text-base font-medium text-gray-800 capitalize border-0 border-solid border-b border-gray-300 mb-4 pb-2 mx-4"
       >
         Top Categories
       </Link>
 
-      <Swiper
+      {/* <Swiper
         // install Swiper modules
         modules={[EffectFade]}
         spaceBetween={15}
-        slidesPerView={2.15}
+        slidesPerView={3}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
         speed={600}
@@ -70,38 +67,34 @@ export default function MultiCarousel({
             )}
           </SwiperSlide>
         ))}
-      </Swiper>
-    </div>
+      </Swiper> */}
 
-    /* <Carousel
-        swipeable={true}
-        draggable={true}
-        responsive={responsive}
-        infinite={false}
-        transitionDuration={500}
-        containerClass="carousel-container"
-        removeArrowOnDeviceType={['tablet', 'mobile']}
-        itemClass="pl-4"
-        partialVisible={true}
-        focusOnSelect={true}
-        // Uncomment Extra Features
-        //  showDots={false}
-        //  ssr={true} // means to render carousel on server-side.
-        //  autoPlay={false}
-        //  autoPlaySpeed={1000}
-        //  keyBoardControl={true}
-        //  customTransition="all .5"
-        //  deviceType={this.props.deviceType}
-        //  dotListClass="custom-dot-list-style"
-      >
-        {slides[0].slides.map((slide, index) => (
-          <CardOne
-            slide={slide}
-            key={index}
-            classnames={index == slides[0].slides.length - 1 ? 'pr-4' : ''}
-            routeName={routeName}
-          />
-        ))}
-      </Carousel> */
+      <div className="w-screen overflow-x-scroll">
+        <div className="inline-flex">
+          {slides.map((slide) => {
+            return (
+              <Link
+                key={'category_' + slide.id}
+                href={`/${routeName}/${slide.title}`}
+                className="flex flex-col items-center group w-32 ml-4 last-of-type:mr-4 "
+              >
+                <div className="w-full h-32 rounded-md overflow-hidden group-hover:drop-shadow-md">
+                  <img
+                    src={slide.img_url ?? '/images/cover.webp'}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h4
+                  className="text-sm w-full text-gray-800 py-0 mt-3 capitalize truncate text-center"
+                  title={slide.title}
+                >
+                  {slide.title}
+                </h4>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
