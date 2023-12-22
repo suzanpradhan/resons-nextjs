@@ -4,6 +4,7 @@ import { language_code, privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import AsyncMultiSelect from '@/core/ui/components/AsyncMultiSelect';
+import Button from '@/core/ui/components/Button';
 import postApi from '@/modules/post/postApi';
 import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
@@ -101,7 +102,7 @@ const PostCreatePage = () => {
             cover_image: data.cover_image!,
             remember_my_language: data.remember_my_language,
             color_code: data.color_code,
-            tags: selectedTagOptions.map((tag: Option) => tag.value),
+            genres: data.genres,
           })
         )
       );
@@ -160,7 +161,7 @@ const PostCreatePage = () => {
       cover_image: undefined,
       color_code: '#000000',
       remember_my_language: '0',
-      tags: [],
+      genres: [],
       is_ai_generated: '0',
     },
     validateOnChange: false,
@@ -178,13 +179,14 @@ const PostCreatePage = () => {
   // };
 
   const handleTagsChange = (e: MultiValue<Option>) => {
-    console.log(e);
-    setSelectedTagOptions((prevStates) => [
-      ...prevStates,
-      { label: e[e.length - 1].label, value: e[e.length - 1].value },
-    ]);
-    // formik.setFieldValue('tags');
-    console.log(formik.values.tags);
+    // setSelectedTagOptions((prevStates) => [
+    //   ...prevStates,
+    //   { label: e[e.length - 1].label, value: e[e.length - 1].value },
+    // ]);
+    formik.setFieldValue(
+      'genres',
+      e.map((genre) => genre.value)
+    );
   };
 
   const startNewRecording = async () => {
@@ -374,7 +376,22 @@ const PostCreatePage = () => {
               formik.handleSubmit(e);
             }}
           >
-            <div className="px-5 bg-black py-4 flex-col gap-">
+            <div
+              className={classNames(
+                'px-5 py-4 flex-col relative',
+                imageFile ? 'bg-transparent' : 'bg-black'
+              )}
+            >
+              {imageFile && (
+                <Image
+                  className="rounded -z-10"
+                  src={imageFile}
+                  alt="cover image"
+                  fill
+                  objectFit="cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              )}
               <div className="flex gap-3 items-center">
                 <div className="relative w-16 h-16 ">
                   <Image
@@ -427,6 +444,7 @@ const PostCreatePage = () => {
                     setIsPlaying={setIsPlaying}
                     audioRef={audioRef}
                     wavePlayerVisible={wavePlayerVisible}
+                    theme="light"
                   />
                 </span>
                 <button
@@ -514,50 +532,37 @@ const PostCreatePage = () => {
               </div>
               {imagesVisibility && coverImages && (
                 <div>
-                  {!imageFile ? (
-                    <div className="grid grid-cols-2 gap-2 w-80 h-64 overflow-y-scroll">
-                      {coverImages?.map((item) => (
-                        <div
-                          key={item.id}
-                          className={classNames(
-                            'w-full h-20 relative',
-                            formik.values.cover_image_id ===
-                              item.id.toString() && 'border-2 border-red-400'
-                          )}
-                        >
-                          <label className="mb-0" htmlFor={item.id.toString()}>
-                            <Image
-                              className="rounded"
-                              src={item.source}
-                              alt="cover image"
-                              fill
-                              objectFit="cover"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
-                          </label>
-                          <input
-                            id={item.id.toString()}
-                            type="radio"
-                            // name="cover_image_id"
-                            // value={item.id}
-                            // onChange={handleChange}
-                            {...formik.getFieldProps('cover_image_id')}
+                  <div className="grid grid-cols-2 gap-2 w-80 h-64 overflow-y-scroll">
+                    {coverImages?.map((item) => (
+                      <div
+                        key={item.id}
+                        className={classNames(
+                          'w-full h-20 relative',
+                          formik.values.cover_image_id === item.id.toString() &&
+                            'border-2 border-red-400'
+                        )}
+                      >
+                        <label className="mb-0" htmlFor={item.id.toString()}>
+                          <Image
+                            className="rounded"
+                            src={item.source}
+                            alt="cover image"
+                            fill
+                            objectFit="cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="w-20 h-20 relative">
-                      <Image
-                        className="rounded"
-                        src={imageFile}
-                        alt="cover image"
-                        fill
-                        objectFit="cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
-                  )}
+                        </label>
+                        <input
+                          id={item.id.toString()}
+                          type="radio"
+                          // name="cover_image_id"
+                          // value={item.id}
+                          // onChange={handleChange}
+                          {...formik.getFieldProps('cover_image_id')}
+                        />
+                      </div>
+                    ))}
+                  </div>
                   <div className="flex items-center mt-4">
                     <label
                       htmlFor="coverImageInput"
@@ -711,12 +716,16 @@ const PostCreatePage = () => {
                 />
               </div>
             </div>
-            <button
+            <div className="mx-4">
+              <Button text="Create" type="submit" className="hover:shadow-lg" />
+            </div>
+
+            {/* <button
               type="submit"
               className="bg-red-400 ml-4 px-20 py-2 text-white font-semibold rounded w-[91%]"
             >
               Create
-            </button>
+            </button> */}
           </form>
         )}
       </div>

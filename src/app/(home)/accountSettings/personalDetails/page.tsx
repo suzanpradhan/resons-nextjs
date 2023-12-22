@@ -2,8 +2,10 @@
 import { language_code } from '@/core/constants/appConstants';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
+import TextField from '@/core/ui/components/TextField';
 import countriesApi from '@/modules/countries/countriesApi';
 import { CountriesDetailType } from '@/modules/countries/countriesType';
+import postApi from '@/modules/post/postApi';
 import profileApi from '@/modules/profile/profileApi';
 import {
   ProfileDetailType,
@@ -20,14 +22,17 @@ import { ZodError } from 'zod';
 const FORM_DETAILS = [
   { datailName: 'Name', formikName: 'name' },
   { datailName: 'Phone Number', formikName: 'phone_number' },
-  { datailName: 'Username', formikName: 'nickname' },
-  { datailName: 'Date of Birth', formikName: 'date_of_birth' },
+  // { datailName: 'Username', formikName: 'nickname' },
+  // { datailName: 'Date of Birth', formikName: 'date_of_birth' },
 ];
 
 const PersonalDetailsPage = () => {
   const navigate = useRouter();
   const dispatch = useAppDispatch();
   const [imageFile, setImageFile] = useState<string | undefined>(undefined);
+  const currentPage = useAppSelector(
+    (state: RootState) => state.postListing.currentPage
+  );
 
   useEffect(() => {
     dispatch(profileApi.endpoints.getMyProfile.initiate());
@@ -60,7 +65,7 @@ const PersonalDetailsPage = () => {
       );
       if (Object.prototype.hasOwnProperty.call(responseData, 'data')) {
         await dispatch(
-          profileApi.endpoints.getMyProfileData.initiate('?load=true', {
+          postApi.endpoints.getMyPostList.initiate(currentPage, {
             forceRefetch: true,
           })
         );
@@ -82,7 +87,6 @@ const PersonalDetailsPage = () => {
     } catch (error) {
       if (error instanceof ZodError) {
         console.log(error);
-        console.log(typeof formik.values.country_id);
         return error.formErrors.fieldErrors;
       }
     }
@@ -92,11 +96,11 @@ const PersonalDetailsPage = () => {
     enableReinitialize: true,
     initialValues: {
       name: myProfile?.name!,
-      phone_number: myProfile?.phone_number,
-      date_of_birth: myProfile?.date_of_birth,
-      nickname: myProfile?.nickname,
-      user_language: myProfile?.user_language,
-      country_id: myProfile?.country?.id,
+      phone_number: myProfile?.phone_number!,
+      date_of_birth: myProfile?.date_of_birth!,
+      nickname: myProfile?.nickname!,
+      user_language: myProfile?.user_language!,
+      country_id: myProfile?.country?.id!,
     },
     validateOnChange: false,
     validate: validateForm,
@@ -165,27 +169,50 @@ const PersonalDetailsPage = () => {
           }}
         >
           {FORM_DETAILS.map((item, index) => (
-            <div key={index}>
-              <label
-                htmlFor={item.formikName}
-                className="text-base font-normal"
-              >
-                {item.datailName}
-              </label>
-              <input
-                id={item.formikName}
-                type="text"
-                {...formik.getFieldProps(item.formikName)}
-              />
-            </div>
+            <TextField
+              label={item.datailName}
+              isLabelBold={false}
+              key={index}
+              id={item.formikName}
+              type="text"
+              {...formik.getFieldProps(item.formikName)}
+            />
           ))}
+
+          <div className="flex flex-col py-2">
+            <label htmlFor="username" className="mb-1 font-normal">
+              Username
+            </label>
+            <div className="">
+              <label
+                htmlFor="username"
+                className="flex rounded-md border-gray-200 border-[1px] items-center m-0 text-sm text-gray-400 font-normal pl-3  "
+              >
+                <span>https://resons.com/</span>
+                <input
+                  id="nickname"
+                  type="text"
+                  {...formik.getFieldProps('nickname')}
+                  className="!border-0 bg-slate-100 inline w-full text-sm text-gray-700 border-gray-200 font-normal py-2 pr-3 rounded-sm outline-none "
+                  autoComplete=""
+                />
+              </label>
+            </div>
+          </div>
+          <TextField
+            label="Date of Birth"
+            isLabelBold={false}
+            id="date_of_birth"
+            type="text"
+            {...formik.getFieldProps('date_of_birth')}
+          />
           <div className="flex flex-col">
             <label className="text-base font-normal " htmlFor="language">
               Language
             </label>
             <select
               // name="language"
-              className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none w-full border-gray-200 bg-white border  text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
               id="language"
               // onChange={handleChange}
               {...formik.getFieldProps('user_language')}
@@ -199,11 +226,11 @@ const PersonalDetailsPage = () => {
                   ))
                 : null}
             </select>
-            {!!formik.errors.user_language && (
+            {/* {!!formik.errors.user_language && (
               <div className="text-red-500 text-sm -mt-2">
                 {formik.errors.user_language}
               </div>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col pb-2">
             <label htmlFor="country" className="text-base font-normal">
@@ -211,7 +238,7 @@ const PersonalDetailsPage = () => {
             </label>
             <select
               id="country_id"
-              className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
               name="country_id"
               value={formik.values.country_id}
               // onChange={(e) => handleCountryChange(e)}

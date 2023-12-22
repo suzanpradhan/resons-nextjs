@@ -37,5 +37,5 @@ export async function middleware(req: any) {
 }
 
 export const config = {
-  matcher: ['/library', '/settings', '/notification', '/postCreate', '/profile', '/login', '/post'],
+  matcher: ['/settings', '/notification', '/postCreate', '/profile', '/login', '/post'],
 };

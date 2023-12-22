@@ -110,6 +110,9 @@ export const apiPaths = {
   userFollowing: '/socialnetwork/profile/list-following',
   // Playlist
   myPlaylistsUrl: '/socialnetwork/playlist/list',
+  getPlaylistDetail: '/socialnetwork/playlist/each',
+  popularPlaylistsUrl: '/socialnetwork/playlist/popular',
+  newReleasesPlaylistsUrl: '/socialnetwork/playlist/new',
   playlistAudioUrl: '/socialnetwork/playlist/list-audio',
   playlistMinUrl: '/socialnetwork/playlist/min-list',
   addAudioToPlaylistUrl: '/socialnetwork/playlist/add-audio',
@@ -118,7 +121,7 @@ export const apiPaths = {
   // Geners
   getGenresUrl: '/socialnetwork/list-genre',
   getGenreCurrentItem: '/socialnetwork/genre/current/playing',
-
+  searchGenresUrl: '/socialnetwork/genres/search',
   // Notification
   setNotificationUrl: '/socialnetwork/settings/update',
   getNotificationListUrl: '/notification/list',

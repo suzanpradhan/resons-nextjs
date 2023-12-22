@@ -4,14 +4,27 @@ import { z } from 'zod';
 export const playlistDetailSchema = z.object({
   id: z.number().optional(),
   title: z.string().optional(),
+  image: z.string().optional(),
   description: z.string().optional(),
   privacy_code: z.number().optional()
 });
+
+
+export const playlistItemSchema = z.object({
+  id: z.number(),
+  audio_id: z.number(),
+  title: z.string(),
+  total_likes: z.number(),
+  owner: z.string(),
+  duration: z.string(),
+});
+
 export type PlaylistDetailType = z.infer<typeof playlistDetailSchema>;
+export type PlaylistItemType = z.infer<typeof playlistItemSchema>;
 
 export interface AddPlaylistFormType {
   playlist_id: string;
-  audio_id: number;
+  post_id: number;
 }
 
 export interface RemovePlaylistFormType {

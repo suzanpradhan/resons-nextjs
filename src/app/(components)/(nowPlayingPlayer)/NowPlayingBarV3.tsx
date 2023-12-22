@@ -516,7 +516,7 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
     <>
       <AnimatePresence mode="wait">
         <div
-          className={`bg-white container mx-auto fixed transition-all duration-150 ease-in-out z-40 border-0 border-b border-gray-200 ${
+          className={`bg-white/80 backdrop-filter backdrop-blur-lg container mx-auto fixed transition-all duration-150 ease-in-out z-40 ${
             showComponent ? '' : 'hidden'
           } ${
             scrollDirection === 'down' && props.currentPage == 1
@@ -603,7 +603,7 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
                       <button
                         onClick={handlePrevious}
                         type="button"
-                        className="w-6 h-6 bg-whiteShade rounded-full flex justify-center items-center hover:opacity-90"
+                        className="w-6 h-6 bg-white rounded-full flex justify-center items-center hover:opacity-90"
                       >
                         <SkipBack
                           size={15}
@@ -637,7 +637,7 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
                         e.stopPropagation();
                       }}
                       type="button"
-                      className="border border-gray-300 rounded-full p-1"
+                      className="border border-gray-500 rounded-full p-1"
                     >
                       {props.isPlaying ? (
                         <Pause size={20} className={`black`} weight="fill" />
@@ -649,7 +649,7 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
                       <button
                         onClick={handleNext}
                         type="button"
-                        className="w-6 h-6 bg-whiteShade rounded-full flex justify-center items-center hover:opacity-90"
+                        className="w-6 h-6 bg-white rounded-full flex justify-center items-center hover:opacity-90"
                       >
                         <SkipForward
                           size={15}
@@ -665,7 +665,7 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
                     ) : null}
                     {showAction ? (
                       <div
-                        className="text-sm px-4 py-1 bg-grey-200 rounded-full cursor-pointer"
+                        className="text-sm px-4 py-1 bg-white rounded-full cursor-pointer"
                         onClick={(e) => {
                           if (props.audioPlayBackRate == 2) {
                             dispatch(updatePlaybackRate(1));

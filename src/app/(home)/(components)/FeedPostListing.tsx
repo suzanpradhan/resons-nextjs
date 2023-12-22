@@ -30,9 +30,12 @@ const FeedPostListing = (props: FeedPostListingProps) => {
   const [hasMoreData, setHasMoreData] = useState(true);
 
   useEffect(() => {
-    const patchCollection = dispatch(
-      postApi.util.upsertQueryData('getPostList', 1, props.preloadedPosts!)
-    );
+    // dispatch(
+    //   postApi.util.upsertQueryData('getPostList', 1, props.preloadedPosts!)
+    // );
+    // dispatch(
+    //   postApi.util.upsertQueryData('getMyFeed', 1, props.preloadedPosts!)
+    // );
 
     if (window) {
       window.onbeforeunload = function () {
@@ -101,7 +104,7 @@ const FeedPostListing = (props: FeedPostListingProps) => {
 
   return (
     <div
-      className="w-full flex flex-col items-center h-screen max-h-screen gap-6 pt-16 pb-17 overflow-scroll"
+      className="w-full flex flex-col items-center h-screen max-h-screen gap-6 pt-10 md:pt-12 pb-17 overflow-scroll"
       ref={scrollableDivRef}
       id="feed-listing"
     >

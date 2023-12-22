@@ -27,8 +27,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   ];
 
   return (
-    <div className="bg-white mb-5 mt-11 pl-4 pr-6 py-4 flex gap-4">
-      <div className="relative w-20 md:w-36 h-20 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
+    <div className="bg-white mt-10 pl-4 pr-6 py-4 flex gap-4 items-center">
+      <div className="relative w-16 md:w-36 h-16 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
         <Image
           src={
             props.viewProfile?.profile_image &&
@@ -48,16 +48,18 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
       </div>
       <div className="flex flex-col grow gap-1 max-w-2xl">
         <div className="flex justify-between">
-          <h2 className="m-0 font-medium text-base md:text-lg truncate shrink">
+          <h2 className="m-0 text-sm md:text-lg truncate shrink font-medium flex items-center">
             {props.viewProfile.name}
           </h2>
           <div className="flex gap-1 text-slate-500">
             <Link href="/accountSettings">
-              <GearSix size={24} />
+              <GearSix size={21} />
             </Link>
           </div>
         </div>
-        <p>{props.viewProfile.about}</p>
+        <p className="text-xs font-normal leading-5 tracking-wide w-1/2 text-slate-600">
+          {props.viewProfile.about}
+        </p>
 
         <div className="flex gap-6">
           {PROFILE_DETAILS.map((detail, index) => (
@@ -66,10 +68,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
               className="flex flex-col"
               key={index}
             >
-              <h3 className="font-medium text-base md:text-xl">
+              <h3 className="font-semibold text-xs md:text-base">
                 {detail.detailNumber ?? 0}
               </h3>
-              <p className="text-slate-500 text-xs md:text-xl">
+              <p className="text-slate-600 text-xs md:text-base font-medium">
                 {detail.detailName}
               </p>
             </Link>

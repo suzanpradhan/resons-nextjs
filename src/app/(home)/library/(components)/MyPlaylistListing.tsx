@@ -1,6 +1,4 @@
 import { PlaylistDetailType } from '@/modules/playlist/playlistTypes';
-import Link from 'next/link';
-import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import PlaylistCard from './PlaylistCard';
 
@@ -17,19 +15,20 @@ export default function MyPlaylistListing(props: MainCarouselProps) {
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 4,
+      items: 3,
       slidesToSlide: 3, // optional, default to 1.
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 2,
-      slidesToSlide: 2, // optional, default to 1.
+      items: 2.7,
+      slidesToSlide: 3, // optional, default to 1.
     },
   };
 
   return (
-    <div className="flex flex-col mb-4 px-4 py-4 mx-4 bg-white rounded-sm overflow-x-hidden">
-      <div className="border-0 border-solid border-gray-300 border-b mb-4 flex items-center justify-between pb-2">
+    <>
+      {/* <div className="flex flex-col mb-4 px-4 py-4 mx-4 bg-white rounded-sm overflow-x-hidden"> */}
+      {/* <div className="border-0 border-solid border-gray-300 border-b mb-4 flex items-center justify-between pb-2">
         <h3 className="text-lg text-gray-800 font-bold capitalize">
           My Playlist
         </h3>
@@ -39,16 +38,22 @@ export default function MyPlaylistListing(props: MainCarouselProps) {
         >
           View all
         </Link>
+      </div> */}
+      <div className="w-screen overflow-x-scroll">
+        <div className="inline-flex">
+          {props.playlists.map((playlist, index) => (
+            <PlaylistCard playlist={playlist} key={index} />
+          ))}
+        </div>
       </div>
 
-      <Carousel
+      {/* <Carousel
         swipeable={true}
         responsive={responsive}
-        infinite={true}
         transitionDuration={500}
         containerClass="carousel-container"
         removeArrowOnDeviceType={['tablet', 'mobile']}
-        itemClass="px-1"
+        itemClass="pl-4 border"
         // Uncomment Extra Features
         //  draggable={true}
         //  showDots={false}
@@ -63,7 +68,17 @@ export default function MyPlaylistListing(props: MainCarouselProps) {
         {props.playlists.map((playlist, index) => (
           <PlaylistCard playlist={playlist} key={index} />
         ))}
-      </Carousel>
-    </div>
+        {props.playlists.map((playlist, index) => (
+          <PlaylistCard playlist={playlist} key={index} />
+        ))}
+        {props.playlists.map((playlist, index) => (
+          <PlaylistCard playlist={playlist} key={index} />
+        ))}
+        {props.playlists.map((playlist, index) => (
+          <PlaylistCard playlist={playlist} key={index} />
+        ))}
+      </Carousel> */}
+      {/* </div> */}
+    </>
   );
 }
