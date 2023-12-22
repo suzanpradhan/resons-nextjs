@@ -57,6 +57,8 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true); // Set isLoading to true before making the API request
+      console.log('rendering');
+
       const response = await dispatch(
         // postApi.endpoints.getPostList.initiate(currentPage)
         postApi.endpoints.getMyPostList.initiate(currentPage)
@@ -109,27 +111,39 @@ export default function ProfilePage() {
           <Tabs activeTab={activeTab} setTab={setActiveTab} />
           <div className="mb-24 flex gap-5 flex-col">
             {activeTab === 'Posts' ? (
-              activeTab === 'Posts' && myPostList?.data?.length > 0 ? (
-                <>
-                  {myPostList?.data?.map((post: PostDetailType) => (
-                    <PostCardV4 key={post.id} post={post} />
-                  ))}
-                </>
+              activeTab === 'Posts' && myPostList?.data != undefined ? (
+                myPostList.data.length <= 0 ? (
+                  <>
+                    <div className="bg-transparent py-4 px-8 mb-10 text-center text-sm text-primary-500">
+                      No more posts
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {myPostList?.data?.map((post: PostDetailType) => (
+                      <PostCardV4 key={post.id} post={post} />
+                    ))}
+                  </>
+                )
               ) : (
                 <PostLoadingSkeleton />
               )
             ) : (
-              <>
-                <div className="bg-transparent py-4 px-8 mb-10 text-center text-sm text-primary-500">
-                  No more posts
-                </div>
-              </>
+              <></>
             )}
 
             {/* stories */}
             {activeTab === 'Stories' ? (
-              activeTab === 'Stories' && myPostList?.data?.length > 0 ? (
-                <>{session.data?.user && <StoryList />}</>
+              activeTab === 'Stories' && myPostList?.data != undefined ? (
+                myPostList.data.length <= 0 ? (
+                  <>
+                    <div className="bg-transparent py-4 px-8 mb-10 text-center text-sm text-primary-500">
+                      No more posts
+                    </div>
+                  </>
+                ) : (
+                  <>{session.data?.user && <StoryList />}</>
+                )
               ) : (
                 <div className="bg-white py-4 px-8 mt-[60px]">
                   <div className="flex animate-pulse">
