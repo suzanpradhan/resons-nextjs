@@ -1,5 +1,3 @@
-'use client';
-
 import WavePlayer from '@/app/(components)/WavePlayer';
 import { apiPaths } from '@/core/api/apiConstants';
 import { defaultWaveData } from '@/core/constants/appConstants';
@@ -11,6 +9,7 @@ import postApi from '@/modules/post/postApi';
 import { PostDetailType } from '@/modules/post/postType';
 import Image from 'next/image';
 import { ChatTeardropDots, Playlist, ThumbsUp } from 'phosphor-react';
+import { useEffect } from 'react';
 
 const PopularPostsSection = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +37,7 @@ const PopularPostsSection = () => {
         <h3 className="text-base font-medium text-gray-800 mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0 mx-4">
           Popular Posts
         </h3>
-        {postsListData?.map((post, index) => {
+        {postsListData?.data.map((post, index) => {
           return (
             <div
               key={`popular_post_${index}`}
