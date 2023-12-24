@@ -10,11 +10,13 @@ const Tab = ({ title, active, onTap }: TabProps) => {
   return (
     <li
       className={`z-30 flex-auto text-center ${
-        active ? 'bg-white rounded-lg' : 'transparent'
+        active
+          ? 'bg-gray-200 font-medium text-slate-900'
+          : 'bg-transparent text-slate-400'
       }`}
     >
       <button
-        className="z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-all ease-in-out border-0 rounded-lg cursor-pointer text-slate-700 bg-inherit"
+        className="z-30 flex items-center justify-center w-full px-0 py-3 mb-0 transition-all ease-in-out border-0 cursor-pointer text-xs md:text-base bg-inherit"
         data-tab-target=""
         role="tab"
         aria-selected={active}
@@ -33,10 +35,10 @@ interface TabsProps {
 
 const Tabs = ({ activeTab, setTab }: TabsProps) => {
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full">
       <div className="relative right-0">
         <ul
-          className="relative flex flex-wrap p-1 gap-1 list-none rounded-xl bg-gray-200"
+          className="relative flex flex-wrap list-none bg-white"
           data-tabs="tabs"
           role="list"
         >

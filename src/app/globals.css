@@ -468,13 +468,13 @@ label {
   margin-bottom: 5px;
 }
 
-input[type='text'],
+/* input[type='text'],
 input[type='password'] {
   width: 100%;
   padding: 10px;
   border-radius: 4px;
   font-size: 16px;
-}
+} */
 
 .loginButton {
   background-color: #0070f3;

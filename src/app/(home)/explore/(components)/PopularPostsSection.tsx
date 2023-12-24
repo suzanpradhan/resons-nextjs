@@ -3,16 +3,35 @@
 import WavePlayer from '@/app/(components)/WavePlayer';
 import { apiPaths } from '@/core/api/apiConstants';
 import { defaultWaveData } from '@/core/constants/appConstants';
+import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
+import { RootState } from '@/core/redux/store';
+import { PaginatedResponseType } from '@/core/types/reponseTypes';
+import { updateHomePage } from '@/modules/post/homePageReducer';
+import postApi from '@/modules/post/postApi';
 import { PostDetailType } from '@/modules/post/postType';
 import Image from 'next/image';
 import { ChatTeardropDots, Playlist, ThumbsUp } from 'phosphor-react';
 
-const PopularPostsSection = ({
-  postsListData,
-}: {
-  postsListData: PostDetailType[];
-}) => {
-  console.log(postsListData);
+const PopularPostsSection = () => {
+  const dispatch = useAppDispatch();
+  const currentPage = useAppSelector(
+    (state: RootState) => state.homepage.currentPage
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(postApi.endpoints.getPopularPostList.initiate());
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  const postsListData = useAppSelector(
+    (state: RootState) =>
+      state.baseApi.queries[`getPopularPostList`]
+        ?.data as PaginatedResponseType<PostDetailType>
+  );
+
   return (
     <>
       <div className="flex flex-col mb-4 py-4 bg-white overflow-x-hidden last-of-type:mb-28">
@@ -23,6 +42,14 @@ const PopularPostsSection = ({
           return (
             <div
               key={`popular_post_${index}`}
+              onClick={() => {
+                if (currentPage == 2) {
+                  return;
+                }
+                if (currentPage == 1) {
+                  dispatch(updateHomePage({ page: 2, id: post.id }));
+                }
+              }}
               className="relative mb-4 mx-4 px-4 rounded-lg overflow-hidden last-of-type:mb-0"
             >
               {post.cover_image ? (

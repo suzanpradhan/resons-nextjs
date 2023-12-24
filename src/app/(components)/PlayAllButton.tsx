@@ -23,7 +23,7 @@ const PlayAllButton = (props: PlayAllButtonProps) => {
 
   return props.postId ? (
     <div
-      className="border-y border-y-grey-200 bg-white px-4 py-3 flex items-center gap-2 cursor-pointer hover:bg-grey-100 active:bg-grey-200"
+      className="border-y border-y-grey-50 bg-white px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-grey-100 active:bg-grey-200"
       onClick={() => {
         dispatch(updateHomePage({ page: 2, id: props.postId }));
         if (props.onClick) {
@@ -32,10 +32,12 @@ const PlayAllButton = (props: PlayAllButtonProps) => {
       }}
     >
       <div className={`border-none rounded-full p-2 bg-primary-900`}>
-        <Play size="21" className="text-white" weight="fill" />
+        <Play size="20" className="text-white" weight="fill" />
       </div>
-      <div className="text-sm select-none">
-        <span className="text-base font-medium">Play all | </span>
+      <div className="text-xs md:text-sm select-none text-gray-400">
+        <span className="text-xs md:text-base font-medium text-gray-900">
+          Play all -{' '}
+        </span>
         {commentCount} {commentCount > 1 ? 'comments ' : 'comment '}{' '}
         {props.totalTime ? props.totalTime : ''}
       </div>

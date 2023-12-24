@@ -29,17 +29,15 @@ const MobileNavigation = () => {
   return (
     <div
       className={
-        'fixed md:hidden bottom-0 left-0 w-full bg-white z-40 border-0 border-t border-gray-100 ' +
-        (scrollDirection === 'up' || scrollDirection === 'down' ? 'hidden' : '')
+        'fixed md:hidden bottom-0 left-0 w-full bg-white/80 z-40 border-0 border-t border-gray-100 backdrop-filter backdrop-blur-lg'
+        // (scrollDirection === 'up' || scrollDirection === 'down' ? 'hidden' : '')
       }
     >
       <ul className="flex justify-evenly list-none m-0 p-0 h-12">
         <li className="basis-[20%]">
           <Link
             href="/"
-            className={`flex items-center px-4 h-full text-gray-400 ${
-              pathName === '/' ? 'bg-gray-200' : ''
-            }`}
+            className={`flex items-center px-4 h-full text-gray-400`}
           >
             <div className="w-max mx-auto">
               <House

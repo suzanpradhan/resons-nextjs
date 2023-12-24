@@ -1,5 +1,3 @@
-import MultiCarousel from '@/app/(components)/(carousel)/MultiCarousel';
-
 interface LanggatePostListType {
   title: string;
 }
@@ -62,7 +60,8 @@ const LanguagePostList = ({ title }: LanggatePostListType) => {
       ],
     },
   ];
-  return <MultiCarousel slides={group} routeName="languages" />;
+  // return <MultiCarousel slides={group} routeName="languages" />;
+  return <></>;
 };
 
 export default LanguagePostList;

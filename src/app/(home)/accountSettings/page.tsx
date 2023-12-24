@@ -1,8 +1,10 @@
 'use client';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Bell,
+  CaretLeft,
   CaretRight,
   FileText,
   Lock,
@@ -14,6 +16,7 @@ import {
 } from 'phosphor-react';
 
 export default function AccountSettingPage() {
+  const router = useRouter();
   // Logout function
   const handleLogout = async () => {
     signOut({ callbackUrl: '/login', redirect: true });
@@ -22,7 +25,12 @@ export default function AccountSettingPage() {
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
       <h2 className="h-11 w-full px-4 bg-white shadow-sm flex gap-2 mb-0 fixed z-50">
-        <span className="text-3xl font-light flex items-center">&#60;</span>
+        <span
+          onClick={() => router.back()}
+          className="text-3xl font-light flex items-center"
+        >
+          <CaretLeft size={18} weight="bold" />
+        </span>
         <span className="text-sm font-medium flex items-center">
           Account Settings
         </span>
@@ -33,8 +41,8 @@ export default function AccountSettingPage() {
           Account settings
         </h3>
         <div className="flex flex-col gap-5">
-          <ul className="bg-slate-100 rounded-lg overflow-hidden py-2">
-            <li className="relative hover:bg-slate-200 rounded-md">
+          <ul className="bg-slate-100 overflow-hidden py-2">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/accountSettings/personalDetails"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -49,7 +57,7 @@ export default function AccountSettingPage() {
                 className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
               />
             </li>
-            <li className="relative hover:bg-slate-200 rounded-md">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/accountSettings/security"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -64,7 +72,7 @@ export default function AccountSettingPage() {
                 className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
               />
             </li>
-            <li className="relative hover:bg-slate-200 rounded-md">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/accountSettings/notification"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -79,7 +87,7 @@ export default function AccountSettingPage() {
                 className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
               />
             </li>
-            <li className="relative hover:bg-slate-200 rounded-md">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -94,7 +102,7 @@ export default function AccountSettingPage() {
                 className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
               />
             </li>
-            <li className="relative hover:bg-slate-200 rounded-md">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/accountSettings/deactivation"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -110,8 +118,8 @@ export default function AccountSettingPage() {
               />
             </li>
           </ul>
-          <ul className="bg-slate-100 rounded-lg overflow-hidden py-2">
-            <li className="relative hover:bg-slate-200 rounded-md">
+          <ul className="bg-slate-100 overflow-hidden py-2">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -126,7 +134,7 @@ export default function AccountSettingPage() {
                 className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
               />
             </li>
-            <li className="relative hover:bg-slate-200 rounded-md">
+            <li className="relative hover:bg-slate-200">
               <Link
                 href="/"
                 className="text-sm font-medium text-gray-700 block px-2 py-2"
@@ -147,7 +155,7 @@ export default function AccountSettingPage() {
             <button
               onClick={handleLogout}
               type="button"
-              className="bg-[#d8566c] text-white rounded-lg w-full h-11 flex items-center px-3 gap-4 text-sm hover:shadow-md shadow-[#f35973] hover:bg-[#f35973]"
+              className="bg-[#d8566c] text-white w-full h-11 flex items-center px-3 gap-4 text-sm hover:shadow-md shadow-[#f35973] hover:bg-[#f35973]"
             >
               <SignOut size={24} />
               Log out

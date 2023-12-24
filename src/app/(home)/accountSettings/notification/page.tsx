@@ -5,6 +5,7 @@ import notificationApi from '@/modules/notification/notificationApi';
 import profileApi from '@/modules/profile/profileApi';
 import { ProfileDetailType } from '@/modules/profile/profileType';
 import { useRouter } from 'next/navigation';
+import { CaretLeft } from 'phosphor-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -82,7 +83,7 @@ export default function NotificationPage() {
           onClick={() => router.back()}
           className="text-3xl font-light flex items-center"
         >
-          &#60;
+          <CaretLeft size={18} weight="bold" />
         </span>
         <span className="text-sm font-medium flex items-center">
           Notifications Settings
