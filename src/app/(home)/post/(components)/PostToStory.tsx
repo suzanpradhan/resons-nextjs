@@ -244,7 +244,7 @@ const PostToStory = () => {
     enableReinitialize: true,
     initialValues: {
       audio_file: undefined,
-      file_duration: 0,
+      file_duration: '',
       wave_data: '',
     },
     validateOnChange: false,
