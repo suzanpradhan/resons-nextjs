@@ -4,7 +4,6 @@ import { privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch } from '@/core/redux/clientStore';
 import Button from '@/core/ui/components/Button';
 import CustomPopup from '@/core/ui/components/CustomPopup';
-import storyApi from '@/modules/story/storyApi';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -37,27 +36,27 @@ function PostAStory(props: StoryCreateProps) {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setIsLoading(true);
-    try {
-      const data = await Promise.resolve(
-        dispatch(
-          storyApi.endpoints.addStory.initiate({
-            title: 'This is story title',
-            privacy_code: selectedPrivacyValue ?? '1',
-            audio_file: props.audioFile!,
-            file_duration: props.audioDuration as number,
-            wave_data: props.audioWaveData,
-            is_ai_generated: '0',
-            description: 'This is description',
-          })
-        )
-      );
-      if (Object.prototype.hasOwnProperty.call(data, 'data')) {
-        navigate.push('/');
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const data = await Promise.resolve(
+    //     dispatch(
+    //       storyApi.endpoints.addStory.initiate({
+    //         title: 'This is story title',
+    //         privacy_code: selectedPrivacyValue ?? '1',
+    //         audio_file: props.audioFile!,
+    //         file_duration: props.audioDuration as number,
+    //         wave_data: props.audioWaveData,
+    //         is_ai_generated: '0',
+    //         description: 'This is description',
+    //       })
+    //     )
+    //   );
+    //   if (Object.prototype.hasOwnProperty.call(data, 'data')) {
+    //     navigate.push('/');
+    //   }
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
