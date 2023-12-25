@@ -1,39 +1,50 @@
 import {
   PlaylistDetailType,
+  PlaylistFormType,
   playlistDetailSchema,
 } from '@/modules/playlist/playlistTypes';
-import { MusicNotes } from 'phosphor-react';
 import { ZodError } from 'zod';
 
 import { useAppDispatch } from '@/core/redux/clientStore';
+import TextField from '@/core/ui/components/TextField';
 import playlistApi from '@/modules/playlist/playlistApi';
 import { useFormik } from 'formik';
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import Image from 'next/image';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import CommonPopup from './CommonPopup';
 
 interface EditPlaylistPopUpType {
   toggleModelOpen: Dispatch<SetStateAction<boolean>>;
   isModalOpen: boolean;
+  playlist: PlaylistDetailType;
 }
 
 const EditPlaylistPopUp = ({
   toggleModelOpen,
   isModalOpen,
+  playlist,
 }: EditPlaylistPopUpType) => {
   const dispatch = useAppDispatch();
+  console.log(playlist);
   const dialogRef = useRef<HTMLDialogElement | null>(null);
+
+  const [image, setImage] = useState<File | undefined>(undefined);
+
   useEffect(() => {
     isModalOpen ? dialogRef.current?.showModal() : dialogRef.current?.close();
   }, [isModalOpen]);
 
-  const onSubmit = async (data: PlaylistDetailType) => {
+  const onSubmit = async (data: PlaylistFormType) => {
     console.log(data);
+
     try {
       const responseData = await Promise.resolve(
         dispatch(
-          playlistApi.endpoints.addPlaylist.initiate({
+          playlistApi.endpoints.updatePlaylist.initiate({
+            id: data.id,
             title: data.title,
-            privacy_code: 1,
+            description: data.description,
+            image: image,
           })
         )
       );
@@ -44,34 +55,52 @@ const EditPlaylistPopUp = ({
     }
   };
 
-  const validateForm = (values: PlaylistDetailType) => {
+  const validateForm = (values: PlaylistFormType) => {
     try {
       playlistDetailSchema.parse(values);
     } catch (error) {
       if (error instanceof ZodError) {
-        console.log(error);
-
         return error.formErrors.fieldErrors;
       }
     }
   };
 
-  const formik = useFormik<PlaylistDetailType>({
+  const formik = useFormik<PlaylistFormType>({
     enableReinitialize: true,
     initialValues: {
-      privacy_code: 1,
-      title: '',
+      id: playlist?.id,
+      privacy_code: playlist?.privacy_code,
+      title: playlist?.title,
+      description: playlist?.description ?? '',
     },
     validateOnChange: false,
     validate: validateForm,
     onSubmit,
   });
 
+  const supportedImageTypes = [
+    'image/png',
+    'image/jpeg',
+    'image/gif',
+    'image/webp',
+  ];
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      if (supportedImageTypes.includes(file.type)) {
+        const imageUrl = URL.createObjectURL(file);
+        setImage(event.target.files[0]);
+      }
+    }
+  };
+
   return (
     <CommonPopup
       isModalOpen={isModalOpen}
       popupName="Edit Playlist"
       toggleModelOpen={toggleModelOpen}
+      className="rounded-lg w-screen"
     >
       <form
         onSubmit={(e) => {
@@ -79,22 +108,52 @@ const EditPlaylistPopUp = ({
           formik.handleSubmit(e);
         }}
       >
-        <div className="flex gap-4">
+        <div className="flex px-4 pb-4">
           <label
-            className="bg-[#ebeef0] p-8 mb-0 text-slate-600 rounded-md"
+            className="w-20 h-20 rounded-md relative"
             htmlFor="playlist-image-input"
           >
-            <MusicNotes size={52} weight="fill" />
+            <Image
+              src={
+                image
+                  ? URL.createObjectURL(image)
+                  : playlist?.image != undefined
+                  ? playlist.image
+                  : '/images/audio_no_image.png'
+              }
+              alt="song cover image"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="rounded-md"
+              fill
+              objectFit="cover"
+            />
           </label>
-          <input type="file" id="playlist-image-input" hidden />
-          <div className="flex flex-col gap-1">
-            <p>Name</p>
-            <input
-              placeholder="Name of Playlist"
+          <input
+            type="file"
+            id="playlist-image-input"
+            hidden
+            onChange={handleImageChange}
+          />
+          <div className="flex flex-col flex-1 ml-2 overflow-hidden gap-2">
+            <TextField
+              id="title"
               type="text"
+              placeholder="Title"
+              decorationClassName="bg-transparent border-gray-400 placeholder:text-gray-400"
               {...formik.getFieldProps('title')}
             />
-            <button className="bg-red-400 w-16 py-1 mt-1 rounded" type="submit">
+            <TextField
+              id="description"
+              type="text"
+              placeholder="Description"
+              isMulti={true}
+              decorationClassName="bg-transparent border-gray-400 placeholder:text-gray-400"
+              {...formik.getFieldProps('description')}
+            />
+            <button
+              type={'submit'}
+              className={'bg-accent px-4 py-1 rounded text-white'}
+            >
               Save
             </button>
           </div>

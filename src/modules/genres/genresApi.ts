@@ -41,9 +41,7 @@ const genresApi = baseApi
             }),
             getCurrentItem: builder.query<NowPlayingType, number>({
                 query: (id) => `${apiPaths.getGenreCurrentItem}/${id}?isPostAudio=YES`,
-                serializeQueryArgs: ({ endpointName }) => {
-                    return endpointName;
-                },
+
                 forceRefetch({ currentArg, previousArg }) {
                     return currentArg !== previousArg;
                 },

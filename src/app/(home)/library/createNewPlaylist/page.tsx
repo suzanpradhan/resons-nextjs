@@ -1,6 +1,5 @@
 'use client';
 
-import EditPlaylistPopUp from '@/app/(components)/(popups)/EditPlaylistPopUp';
 import { MusicNotes, Pen } from 'phosphor-react';
 import { useState } from 'react';
 
@@ -25,10 +24,10 @@ const CreateNewPlaylistPage = () => {
           <input type="text" placeholder="Search" />
           <p className="text-center text-[#909090] mt-8 ">No audios</p>
         </div>
-        <EditPlaylistPopUp
+        {/* <EditPlaylistPopUp
           isModalOpen={isModalOpen}
           toggleModelOpen={toggleModelOpen}
-        />
+        /> */}
       </div>
     </div>
   );

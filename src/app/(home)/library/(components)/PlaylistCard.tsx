@@ -7,6 +7,8 @@ interface PlaylistCardProps {
 }
 
 export default function PlaylistCard(props: PlaylistCardProps) {
+  console.log('images:' + props.playlist.image);
+
   return (
     <>
       <Link
@@ -21,7 +23,7 @@ export default function PlaylistCard(props: PlaylistCardProps) {
       >
         <div className="w-full h-32 rounded-md overflow-hidden group-hover:drop-shadow-md">
           <img
-            src={props.playlist.image}
+            src={props.playlist.image ?? '/images/audio_no_image.png'}
             alt={props.playlist.title}
             className="w-full h-full object-cover"
           />
