@@ -74,7 +74,7 @@ const AddToPlaylistPopup = ({
             id="search"
             type="text"
             placeholder="Search"
-            decorationClassName="bg-transparent border-gray-400 placeholder:text-gray-400"
+            decorationclassname="bg-transparent border-gray-400 placeholder:text-gray-400"
             // {...formik.getFieldProps('date_of_birth')}
           />
         </div>

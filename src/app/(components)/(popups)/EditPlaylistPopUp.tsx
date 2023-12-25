@@ -1,7 +1,7 @@
 import {
   PlaylistDetailType,
   PlaylistFormType,
-  playlitsFormType,
+  playlistDetailSchema,
 } from '@/modules/playlist/playlistTypes';
 import { ZodError } from 'zod';
 
@@ -25,7 +25,6 @@ const EditPlaylistPopUp = ({
   playlist,
 }: EditPlaylistPopUpType) => {
   const dispatch = useAppDispatch();
-  console.log(playlist);
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const [image, setImage] = useState<File | undefined>(undefined);
@@ -35,7 +34,7 @@ const EditPlaylistPopUp = ({
   }, [isModalOpen]);
 
   const onSubmit = async (data: PlaylistFormType) => {
-    console.log(data);
+    console.log('submission');
 
     try {
       const responseData = await Promise.resolve(
@@ -48,7 +47,6 @@ const EditPlaylistPopUp = ({
           })
         )
       );
-      console.log(responseData);
       toggleModelOpen(false);
     } catch (error) {
       console.log(error);
@@ -57,7 +55,7 @@ const EditPlaylistPopUp = ({
 
   const validateForm = (values: PlaylistFormType) => {
     try {
-      playlitsFormType.parse(values);
+      playlistDetailSchema.parse(values);
     } catch (error) {
       if (error instanceof ZodError) {
         return error.formErrors.fieldErrors;
@@ -69,7 +67,6 @@ const EditPlaylistPopUp = ({
     enableReinitialize: true,
     initialValues: {
       id: playlist?.id,
-      privacy_code: playlist?.privacy_code,
       title: playlist?.title,
       description: playlist?.description ?? '',
     },
@@ -139,7 +136,7 @@ const EditPlaylistPopUp = ({
               id="title"
               type="text"
               placeholder="Title"
-              decorationClassName="bg-transparent border-gray-400 placeholder:text-gray-400"
+              decorationclassname="bg-transparent border-gray-400 placeholder:text-gray-400"
               {...formik.getFieldProps('title')}
             />
             <TextField
@@ -147,7 +144,7 @@ const EditPlaylistPopUp = ({
               type="text"
               placeholder="Description"
               isMulti={true}
-              decorationClassName="bg-transparent border-gray-400 placeholder:text-gray-400"
+              decorationclassname="bg-transparent border-gray-400 placeholder:text-gray-400"
               {...formik.getFieldProps('description')}
             />
             <button
