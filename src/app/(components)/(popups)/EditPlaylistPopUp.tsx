@@ -1,7 +1,7 @@
 import {
   PlaylistDetailType,
   PlaylistFormType,
-  playlistDetailSchema,
+  playlitsFormType,
 } from '@/modules/playlist/playlistTypes';
 import { ZodError } from 'zod';
 
@@ -57,7 +57,7 @@ const EditPlaylistPopUp = ({
 
   const validateForm = (values: PlaylistFormType) => {
     try {
-      playlistDetailSchema.parse(values);
+      playlitsFormType.parse(values);
     } catch (error) {
       if (error instanceof ZodError) {
         return error.formErrors.fieldErrors;
@@ -151,7 +151,7 @@ const EditPlaylistPopUp = ({
               {...formik.getFieldProps('description')}
             />
             <button
-              type={'submit'}
+              type="submit"
               className={'bg-accent px-4 py-1 rounded text-white'}
             >
               Save
