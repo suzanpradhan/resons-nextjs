@@ -38,7 +38,10 @@ const TextField = ({
       )}
       {isMulti ? (
         <textarea
-          className="py-3 px-4 border rounded-sm bg-slate-50 text-sm focus:outline-none custom-scrollbar"
+          className={classNames(
+            'py-3 px-4 border rounded-md bg-slate-50 text-sm focus:outline-none custom-scrollbar',
+            props.decorationClassName
+          )}
           cols={30}
           rows={props.rows}
           {...props}

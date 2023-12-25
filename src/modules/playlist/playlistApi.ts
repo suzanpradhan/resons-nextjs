@@ -3,7 +3,7 @@ import { baseApi } from '@/core/api/apiQuery';
 import { PaginatedResponseType } from '@/core/types/reponseTypes';
 import { toast } from 'react-toastify';
 import { GenrePlaylistItemType } from '../genres/genresType';
-import { AddPlaylistFormType, PlaylistDetailType, RemovePlaylistFormType } from './playlistTypes';
+import { AddPlaylistFormType, PlaylistDetailType, PlaylistFormType, RemovePlaylistFormType } from './playlistTypes';
 
 const playlistApi = baseApi
   .enhanceEndpoints({ addTagTypes: ['Playlists', 'PlaylistAudios'] })
@@ -98,9 +98,6 @@ const playlistApi = baseApi
               { type: 'PlaylistAudios', id: 'LIST' },
             ]
             : [{ type: 'PlaylistAudios', id: 'LIST' }],
-        serializeQueryArgs: ({ endpointName }) => {
-          return endpointName;
-        },
         forceRefetch({ currentArg, previousArg }) {
           return currentArg !== previousArg;
         },
@@ -178,6 +175,62 @@ const playlistApi = baseApi
         transformResponse: (response) => {
           console.log(response);
           return response as any;
+        },
+      }),
+
+      // Update Playlist
+      updatePlaylist: builder.mutation<any, PlaylistFormType>({
+        query: ({ ...payload }) => {
+          var formData = new FormData();
+          formData.append('title', payload.title ?? '');
+          formData.append('description', payload.description ?? "");
+          if (payload.image != undefined) {
+            formData.append('image', payload.image);
+          }
+          return {
+            url: `${apiPaths.updatePlaylistUrl}/${payload.id}`,
+            method: 'POST',
+            body: formData,
+            formData: true,
+          };
+        },
+        invalidatesTags: ['Playlists'],
+        async onQueryStarted(payload, { queryFulfilled }) {
+          try {
+            await queryFulfilled;
+            toast.success('Playlist updated.');
+          } catch (err) {
+            console.log(err);
+            toast.error('Failed updating playlist.');
+          }
+        },
+        transformResponse: (response) => {
+          console.log(response);
+          return response as any;
+        },
+      }),
+
+      // Add Playlist
+      addDefaultPlaylist: builder.mutation<PlaylistDetailType, void>({
+        query: () => {
+          return {
+            url: `${apiPaths.addDefaultPlaylistUrl}`,
+            method: 'POST'
+          };
+        },
+        invalidatesTags: ['Playlists'],
+        async onQueryStarted(payload, { queryFulfilled }) {
+          try {
+            await queryFulfilled;
+            toast.success('Playlist added.');
+          } catch (err) {
+            console.log(err);
+            toast.error('Failed adding playlist.');
+          }
+        },
+        transformResponse: (response) => {
+          console.log(response);
+          return (response as any).data as PlaylistDetailType;
         },
       }),
 

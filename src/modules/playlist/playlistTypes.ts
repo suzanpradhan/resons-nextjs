@@ -6,7 +6,8 @@ export const playlistDetailSchema = z.object({
   title: z.string().optional(),
   image: z.string().optional(),
   description: z.string().optional(),
-  privacy_code: z.number().optional()
+  privacy_code: z.number().optional(),
+  isMine: z.boolean().optional()
 });
 
 
@@ -19,7 +20,12 @@ export const playlistItemSchema = z.object({
   duration: z.string(),
 });
 
+export const playlitsFormType = playlistDetailSchema.extend({
+  image: z.custom<File>().optional(),
+});
+
 export type PlaylistDetailType = z.infer<typeof playlistDetailSchema>;
+export type PlaylistFormType = z.infer<typeof playlitsFormType>;
 export type PlaylistItemType = z.infer<typeof playlistItemSchema>;
 
 export interface AddPlaylistFormType {

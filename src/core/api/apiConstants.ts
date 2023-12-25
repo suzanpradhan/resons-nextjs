@@ -118,6 +118,8 @@ export const apiPaths = {
   addAudioToPlaylistUrl: '/socialnetwork/playlist/add-audio',
   removeAudioToPlaylistUrl: '/socialnetwork/playlist/remove-audio',
   addPlaylistUrl: '/socialnetwork/playlist/create',
+  updatePlaylistUrl: '/socialnetwork/playlist/update',
+  addDefaultPlaylistUrl: '/socialnetwork/playlist/create/default',
   // Geners
   getGenresUrl: '/socialnetwork/list-genre',
   getGenreCurrentItem: '/socialnetwork/genre/current/playing',

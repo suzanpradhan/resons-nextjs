@@ -6,13 +6,14 @@ import { PaginatedResponseType } from '@/core/types/reponseTypes';
 import playlistApi from '@/modules/playlist/playlistApi';
 import { PlaylistDetailType } from '@/modules/playlist/playlistTypes';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus } from 'phosphor-react';
 import { useEffect } from 'react';
 import MyPlaylistListing from './(components)/MyPlaylistListing';
 
 export default function PlaylistPage() {
   const dispatch = useAppDispatch();
+  const navigator = useRouter();
   const session = useSession();
 
   useEffect(() => {
@@ -43,6 +44,17 @@ export default function PlaylistPage() {
       state.baseApi.queries[`getNewReleasesPlaylistList`]
         ?.data as PaginatedResponseType<PlaylistDetailType>
   );
+
+  const handleCreateNewPlaylist = async () => {
+    const response = await dispatch(
+      playlistApi.endpoints.addDefaultPlaylist.initiate()
+    );
+    // dispatch(genresApi.endpoints.getCurrentItem.util.resetApiState());
+    if ((response as any).data) {
+      navigator.push('playlist/' + (response as any).data.id);
+    }
+  };
+
   return (
     <div className="w-full h-screen max-h-screen bg-white pb-16 overflow-scroll">
       {/* <div className="sm:px-0 py-4 mx-4">
@@ -57,9 +69,9 @@ export default function PlaylistPage() {
           <div className="mt-4 w-screen overflow-hidden">
             <div className="px-4 font-medium flex justify-between text-base mb-3">
               <div>My Playlists</div>
-              <Link href="/library/createNewPlaylist">
+              <button type="button" onClick={handleCreateNewPlaylist}>
                 <Plus size={24} />
-              </Link>
+              </button>
             </div>
 
             <MyPlaylistListing playlists={myPlaylistData.data} />
