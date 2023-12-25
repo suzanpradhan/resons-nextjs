@@ -10,7 +10,7 @@ export interface TextFieldProps {
   isMulti?: boolean;
   rows?: number;
   className?: string;
-  decorationClassName?: string;
+  decorationclassname?: string;
   required?: boolean;
   onChange?: (e: any) => void;
 }
@@ -40,7 +40,7 @@ const TextField = ({
         <textarea
           className={classNames(
             'py-3 px-4 border rounded-md bg-slate-50 text-sm focus:outline-none custom-scrollbar',
-            props.decorationClassName
+            props.decorationclassname
           )}
           cols={30}
           rows={props.rows}
@@ -50,7 +50,7 @@ const TextField = ({
         <input
           className={classNames(
             'py-3 px-4 h-11 border rounded-md focus:outline-none placeholder:text-sm text-sm text-gray-700 font-normal border-gray-200',
-            props.decorationClassName
+            props.decorationclassname
           )}
           autoComplete="true"
           {...props}
