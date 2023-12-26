@@ -4,7 +4,6 @@ import { privacy_code } from '@/core/constants/appConstants';
 import { useAppDispatch } from '@/core/redux/clientStore';
 import Button from '@/core/ui/components/Button';
 import { TemporarySegment } from '@/core/ui/components/TemporarySegment';
-import storyApi from '@/modules/story/storyApi';
 import {
   CloseCircle,
   ExportCurve,
@@ -91,37 +90,37 @@ const CreatePopUp = (props: CreateStoryProps) => {
   const handleSubmit = async (event: any) => {
     setIsLoading(true);
     event.preventDefault();
-    if (audioFile) {
-      if (isLoading) {
-        return;
-      }
-      setIsLoading(true);
-      try {
-        await Promise.resolve(
-          dispatch(
-            storyApi.endpoints.addStory.initiate({
-              title: title,
-              is_ai_generated: "0",
-              // genre: selectGenre,
-              privacy_code: selectPrivacy,
-              audio_file: audioFile!,
-              description: description,
-              file_duration: audioDuration,
-              wave_data: audioWaveData,
-            })
-          )
-        );
-        setSelectGenre('');
-        setSelectPrivacy('0');
-        setTitle('');
-        setDescription('');
-        setAudioFile(undefined);
-        navigate.push('/');
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoading(false);
-    }
+    // if (audioFile) {
+    //   if (isLoading) {
+    //     return;
+    //   }
+    //   setIsLoading(true);
+    //   try {
+    //     await Promise.resolve(
+    //       dispatch(
+    //         storyApi.endpoints.addStory.initiate({
+    //           title: title,
+    //           is_ai_generated: "0",
+    //           // genre: selectGenre,
+    //           privacy_code: selectPrivacy,
+    //           audio_file: audioFile!,
+    //           description: description,
+    //           file_duration: audioDuration,
+    //           wave_data: audioWaveData,
+    //         })
+    //       )
+    //     );
+    //     setSelectGenre('');
+    //     setSelectPrivacy('0');
+    //     setTitle('');
+    //     setDescription('');
+    //     setAudioFile(undefined);
+    //     navigate.push('/');
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    //   setIsLoading(false);
+    // }
   };
 
   return (

@@ -2,6 +2,14 @@ import { z } from 'zod';
 import { accountDetailSchema } from '../account/accountType';
 import { audioDetailSchema } from '../audio/audioType';
 
+export const createStoryDetailSchema = z.object({
+  audio_file: z.custom<File | undefined>().optional(),
+  file_duration: z.string().optional(),
+  wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)).optional(),
+})
+
+export type CreateStoryDetailType = z.infer<typeof createStoryDetailSchema>
+
 export const storyDetailSchema = z.object({
   story_id: z.number().optional(),
   title: z.string(),

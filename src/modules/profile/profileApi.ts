@@ -21,6 +21,9 @@ const profileApi = baseApi
                         toast.error(JSON.stringify(err));
                     }
                 },
+                forceRefetch({ currentArg, previousArg }) {
+                    return currentArg !== previousArg;
+                },
                 transformResponse: (response) => {
                     return (response as any)?.data as ProfileDetailType;
                 },
@@ -28,7 +31,7 @@ const profileApi = baseApi
 
             getMyProfileData: builder.query<ProfileDetailType, string>({
                 query: (query: string) => `${apiPaths.profileUrl}${query}`,
-                providesTags: ['Profile'],
+                providesTags: ['Profile', 'Posts'],
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {
                         await queryFulfilled;
@@ -36,6 +39,9 @@ const profileApi = baseApi
                         console.log(err);
                         toast.error(JSON.stringify(err));
                     }
+                },
+                forceRefetch({ currentArg, previousArg }) {
+                    return currentArg !== previousArg;
                 },
                 transformResponse: (response) => {
                     return (response as any)?.data as ProfileDetailType;
