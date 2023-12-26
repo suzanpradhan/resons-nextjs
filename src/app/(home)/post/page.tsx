@@ -372,7 +372,6 @@ const PostCreatePage = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              console.log(e.target);
               formik.handleSubmit(e);
             }}
           >
