@@ -200,12 +200,14 @@ const PostToStory = () => {
   };
 
   const handleCancelAudio = () => {
-    console.log(audioRef);
-
-    audioRef.current.destroy();
+    if (audioRef?.current) {
+      audioRef.current.destroy();
+    }
+    if (waveRef?.current) {
+      waveRef.current.destroy();
+    }
+    formik.setFieldValue('audio_file', undefined);
     setHiddenButton(undefined);
-
-    console.log(audioRef);
   };
 
   useEffect(() => {
@@ -259,24 +261,32 @@ const PostToStory = () => {
         console.log(e.target);
         formik.handleSubmit(e);
       }}
-      className="overflow-y-scroll h-full pb-20  flex flex-col gap-2 items-center max-h-[95%] bg-white"
+      className="overflow-y-scroll h-full pb-20 flex flex-col items-center max-h-[95%] bg-white"
     >
-      <h2 className="px-4 py-[6px] bg-white shadow-sm flex items-center gap-2 text-lg my-0 w-full">
-        <CaretLeft size={28} weight="bold" />
-        <span className="font-medium grow">Create a post</span>
-        <button className="text-red-500" type="submit">
+      <div className="px-4 h-12 bg-white shadow-sm flex items-center gap-2 my-0 w-full">
+        <CaretLeft size={20} weight="bold" />
+        <div className="text-base font-normal flex-1">Create a story</div>
+        <button type="submit" className="text-red-500 text-base">
           Post
         </button>
-      </h2>
-      <div className="h-6">
-        {recordTime && (
-          <span className="inline-flex  py-0.5 px-2 bg-gray-600 text-white rounded-md">
-            {formatTime(recordTime / 1000)}
-          </span>
-        )}
       </div>
+
       <div className="relative bg-[#f5f6fa] grow w-full flex flex-col justify-center">
         <div ref={recordedAudio}></div>
+        <div className="flex absolute bottom-2 left-0 right-0 w-full justify-center">
+          {recordTime && (
+            <span className="inline-flex  py-0.5 px-2 bg-gray-600 text-white rounded-md">
+              {formatTime(recordTime / 1000)}
+            </span>
+          )}
+        </div>
+        {formik.values.audio_file == undefined && !recording ? (
+          <div className="absolute text-dark-400 text-center w-full">
+            Record or Upload audio
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="flex gap-4 mt-5">
@@ -296,7 +306,7 @@ const PostToStory = () => {
           <button
             type="button"
             className={classNames('rounded-full bg-red-500 p-4 text-white ')}
-            onClick={recording ? stopTheRecording : startNewRecording}
+            onClick={handleCancelAudio}
           >
             <X size={35} weight="bold" />
           </button>

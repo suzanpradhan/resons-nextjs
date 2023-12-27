@@ -40,12 +40,18 @@ const AddLanguage = ({
             <div key={index}>
               <label
                 className={classNames(
-                  `mb-0 w-full flex items-center px-4 py-3`,
-                  languagevalue === item.code && 'bg-red-500'
+                  `mb-1 w-full flex text-base font-normal items-center px-4 py-3`,
+                  languagevalue === item.code ? 'bg-red-500' : 'bg-whiteShade'
                 )}
                 htmlFor={'language' + item.code}
               >
-                <span>{item.name}</span>
+                <span
+                  className={
+                    languagevalue === item.code ? 'text-white' : 'text-dark-500'
+                  }
+                >
+                  {item.name}
+                </span>
               </label>
               <input
                 hidden

@@ -8,9 +8,9 @@ interface AddAudienceType {
 }
 
 const PRIVACY_CODE_ICONS = [
-  <GlobeHemisphereWest size={32} weight="fill" key={0} />,
-  <LockSimple size={32} weight="fill" key={1} />,
-  <Detective size={32} weight="fill" key={1} />,
+  <GlobeHemisphereWest size={24} weight="fill" key={0} />,
+  <LockSimple size={24} weight="fill" key={1} />,
+  <Detective size={24} weight="fill" key={1} />,
 ];
 
 const PRIVACY_CODE_ELEMENTS = privacy_code.map((item, index) => {
@@ -34,13 +34,18 @@ const AddAudience = ({
           <div key={index}>
             <label
               className={classNames(
-                `mb-0 w-full flex items-center p-4`,
-                Number(privacy_value) === item.id && 'bg-red-500'
+                `mb-1 w-full flex items-center p-4 font-normal text-base`,
+                Number(privacy_value) === item.id
+                  ? 'bg-red-500'
+                  : 'bg-whiteShade',
+                Number(privacy_value) === item.id
+                  ? 'text-white'
+                  : 'text-dark-500'
               )}
               htmlFor={'privacy_code' + item.id}
             >
               {item.icon}
-              <span>{item.name}</span>
+              <span className="ml-1">{item.name}</span>
             </label>
             <input
               hidden

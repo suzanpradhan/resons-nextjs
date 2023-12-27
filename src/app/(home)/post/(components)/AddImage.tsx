@@ -26,14 +26,17 @@ const AddImage = ({
 
   return (
     <>
-      <div className="flex items-center px-4 py-3">
-        <div className="text-gray-500 text-sm font-normal flex w-full">
+      <div className="flex items-center px-4 py-2">
+        <label
+          className="text-dark-400 h-full text-base m-0 font-normal flex items-center w-full cursor-pointer"
+          htmlFor="coverImageInput"
+        >
           <p className="grow">Choose or upload background</p>
-          <label htmlFor="coverImageInput" className="flex text-red-500">
+          <div className="flex text-accent font-normal gap-1">
             <UploadSimple size={20} weight="fill" />
             <span>Upload</span>
-          </label>
-        </div>
+          </div>
+        </label>
         <input
           id="coverImageInput"
           type="file"
@@ -41,19 +44,20 @@ const AddImage = ({
           style={{ display: 'none' }}
           name="cover_image"
           onChange={handleImageChange}
+          className="hidden"
           // {...formik.getFieldProps('cover_image')} // Hide the input element
         />
       </div>
       <div className="h-full overflow-y-scroll">
         {coverImages && (
-          <div className="grid grid-cols-3 gap-0 w-full overflow-y-scroll">
+          <div className="grid grid-cols-3 gap-0 w-full overflow-y-scroll border-dark-500 border">
             {coverImages?.map((item: CoverImageDetailType) => (
               <div key={item.id}>
                 <label
                   className={classNames(
                     `mb-0 w-full h-20   peer-checked:bg-red-500`,
                     Number(coverImageId) === item.id &&
-                      'border-[3px] border-white-400'
+                      'border-[3px] border-white'
                   )}
                   htmlFor={'cover_image_id_' + item.id}
                 >
