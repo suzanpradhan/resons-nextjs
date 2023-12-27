@@ -4,7 +4,7 @@ import Link from 'next/link';
 interface CardOneProps {
   slide: {
     id?: number;
-    img_url: string;
+    image: string;
     title: string;
   };
   classnames?: string;
@@ -24,7 +24,7 @@ export default function CardOne({
       >
         <div className="w-full h-32 sm:h-40 overflow-hidden drop-shadow-md">
           <img
-            src={slide.img_url}
+            src={slide.image}
             alt={slide.title}
             className="w-full h-full aspect-auto object-cover"
           />

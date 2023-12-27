@@ -69,6 +69,7 @@ const PersonalDetailsPage = () => {
             forceRefetch: true,
           })
         );
+
         navigate.push('/');
       }
     } catch (error) {
