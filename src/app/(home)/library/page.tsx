@@ -54,7 +54,6 @@ export default function PlaylistPage() {
       navigator.push('playlist/' + (response as any).data.id);
     }
   };
-
   return (
     <div className="w-full h-screen max-h-screen bg-white pb-16 overflow-scroll">
       {/* <div className="sm:px-0 py-4 mx-4">
@@ -69,12 +68,22 @@ export default function PlaylistPage() {
           <div className="mt-4 w-screen overflow-hidden">
             <div className="px-4 font-medium flex justify-between text-base mb-3">
               <div>My Playlists</div>
-              <button type="button" onClick={handleCreateNewPlaylist}>
-                <Plus size={24} />
+              <button onClick={() => navigator.push('library/myPlaylists')}>
+                <Plus size={24} weight="light" />
               </button>
             </div>
 
             <MyPlaylistListing playlists={myPlaylistData.data} />
+            <div className="mx-4 ">
+              <button
+                type="button"
+                onClick={handleCreateNewPlaylist}
+                className=" w-full mt-4 py-2 flex justify-center gap-2 border-[1px] px-2 rounded-md border-[#b3adad] bg-whiteShade"
+              >
+                <Plus size={24} />
+                <span>Create new Playlist</span>
+              </button>
+            </div>
           </div>
         ) : (
           <></>

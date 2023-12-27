@@ -20,12 +20,12 @@ export const playlistItemSchema = z.object({
   duration: z.string(),
 });
 
-export const playlitsFormType = playlistDetailSchema.extend({
+export const playlistFormSchema = playlistDetailSchema.extend({
   image: z.custom<File>().optional(),
 });
 
 export type PlaylistDetailType = z.infer<typeof playlistDetailSchema>;
-export type PlaylistFormType = z.infer<typeof playlitsFormType>;
+export type PlaylistFormType = z.infer<typeof playlistFormSchema>;
 export type PlaylistItemType = z.infer<typeof playlistItemSchema>;
 
 export interface AddPlaylistFormType {

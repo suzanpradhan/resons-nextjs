@@ -182,10 +182,14 @@ const playlistApi = baseApi
       updatePlaylist: builder.mutation<any, PlaylistFormType>({
         query: ({ ...payload }) => {
           var formData = new FormData();
+          console.log(payload)
           formData.append('title', payload.title ?? '');
           formData.append('description', payload.description ?? "");
           if (payload.image != undefined) {
             formData.append('image', payload.image);
+          }
+          if (payload?.privacy_code) {
+            formData.append('privacy_code', payload.privacy_code.toString())
           }
           return {
             url: `${apiPaths.updatePlaylistUrl}/${payload.id}`,
