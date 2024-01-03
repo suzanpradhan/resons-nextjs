@@ -27,9 +27,9 @@ const AddAudience = ({
   privacy_value,
 }: AddAudienceType) => {
   return (
-    <div className="py-2 ">
-      <p className="px-4 pb-2 border-b-2">Post Audience</p>
-      <div>
+    <>
+      <div className="px-4 py-2 border-b-2 bg-white">Post Audience</div>
+      <div className="bg-white flex-1 overflow-y-scroll pb-14">
         {PRIVACY_CODE_ELEMENTS.map((item, index) => (
           <div key={index}>
             <label
@@ -58,7 +58,7 @@ const AddAudience = ({
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

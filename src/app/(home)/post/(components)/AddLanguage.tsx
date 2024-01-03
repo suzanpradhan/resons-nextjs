@@ -19,8 +19,8 @@ const AddLanguage = ({
   );
 
   return (
-    <div className="h-full">
-      <div className="flex items-center px-4 gap-2">
+    <>
+      <div className="flex items-center px-4 gap-2 bg-white">
         <label htmlFor="searchInput">
           <MagnifyingGlass size={24} />
         </label>
@@ -33,7 +33,7 @@ const AddLanguage = ({
           value={searchValue}
         />
       </div>
-      <div className="h-full">
+      <div className="overflow-y-scroll pb-14 bg-white flex-1">
         {language_code
           .filter((item) => item.name.toLowerCase().includes(searchValue))
           .map((item, index) => (
@@ -63,9 +63,8 @@ const AddLanguage = ({
               />
             </div>
           ))}
-        <div className="h-28"></div>
       </div>
-    </div>
+    </>
   );
 };
 

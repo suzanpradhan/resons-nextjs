@@ -13,7 +13,7 @@ import { MultiValue } from 'react-select';
 import { Autoplay, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 
 import Button from '@/core/ui/components/Button';
-import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
+import { PostFormType, postFormSchema } from '@/modules/post/postType';
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/navigation';
@@ -185,7 +185,7 @@ function PostToFeed(props: PostCreateProps) {
   //   }
   // };
 
-  const validateForm = (values: PostDefaultFormType) => {
+  const validateForm = (values: PostFormType) => {
     try {
       postFormSchema.parse(values);
     } catch (error) {

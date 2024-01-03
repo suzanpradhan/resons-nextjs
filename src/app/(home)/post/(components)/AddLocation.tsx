@@ -8,7 +8,7 @@ import {
   MapCameraChangedEvent,
   MapMouseEvent,
 } from '@vis.gl/react-google-maps/dist/components/map/use-map-events';
-import { NavigationArrow } from 'phosphor-react';
+import { Crosshair } from 'phosphor-react';
 
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
@@ -59,8 +59,6 @@ const PlacesAutocomplete = ({ setMarkerPosition }: PlacesAutocompleteType) => {
 const AddLocation = () => {
   const [markerPosition, setMarkerPosition] =
     useState<LatLngJsonType>(DEFAULT_CENTER);
-
-  // console.log(useMapsLibrary('places'));
   const handleCenterChange = (map: MapCameraChangedEvent) => {
     const newCenter = map.detail.center;
     setMarkerPosition(newCenter);
@@ -82,33 +80,31 @@ const AddLocation = () => {
   };
 
   return (
-    <div>
-      <APIProvider apiKey={API_KEY!}>
-        <div className="flex flex-col ">
-          <div className="flex my-2">
-            <PlacesAutocomplete setMarkerPosition={setMarkerPosition} />
-            <button
-              type="button"
-              className="px-2 bg-white ml-2 rounded-md "
-              onClick={handleClick}
-            >
-              <NavigationArrow size={26} />
-            </button>
-          </div>
-          <Map
-            onCenterChanged={(map) => handleCenterChange(map)}
-            zoom={8}
-            center={markerPosition}
-            gestureHandling={'greedy'}
-            disableDefaultUI={true}
-            className="w-full h-96"
-            onClick={(map) => handleMapClick(map)}
+    <APIProvider apiKey={API_KEY!}>
+      <div className="flex flex-col flex-1">
+        <div className="flex py-2 px-4 bg-white">
+          <PlacesAutocomplete setMarkerPosition={setMarkerPosition} />
+          <button
+            type="button"
+            className="px-2 bg-dark-500 ml-2 rounded-md "
+            onClick={handleClick}
           >
-            <Marker position={markerPosition} />
-          </Map>
+            <Crosshair size={26} className="text-white" />
+          </button>
         </div>
-      </APIProvider>
-    </div>
+        <Map
+          onCenterChanged={(map) => handleCenterChange(map)}
+          zoom={14}
+          center={markerPosition}
+          gestureHandling={'greedy'}
+          disableDefaultUI={true}
+          className="w-full flex-1"
+          onClick={(map) => handleMapClick(map)}
+        >
+          <Marker position={markerPosition} />
+        </Map>
+      </div>
+    </APIProvider>
   );
 };
 

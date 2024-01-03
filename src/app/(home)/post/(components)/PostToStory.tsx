@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import {
-  CaretLeft,
   Microphone,
   Pause,
   Play,
@@ -264,7 +263,6 @@ const PostToStory = () => {
       className="overflow-y-scroll h-full pb-20 flex flex-col items-center max-h-[95%] bg-white"
     >
       <div className="px-4 h-12 bg-white shadow-sm flex items-center gap-2 my-0 w-full">
-        <CaretLeft size={20} weight="bold" />
         <div className="text-base font-normal flex-1">Create a story</div>
         <button type="submit" className="text-red-500 text-base">
           Post
@@ -343,6 +341,9 @@ const PostToStory = () => {
               id="audioUpload"
               type="file"
               accept="audio/*"
+              onClick={(e) => {
+                (e.target as HTMLInputElement).value = '';
+              }}
               onChange={(e) => handleFileChange(e)}
             />
           </div>
