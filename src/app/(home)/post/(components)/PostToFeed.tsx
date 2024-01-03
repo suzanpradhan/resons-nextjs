@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import coverImageApi from '@/modules/coverImage/coverImageApi';
+import { CoverImageDetailType } from '@/modules/coverImage/coverImageType';
 import postApi from '@/modules/post/postApi';
-import { PostDefaultFormType, postFormSchema } from '@/modules/post/postType';
+import { PostFormType, postValidateFormSchema } from '@/modules/post/postType';
 import profileApi from '@/modules/profile/profileApi';
 import { ProfileDetailType } from '@/modules/profile/profileType';
 import classNames from 'classnames';
@@ -10,7 +11,6 @@ import { useFormik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
-  CaretLeft,
   ImageSquare,
   Lock,
   MapPin,
@@ -19,10 +19,9 @@ import {
   Timer,
   Translate,
   UploadSimple,
-  XCircle,
+  X,
 } from 'phosphor-react';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { MultiValue } from 'react-select';
+import { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
 import { ZodError } from 'zod';
@@ -56,16 +55,10 @@ const FIELD_DETAILS = [
   },
 ];
 
-interface Option {
-  value: string;
-  label: string;
-}
-
 const PostToFeed = () => {
   const navigate = useRouter();
   const dispatch = useAppDispatch();
-  const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
-  const [imageFile, setImageFile] = useState<string | undefined>(undefined);
+  // const [audioWaveData, setAudioWaveData] = useState<any>([0, 1, 0.5, -0.3]);
   const recordedAudio = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -75,6 +68,7 @@ const PostToFeed = () => {
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
   const [recordTime, setRecordTime] = useState(0);
+
   const [wavePlayerVisible, toggleWavePlayerVisible] = useState(false);
   const audioRef = useRef<any>(null);
   const [hiddenButton, setHiddenButton] = useState<
@@ -82,19 +76,13 @@ const PostToFeed = () => {
   >(undefined);
   const [recording, setRecording] = useState(false);
   const [activeFieldTab, toggleActiveFieldTab] = useState<string>('Image');
-  const [selectedTagOptions, setSelectedTagOptions] = useState<
-    MultiValue<Option>
-  >([]);
 
   const myProfile = useAppSelector((state: RootState) => {
     return state.baseApi.queries[`getMyProfileData("?load=true")`]
       ?.data as ProfileDetailType;
   });
 
-  const onSubmit = async (data: PostDefaultFormType) => {
-    console.log(data);
-
-    // setIsLoading(true);
+  const onSubmit = async (data: PostFormType) => {
     try {
       const responseData = await Promise.resolve(
         dispatch(
@@ -102,15 +90,13 @@ const PostToFeed = () => {
             title: data.title,
             privacy_code: data.privacy_code,
             audio_file: data.audio_file,
-            file_duration: data.file_duration,
-            wave_data: audioWaveData,
+            file_duration: (data.file_duration as number) / 1000,
+            wave_data: data.wave_data,
             is_ai_generated: data.is_ai_generated,
             expiration_type: data.expiration_type,
             language: data.language,
-            cover_image: data.cover_image!,
-            cover_image_id: data.cover_image_id,
+            cover_image: data.cover_image,
             remember_my_language: data.remember_my_language,
-            color_code: data.color_code,
             genres: data.genres,
           })
         )
@@ -121,42 +107,32 @@ const PostToFeed = () => {
         );
         navigate.push('/');
       }
-      // setIsLoading(false);
-
-      // setSelectedValue('');
-      // setTitle('');
-      // setSelectedOptions([]);
-      // setSelectedLabels([]);
-      // setDescription('');
-      // setAudioFile(undefined);
-      // navigate.push('/');
     } catch (error) {
       console.log(error);
     }
   };
 
-  const validateForm = (values: PostDefaultFormType) => {
+  const validateForm = (values: PostFormType) => {
     try {
-      postFormSchema.parse(values);
+      postValidateFormSchema.parse(values);
     } catch (error) {
       if (error instanceof ZodError) {
         console.log(error);
-
         return error.formErrors.fieldErrors;
       }
     }
   };
 
-  const handleTagsChange = (e: MultiValue<Option>) => {
-    // setSelectedTagOptions((prevStates) => [
-    //   ...prevStates,
-    //   { label: e[e.length - 1].label, value: e[e.length - 1].value },
-    // ]);
-    formik.setFieldValue(
-      'genres',
-      e.map((genre) => genre.value)
-    );
-  };
+  // const handleTagsChange = (e: MultiValue<Option>) => {
+  //   // setSelectedTagOptions((prevStates) => [
+  //   //   ...prevStates,
+  //   //   { label: e[e.length - 1].label, value: e[e.length - 1].value },
+  //   // ]);
+  //   formik.setFieldValue(
+  //     'genres',
+  //     e.map((genre) => genre.value)
+  //   );
+  // };
 
   const startNewRecording = async () => {
     setHiddenButton('upload');
@@ -165,30 +141,30 @@ const PostToFeed = () => {
       audioRef.current.destroy();
     }
     setIsPlaying(false);
-    setAudioFile(undefined);
+    // setAudioFile(undefined);
     setRecording(true);
     setRecordTime(0);
+
     const recordInitiate = () => {
       waveRef.current = WaveSurfer.create({
         container: recordedAudio?.current,
-        waveColor: '#000000',
-        progressColor: '#B00000',
+        waveColor: 'white',
+        progressColor: '#D9362F',
         barWidth: 3,
         height: 80,
         barRadius: 2,
       });
-      record.current = waveRef.current.registerPlugin(RecordPlugin.create());
 
+      record.current = waveRef.current.registerPlugin(RecordPlugin.create());
       record.current.startRecording();
 
       // When we click on stop record button this function would be run.
       record.current.on('record-end', (blob: Blob) => {
         const recordedUrl = URL.createObjectURL(blob);
-        // Create wavesurfer from the recorded audio
         audioRef.current = WaveSurfer.create({
           container: recordedAudio.current,
-          waveColor: '#000000',
-          progressColor: '#B00000',
+          waveColor: 'white',
+          progressColor: '#D9362F',
           url: recordedUrl,
           barWidth: 3,
           height: 80,
@@ -201,8 +177,8 @@ const PostToFeed = () => {
         });
 
         const file = new File([blob], 'audio.wav');
-        setAudioFile(file);
         formik.setFieldValue('audio_file', file);
+
         setRecording(false);
       });
     };
@@ -214,10 +190,9 @@ const PostToFeed = () => {
       waveRef.current.on('decode', () => {
         const getAudioDuration = waveRef.current.getDuration();
         setRecordTime(getAudioDuration * 1000);
+        formik.setFieldValue('file_duration', getAudioDuration * 1000);
         setAudioDuration(recordTime);
-        console.log(waveRef.current.exportPeaks()[0]);
-        setAudioWaveData?.(waveRef.current.exportPeaks()[0]);
-        // setShouldNext(true);
+        formik.setFieldValue('wave_data', waveRef.current.exportPeaks()[0]);
       });
       waveRef.current.destroy();
     }
@@ -225,8 +200,6 @@ const PostToFeed = () => {
       record.current.stopRecording();
       record.current.destroy();
     }
-    // setShouldNext(true);
-    // console.log(shouldNext);
   };
 
   useEffect(() => {
@@ -250,8 +223,8 @@ const PostToFeed = () => {
     return () => clearInterval(interval);
   }, [recording]);
 
-  const handleCoverImageIdChange = (id: number) => {
-    formik.setFieldValue('cover_image_id', id.toString());
+  const handleCoverImageIdChange = (coverImageItem: CoverImageDetailType) => {
+    formik.setFieldValue('cover_image', coverImageItem);
   };
 
   const handleAudienceChange = (value: number) => {
@@ -262,19 +235,23 @@ const PostToFeed = () => {
     formik.setFieldValue('language', value);
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.files?.[0] &&
-      setImageFile(URL.createObjectURL(e.target.files?.[0]));
-    formik.setFieldValue(e.target.name, e.target.files?.[0]);
-  };
+  // const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files?.[0]) {
+  //     const temp = {
+  //       id: 0,
+  //       file_path: URL.createObjectURL(e.target.files?.[0]),
+  //     } as CoverImageDetailType;
+  //     formik.setFieldValue('cover_image', temp);
+  //     setLocalCoverImage(temp);
+  //   }
+  // };
 
   const handleFileChange = (e: any) => {
     // e.preventdefault();
-    console.log(audioRef);
+
     setHiddenButton('record');
     toggleWavePlayerVisible(true);
     if (audioRef.current != null) {
-      console.log(audioRef);
       audioRef.current.destroy();
       audioRef.current = null;
     }
@@ -291,8 +268,8 @@ const PostToFeed = () => {
 
     audioRef.current = WaveSurfer.create({
       container: recordedAudio.current,
-      waveColor: '#000000',
-      progressColor: '#B00000',
+      waveColor: 'white',
+      progressColor: '#D9362F',
       url: audioElement.src,
       barWidth: 3,
       height: 80,
@@ -307,22 +284,22 @@ const PostToFeed = () => {
   };
 
   const handleCancelAudio = () => {
-    console.log(audioRef);
     toggleWavePlayerVisible(false);
-    audioRef.current.destroy();
+    audioRef?.current?.destroy();
+    waveRef?.current?.destroy();
     setHiddenButton(undefined);
     setAudioFile(undefined);
-    console.log(audioRef);
+    formik.setFieldValue('audio_file', undefined);
   };
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.on('ready', () => {
         const getAudioDuration = audioRef.current.getDuration();
-        // console.log('audio Duration' + getAudioDuration);
         setRecordTime(getAudioDuration * 1000);
+        formik.setFieldValue('file_duration', getAudioDuration * 1000);
         setAudioDuration(getAudioDuration * 1000);
-        setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
+        formik.setFieldValue('wave_data', audioRef.current.exportPeaks()[0]);
       });
       audioRef.current.on('finish', () => {
         audioRef.current.setTime(0);
@@ -335,19 +312,17 @@ const PostToFeed = () => {
     });
   }, [audioRef.current, audioDuration]);
 
-  const formik = useFormik<PostDefaultFormType>({
+  const formik = useFormik<PostFormType>({
     enableReinitialize: true,
     initialValues: {
       title: '',
       audio_file: undefined,
       file_duration: 0,
-      wave_data: '',
-      privacy_code: '',
-      expiration_type: '',
+      wave_data: undefined,
+      privacy_code: '0',
+      expiration_type: 'Never',
       language: '',
-      cover_image_id: undefined,
       cover_image: undefined,
-      color_code: '#000000',
       remember_my_language: '0',
       genres: [],
       is_ai_generated: '0',
@@ -366,13 +341,11 @@ const PostToFeed = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        console.log(e.target);
         formik.handleSubmit(e);
       }}
-      className="sm:container bg-white md:container lg:container mx-auto h-full overflow-y-scroll"
+      className="sm:container md:container lg:container mx-auto h-full pb-12 flex flex-col overflow-y-scroll"
     >
-      <div className="px-4 h-12 bg-white shadow-sm flex items-center gap-2 my-0">
-        <CaretLeft size={20} weight="bold" />
+      <div className="px-4 h-12 shadow-sm flex items-center gap-2 my-0">
         <div className="text-base font-normal flex-1">Create a post</div>
         <button type="submit" className="text-red-500 text-base">
           Post
@@ -381,28 +354,25 @@ const PostToFeed = () => {
 
       <div className="border-b border-grey-300">
         <div
-          className={classNames(
-            'px-4 py-4 flex-col relative'
-            // imageFile ? 'bg-transparent' : 'bg-black'
-          )}
+          className={classNames('px-4 py-4 flex-col relative')}
           style={{
-            background: imageFile
+            background: formik.values.cover_image
               ? `linear-gradient(rgb(0,0,0,0.2), rgb(0,0,0,0.4), rgb(0,0,0,0.2))`
               : '#1E1F21',
           }}
         >
-          {imageFile && (
+          {formik.values.cover_image && (
             <Image
               className="-z-10"
-              src={imageFile}
+              src={formik.values.cover_image.file_path}
               alt="cover image"
               fill
               objectFit="cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           )}
-          <div className="flex gap-3 items-center">
-            <div className="relative w-16 h-16 ">
+          <div className="flex gap-2 items-center mb-4">
+            <div className="relative w-14 h-14">
               <Image
                 className="rounded-full"
                 src={
@@ -422,25 +392,31 @@ const PostToFeed = () => {
             </div>
           </div>
           <textarea
-            // name="title"
             id="title"
             placeholder="Enter title here"
-            className="my-3 w-full rounded-md h-20 p-2 bg-transparent border-slate-500 border-[1px] placeholder:text-slate-400 !focus:border-0 focus:outline-0 text-white"
-            // onChange={handleChange}
+            className={classNames(
+              'w-full rounded-md h-20 p-2 border bg-transparent focus:outline-0 text-white',
+              formik.errors.title
+                ? 'border-red-400'
+                : formik.values.cover_image
+                ? 'placeholder:text-white border-white'
+                : 'border-primaryGray-500 placeholder:text-primaryGray-500',
+              formik.values.cover_image
+                ? 'placeholder:text-white'
+                : 'placeholder:text-primaryGray-500'
+            )}
             {...formik.getFieldProps('title')}
           />
-          {!!formik.errors.title && (
-            <div className="text-red-500 text-sm -mt-2">
-              {formik.errors.title}
-            </div>
-          )}
           <div
             className={classNames(
-              'text-white flex gap-2 px-3 py-2 items-center rounded-md bg-[#414141] ',
+              'text-white flex gap-2 px-3 py-2 items-center rounded-md backdrop-blur-sm',
+              formik.errors.wave_data != undefined
+                ? 'bg-accent/10 border border-red-400'
+                : 'bg-white/10',
               wavePlayerVisible && 'h-24'
             )}
           >
-            <span className="grow text-slate-400">
+            <span className="grow text-white">
               {!wavePlayerVisible && <>Record or Upload Audio</>}
               <PlayPauseWithWave
                 audio={recordedAudio}
@@ -449,46 +425,66 @@ const PostToFeed = () => {
                 setIsPlaying={setIsPlaying}
                 audioRef={audioRef}
                 wavePlayerVisible={wavePlayerVisible}
-                theme={imageFile ? 'dark' : 'light'}
+                theme={'dark'}
               />
             </span>
-            <button
-              type="button"
-              className={classNames(
-                'rounded-full bg-[#535353] p-2',
-                hiddenButton === 'record' ? 'hidden' : 'block'
-              )}
-              onClick={recording ? stopTheRecording : startNewRecording}
-            >
-              {recording ? <StopCircle size={24} /> : <Microphone size={24} />}
-            </button>
-            <div
-              className={classNames(
-                'rounded-full bg-[#535353] p-2 mb-0',
-                hiddenButton === 'upload' ? 'hidden' : 'block'
-              )}
-            >
-              {!wavePlayerVisible ? (
-                <label htmlFor="audioUpload">
-                  <UploadSimple height={20} width={24} />
+
+            <input
+              hidden
+              id="audioUpload"
+              type="file"
+              accept="audio/*"
+              onClick={(e) => {
+                (e.target as HTMLInputElement).value = '';
+              }}
+              onChange={(e) => handleFileChange(e)}
+            />
+
+            {wavePlayerVisible && !recording ? (
+              <>
+                <div className="rounded-full bg-white p-2 hover:shadow-md">
+                  <X
+                    size={18}
+                    role="button"
+                    type="button"
+                    onClick={handleCancelAudio}
+                    className="text-accent"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className={classNames(
+                    'rounded-full bg-white/20 p-2 hover:shadow-md',
+                    hiddenButton === 'record' ? 'hidden' : 'block'
+                  )}
+                  onClick={recording ? stopTheRecording : startNewRecording}
+                >
+                  {recording ? (
+                    <StopCircle size={24} />
+                  ) : (
+                    <Microphone size={24} />
+                  )}
+                </button>
+
+                <label
+                  htmlFor="audioUpload"
+                  className={classNames(
+                    'rounded-full bg-white/20 p-2 hover:shadow-md mb-0 hover:cursor-pointer',
+                    hiddenButton === 'upload' ? 'hidden' : 'block'
+                  )}
+                >
+                  {!wavePlayerVisible ? <UploadSimple size={24} /> : <></>}
                 </label>
-              ) : (
-                <XCircle size={24} role="button" onClick={handleCancelAudio} />
-              )}
-              <input
-                hidden
-                id="audioUpload"
-                type="file"
-                accept="audio/*"
-                onChange={(e) => handleFileChange(e)}
-              />
-            </div>
+              </>
+            )}
           </div>
         </div>
-        {/* <PostCard /> */}
-        <div className="my-4 flex flex-col gap-4">
+        <div className="py-4 flex flex-col gap-4 bg-white">
           <div className="flex gap-2 border-[1px] px-2 rounded-md border-grey-300 bg-grey-100 mx-4">
-            <span className=" h-10 flex items-center grow text-sm text-dark-400">
+            <span className="h-10 flex items-center grow text-sm text-dark-400">
               Add to your post
             </span>
             {FIELD_DETAILS.map((item, index) => (
@@ -506,140 +502,13 @@ const PostToFeed = () => {
               </button>
             ))}
           </div>
-
-          {/* {locationInputVisibility && (
-            <>
-              <label
-                className="block text-gray-700 text-sm font-bold mb-0"
-                htmlFor="location"
-              >
-                Location
-              </label>
-              <select
-                name="location"
-                className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-                id="location"
-                onChange={handleChange}
-              >
-                <option>Select location</option>
-                {LOCATION_OPTIONS?.length > 0
-                  ? LOCATION_OPTIONS.map((value, index) => (
-                      <option value={value} key={index}>
-                        {value}
-                      </option>
-                    ))
-                  : null}
-              </select>
-            </>
-          )} */}
-          {/* {languageInputVisibility && (
-                  <>
-                    <label
-                      className="block text-gray-700 text-sm font-bold mb-0"
-                      htmlFor="language"
-                    >
-                      Language
-                    </label>
-                    <select
-                      // name="language"
-                      className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-                      id="language"
-                      // onChange={handleChange}
-                      {...formik.getFieldProps('language')}
-                    >
-                      <option>Select your language</option>
-                      {language_code?.length > 0
-                        ? language_code.map((value, index) => (
-                            <option value={value.code} key={index}>
-                              {value.name}
-                            </option>
-                          ))
-                        : null}
-                    </select>
-                    {!!formik.errors.language && (
-                      <div className="text-red-500 text-sm -mt-2">
-                        {formik.errors.language}
-                      </div>
-                    )}
-                  </>
-                )}
-                <div className="">
-                  <label
-                    className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="privacy"
-                  >
-                    Privacy
-                  </label>
-                  <select
-                    // name="privacy_code"
-                    className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-                    id="privacy_code"
-                    // onChange={handleChange}
-                    {...formik.getFieldProps('privacy_code')}
-                  >
-                    <option>Select Privacy</option>
-                    {privacy_code?.length > 0
-                      ? privacy_code.map((value, index) => (
-                          <option value={value.id} key={index}>
-                            {value.name}
-                          </option>
-                        ))
-                      : null}
-                  </select>
-                  {!!formik.errors.privacy_code && (
-                    <div className="text-red-500 text-sm mt-2">
-                      {formik.errors.privacy_code}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <label
-                    className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="expiration_type"
-                  >
-                    Expiration
-                  </label>
-                  <select
-                    className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
-                    id="expiration_type"
-                    {...formik.getFieldProps('expiration_type')}
-                  >
-                    <option>Select Expiration Type</option>
-                    {EXPIRATION_OPTIONS?.length > 0 &&
-                      EXPIRATION_OPTIONS.map((value, index) => (
-                        <option value={value} key={index}>
-                          {value}
-                        </option>
-                      ))}
-                  </select>
-                  {!!formik.errors.expiration_type && (
-                    <div className="text-red-500 text-sm mt-1">
-                      {formik.errors.expiration_type}
-                    </div>
-                  )}
-                </div>
-                <div className="mb-4">
-                  <label
-                    className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="tag"
-                  >
-                    Tag
-                  </label>
-                  <AsyncMultiSelect
-                    handleTagsChange={handleTagsChange}
-                    name="tag"
-                    id="tag"
-                    selectedTagOptions={selectedTagOptions}
-                    setSelectedTagOptions={setSelectedTagOptions}
-                  />
-                </div> */}
         </div>
       </div>
       {activeFieldTab === 'Image' && (
         <AddImage
-          coverImageId={formik.values.cover_image_id!}
+          hasError={formik.errors.cover_image != undefined}
+          currentCoverImage={formik.values.cover_image}
           handleCoverImageIdChange={handleCoverImageIdChange}
-          handleImageChange={handleImageChange}
         />
       )}
       {activeFieldTab === 'Location' && <AddLocation />}

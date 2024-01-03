@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { accountDetailSchema } from '../account/accountType';
 import { audioDetailSchema } from '../audio/audioType';
 import { CommentDetailType, commentDetailSchema } from '../comment/commentType';
+import { coverImageDetailSchema } from '../coverImage/coverImageType';
 import { genresDetailSchema } from '../genres/genresType';
 import { profileDetailSchema } from '../profile/profileType';
 
@@ -74,21 +75,22 @@ export const postFormSchema = z.object({
   privacy_code: z.string(),
   expiration_type: z.string(),
   language: z.string().optional(),
-  cover_image_id: z.string().optional(),
-  cover_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
+  // cover_image_id: z.string().optional(),
+  // cover_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
+  cover_image: coverImageDetailSchema.optional(),
   remember_my_language: z.string(),
-  color_code: z.string(),
   genres: z.array(z.number()),
   is_ai_generated: z.string().or(z.instanceof(Blob)),
 });
 
-export const postDefaultSchema = postFormSchema.extend({
-  cover_image: z.custom<File>().optional(),
+export type PostFormType = z.infer<typeof postFormSchema>;
 
+export const postValidateFormSchema = postFormSchema.extend({
+  cover_image: coverImageDetailSchema,
+  wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)),
 });
 
-export type PostFormType = z.infer<typeof postFormSchema>;
-export type PostDefaultFormType = z.infer<typeof postDefaultSchema>;
+export type PostValidateFormType = z.infer<typeof postValidateFormSchema>;
 
 // export interface PostDefaultFormType {
 //   title: string;

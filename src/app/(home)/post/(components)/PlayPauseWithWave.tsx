@@ -41,7 +41,7 @@ const PlayPauseWithWave = ({
       className={classNames(
         `rounded pl-12 pr-14 relative flex flex-col justify-center`,
         wavePlayerVisible ? 'block' : 'hidden',
-        theme === 'dark' ? 'bg-slate-400' : 'transparent'
+        'transparent'
       )}
       ref={audio}
     >

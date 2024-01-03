@@ -3,9 +3,9 @@ import { baseApi } from '@/core/api/apiQuery';
 import { PaginatedResponseType } from '@/core/types/reponseTypes';
 import { toast } from 'react-toastify';
 import {
-  PostDefaultFormType,
   PostDetailType,
   PostEachDetailType,
+  PostFormType,
   SearchDetailType
 } from './postType';
 
@@ -234,7 +234,7 @@ const postApi = baseApi.injectEndpoints({
     //     "is_ai_generated": 0
     // }
     // Add Post
-    addPost: builder.mutation<any, PostDefaultFormType>({
+    addPost: builder.mutation<any, PostFormType>({
       query: ({ ...payload }) => {
 
         var formData = new FormData();
@@ -250,19 +250,15 @@ const postApi = baseApi.injectEndpoints({
         formData.append('is_ai_generated', payload?.is_ai_generated);
         formData.append('expiration_type', payload.expiration_type);
         formData.append('language', payload.language!);
-        // if (payload.cover_image) {
-        //   console.log(["here", payload.cover_image])
         if (payload.cover_image) {
-          formData.append('cover_image', payload.cover_image);
+          if (payload.cover_image.id == 0) {
+            formData.append('cover_image', payload.cover_image.file!);
+          } else {
+            formData.append('cover_image_id', payload.cover_image.id.toString());
+          }
         }
-        // }
-        // formData.append('cover_image_id', payload.cover_image_id);
         formData.append('remember_my_language', payload.remember_my_language);
-        formData.append('color_code', payload.color_code);
         payload.genres.map((genre) => formData.append('genres[]', genre as any));
-
-        console.log("formData", formData.get)
-
         return {
           url: `${apiPaths.postCreateUrl}`,
           method: 'POST',
