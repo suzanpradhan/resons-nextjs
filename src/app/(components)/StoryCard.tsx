@@ -21,7 +21,7 @@ const StoryCard = ({ ...props }: StoryType) => {
               '/socialnetwork/stream/story/audio/' +
               props.story?.audio.id
             : '', // Check if props.post.audio exists
-          duration: parseFloat(props.story?.audio?.file_duration || '0') / 1000, // Use optional chaining and provide a default value
+          duration: parseFloat(props.story?.audio?.file_duration || '0'), // Use optional chaining and provide a default value
           info: {
             title: props.story?.title ?? props.story?.title,
             description: props?.story?.owner_name ?? '',
