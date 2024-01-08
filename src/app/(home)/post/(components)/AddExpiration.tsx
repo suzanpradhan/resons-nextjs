@@ -3,11 +3,26 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const AddExpiration = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [currentValue, setValue] = useState(0);
+interface AddExpirationType {
+  handleExpirationChange: (value: Date | undefined) => void;
+  expiration: Date | undefined;
+}
 
+const AddExpiration = (props: AddExpirationType) => {
+  const minDate = new Date(Date.now() + 3600 * 1000 * 24);
+  const [currentValue, setValue] = useState(0);
   const expirationTypes = ['Never', 'Day', 'Week', 'Custom'];
+
+  const changeExpirationType = (value: number) => {
+    if (expirationTypes[value] == 'Never') {
+      props.handleExpirationChange(undefined);
+    } else if (expirationTypes[value] == 'Day') {
+      props.handleExpirationChange(new Date(Date.now() + 3600 * 1000 * 24));
+    } else if (expirationTypes[value] == 'Week') {
+      props.handleExpirationChange(new Date(Date.now() + 3600 * 1000 * 24 * 7));
+    }
+    setValue(value);
+  };
 
   return (
     <>
@@ -17,7 +32,7 @@ const AddExpiration = () => {
           <div key={index}>
             <label
               className={classNames(
-                `mb-1 w-full flex items-center p-4 font-normal text-base`,
+                `mb-1 w-full flex items-center justify-between p-4 font-normal text-base`,
                 Number(currentValue) === index ? 'bg-red-500' : 'bg-whiteShade',
                 Number(currentValue) === index ? 'text-white' : 'text-dark-500'
               )}
@@ -27,15 +42,17 @@ const AddExpiration = () => {
               <div className="ml-4">
                 {item == 'Custom' ? (
                   <DatePicker
-                    minDate={startDate}
+                    minDate={minDate}
                     popperPlacement="top"
                     className={classNames(
                       ' rounded-md text-dark-500 ',
                       currentValue == index ? 'bg-red-200' : 'bg-white'
                     )}
                     showIcon
-                    selected={startDate}
-                    onChange={(date: Date) => setStartDate(date)}
+                    selected={props.expiration}
+                    onChange={(date: Date) =>
+                      props.handleExpirationChange(date)
+                    }
                   />
                 ) : (
                   <></>
@@ -48,7 +65,7 @@ const AddExpiration = () => {
               type="radio"
               name="privacy_code"
               value={index}
-              onChange={() => setValue(index)}
+              onChange={() => changeExpirationType(index)}
             />
           </div>
         ))}

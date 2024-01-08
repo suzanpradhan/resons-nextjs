@@ -248,7 +248,9 @@ const postApi = baseApi.injectEndpoints({
         formData.append('privacy_code', payload.privacy_code);
         formData.append('audio_file', payload.audio_file!);
         formData.append('is_ai_generated', payload?.is_ai_generated);
-        formData.append('expiration_type', payload.expiration_type);
+        if (payload.expiration_datetime) {
+          formData.append('expiration_datetime', payload.expiration_datetime.toLocaleString());
+        }
         formData.append('language', payload.language!);
         if (payload.cover_image) {
           if (payload.cover_image.id == 0) {

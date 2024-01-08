@@ -1,3 +1,4 @@
+import CommonPopup from '@/app/(components)/(popups)/CommonPopup';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import coverImageApi from '@/modules/coverImage/coverImageApi';
@@ -68,6 +69,7 @@ const PostToFeed = () => {
   const [audioDuration, setAudioDuration] = useState<number>(0);
   const [audioFile, setAudioFile] = useState<File | undefined>(undefined);
   const [recordTime, setRecordTime] = useState(0);
+  const [isAddPostModalOpen, setAddPostModelOpen] = useState(false);
 
   const [wavePlayerVisible, toggleWavePlayerVisible] = useState(false);
   const audioRef = useRef<any>(null);
@@ -93,7 +95,7 @@ const PostToFeed = () => {
             file_duration: (data.file_duration as number) / 1000,
             wave_data: data.wave_data,
             is_ai_generated: data.is_ai_generated,
-            expiration_type: data.expiration_type,
+            expiration_datetime: data.expiration_datetime,
             language: data.language,
             cover_image: data.cover_image,
             remember_my_language: data.remember_my_language,
@@ -224,11 +226,17 @@ const PostToFeed = () => {
   }, [recording]);
 
   const handleCoverImageIdChange = (coverImageItem: CoverImageDetailType) => {
+    console.log(coverImageItem.id);
+
     formik.setFieldValue('cover_image', coverImageItem);
   };
 
   const handleAudienceChange = (value: number) => {
     formik.setFieldValue('privacy_code', value);
+  };
+
+  const handleExpirationChange = (value: Date | undefined) => {
+    formik.setFieldValue('expiration_datetime', value);
   };
 
   const handleLanguageChange = (value: string) => {
@@ -313,14 +321,14 @@ const PostToFeed = () => {
   }, [audioRef.current, audioDuration]);
 
   const formik = useFormik<PostFormType>({
-    enableReinitialize: true,
+    // enableReinitialize: true,
     initialValues: {
       title: '',
       audio_file: undefined,
       file_duration: 0,
       wave_data: undefined,
       privacy_code: '0',
-      expiration_type: 'Never',
+      expiration_datetime: undefined,
       language: '',
       cover_image: undefined,
       remember_my_language: '0',
@@ -482,9 +490,41 @@ const PostToFeed = () => {
             )}
           </div>
         </div>
+        <CommonPopup
+          isModalOpen={isAddPostModalOpen}
+          toggleModelOpen={() => setAddPostModelOpen(!isAddPostModalOpen)}
+          popupName="Add to your post"
+          className="w-full rounded-xl"
+        >
+          <div className="grid grid-cols-2 px-2 pb-2">
+            {FIELD_DETAILS.map((item, index) => (
+              <div key={index}>
+                <button
+                  type="button"
+                  className={classNames(
+                    'flex gap-2 w-full h-12 items-center px-2 rounded-lg overflow-hidden focus:bg-grey-100',
+                    activeFieldTab === item.fieldName
+                      ? `text-red-400`
+                      : `text-black`
+                  )}
+                  onClick={() => {
+                    toggleActiveFieldTab(item.fieldName);
+                    setAddPostModelOpen(false);
+                  }}
+                >
+                  {item.fieldIcon}
+                  <div>{item.fieldName}</div>
+                </button>
+              </div>
+            ))}
+          </div>
+        </CommonPopup>
         <div className="py-4 flex flex-col gap-4 bg-white">
-          <div className="flex gap-2 border-[1px] px-2 rounded-md border-grey-300 bg-grey-100 mx-4">
-            <span className="h-10 flex items-center grow text-sm text-dark-400">
+          <div className="flex gap-2 border-[1px] pr-2 rounded-md border-grey-300 bg-grey-100 mx-4">
+            <span
+              className="h-10 flex px-2 items-center grow text-sm text-dark-400"
+              onClick={() => setAddPostModelOpen(true)}
+            >
               Add to your post
             </span>
             {FIELD_DETAILS.map((item, index) => (
@@ -524,7 +564,12 @@ const PostToFeed = () => {
           privacy_value={formik.values.privacy_code}
         />
       )}
-      {activeFieldTab === 'Expiration' && <AddExpiration />}
+      {activeFieldTab === 'Expiration' && (
+        <AddExpiration
+          expiration={formik.values.expiration_datetime}
+          handleExpirationChange={handleExpirationChange}
+        />
+      )}
     </form>
   );
 };
