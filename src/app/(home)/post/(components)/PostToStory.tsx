@@ -2,7 +2,7 @@ import { useAppDispatch } from '@/core/redux/clientStore';
 import storyApi from '@/modules/story/storyApi';
 import {
   CreateStoryDetailType,
-  createStoryDetailSchema,
+  storyValidateFormSchema,
 } from '@/modules/story/storyType';
 import classNames from 'classnames';
 import { useFormik } from 'formik';
@@ -52,6 +52,17 @@ const PostToStory = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const validateForm = (values: CreateStoryDetailType) => {
+    try {
+      storyValidateFormSchema.parse(values);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        console.log(error);
+        return error.formErrors.fieldErrors;
+      }
+    }
+  };
+
   const onSubmit = async (data: CreateStoryDetailType) => {
     console.log(data);
     try {
@@ -59,7 +70,7 @@ const PostToStory = () => {
         dispatch(
           storyApi.endpoints.addStory.initiate({
             audio_file: data.audio_file!,
-            file_duration: data.file_duration,
+            file_duration: (data.file_duration as number) / 1000,
             wave_data: audioWaveData,
           })
         )
@@ -126,9 +137,10 @@ const PostToStory = () => {
       waveRef.current.on('decode', () => {
         const getAudioDuration = waveRef.current.getDuration();
         setRecordTime(getAudioDuration * 1000);
+        formik.setFieldValue('file_duration', getAudioDuration * 1000);
         setAudioDuration(recordTime!);
-        console.log(waveRef.current.exportPeaks()[0]);
         setAudioWaveData?.(waveRef.current.exportPeaks()[0]);
+        formik.setFieldValue('wave_data', waveRef.current.exportPeaks()[0]);
         // setShouldNext(true);
       });
       waveRef.current.destroy();
@@ -215,8 +227,10 @@ const PostToStory = () => {
         const getAudioDuration = audioRef.current.getDuration();
         // console.log('audio Duration' + getAudioDuration);
         setRecordTime(getAudioDuration * 1000);
+        formik.setFieldValue('file_duration', getAudioDuration * 1000);
         setAudioDuration(getAudioDuration * 1000);
         setAudioWaveData?.(audioRef.current.exportPeaks()[0]);
+        formik.setFieldValue('wave_data', audioRef.current.exportPeaks()[0]);
       });
       audioRef.current.on('finish', () => {
         audioRef.current.setTime(0);
@@ -229,24 +243,12 @@ const PostToStory = () => {
     });
   }, [audioRef.current, audioDuration]);
 
-  const validateForm = (values: CreateStoryDetailType) => {
-    try {
-      createStoryDetailSchema.parse(values);
-    } catch (error) {
-      if (error instanceof ZodError) {
-        console.log(error);
-
-        return error.formErrors.fieldErrors;
-      }
-    }
-  };
-
   const formik = useFormik<CreateStoryDetailType>({
     enableReinitialize: true,
     initialValues: {
       audio_file: undefined,
-      file_duration: '',
-      wave_data: '',
+      file_duration: 0,
+      wave_data: undefined,
     },
     validateOnChange: false,
     validate: validateForm,
