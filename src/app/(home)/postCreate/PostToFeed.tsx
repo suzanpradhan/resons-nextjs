@@ -76,12 +76,6 @@ function PostToFeed(props: PostCreateProps) {
       state.baseApi.queries[`getCoverImage`]?.data as CoverImageDetailType[]
   );
 
-  const getCoverImageList = getCoverImageListRaw?.map((item) => ({
-    id: item.id,
-    filePath: item.file_path,
-    colorCode: item.color_code,
-  }));
-
   const handleImageClick = (imageId: any) => {
     setSelectedImageId(imageId);
   };

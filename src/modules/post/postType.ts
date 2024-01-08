@@ -73,7 +73,7 @@ export const postFormSchema = z.object({
   file_duration: z.number().optional(),
   wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)).optional(),
   privacy_code: z.string(),
-  expiration_type: z.string(),
+  expiration_datetime: z.date().optional(),
   language: z.string().optional(),
   // cover_image_id: z.string().optional(),
   // cover_image: z.custom<File>((val) => (val instanceof File), "optional").optional(),
