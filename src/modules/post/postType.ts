@@ -6,7 +6,7 @@ import { audioDetailSchema } from '../audio/audioType';
 import { CommentDetailType, commentDetailSchema } from '../comment/commentType';
 import { coverImageDetailSchema } from '../coverImage/coverImageType';
 import { genresDetailSchema } from '../genres/genresType';
-import { profileDetailSchema } from '../profile/profileType';
+import { ProfileDetailType, profileDetailSchema } from '../profile/profileType';
 
 // export const postFormDetailsSchema = z.object({
 //   id: z.number().optional(),
@@ -60,7 +60,11 @@ export const searchDetailSchema = z.object({
 });
 
 export type PostDetailType = z.infer<typeof postDetailSchema>;
-export type SearchDetailType = z.infer<typeof searchDetailSchema>;
+
+export type SearchDetailType = {
+  posts: PaginatedResponseType<PostDetailType>;
+  people: PaginatedResponseType<ProfileDetailType>
+};
 
 export type PostEachDetailType = {
   post: PostDetailType;

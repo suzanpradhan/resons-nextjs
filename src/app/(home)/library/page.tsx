@@ -63,7 +63,7 @@ export default function PlaylistPage() {
         <MyPlaylistListing playlists={playlistData} />
       ) : ( */}
       <>
-        <div className="mt-12"></div>
+        <div className="mt-14"></div>
         {myPlaylistData?.data ? (
           <div className="mt-4 w-screen overflow-hidden">
             <div className="px-4 font-medium flex justify-between text-base mb-3">

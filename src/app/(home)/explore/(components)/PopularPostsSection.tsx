@@ -33,10 +33,11 @@ const PopularPostsSection = () => {
 
   return (
     <>
-      <div className="flex flex-col mb-4 py-4 bg-white overflow-x-hidden last-of-type:mb-28">
-        <h3 className="text-base font-medium text-gray-800 mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0 mx-4">
-          Popular Posts
-        </h3>
+      <div className="flex flex-col mt-6 overflow-x-hidden">
+        <div className="flex justify-between items-start text-gray-800 h-9 mx-4">
+          <div className="text-base font-medium">Popular Posts</div>
+          {/* <div className="text-sm h-full">see all</div> */}
+        </div>
         {postsListData?.data.map((post, index) => {
           return (
             <div

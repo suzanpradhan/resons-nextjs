@@ -15,18 +15,6 @@ const TopicGenres = ({ title }: { title: string }) => {
 
   const [slides, setSlides] = useState<Slide[]>([]);
 
-  const group = [
-    {
-      groupTitle: title,
-      // slides: [{ id: undefined, img_url: '', title: '' }] as {
-      //   id?: number;
-      //   img_url: string;
-      //   title: string;
-      // }[],
-      slides: [],
-    },
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(genresApi.endpoints.getGenres.initiate());
