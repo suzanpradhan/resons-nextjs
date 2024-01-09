@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Bell, UploadSimple } from 'phosphor-react';
 import { useState } from 'react';
-import SearchBar from './SearchBar';
 import useScrollDirection from './useScrollDirection';
 //import useScrollDirection from './useScrollDirection';
 
@@ -120,7 +119,7 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
-              <SearchBar />
+              {/* <SearchBar /> */}
 
               <Button
                 type="link"

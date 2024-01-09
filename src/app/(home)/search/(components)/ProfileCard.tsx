@@ -58,9 +58,12 @@ export default function ProfileCard(props: PeopleDataType) {
 
   return (
     <>
-      <div className="flex flex-col items-center basis-auto sm:basis-32 md:basis-40 w-[45%] sm:w-full">
-        <Link href={`/profile/${props.peopleData.id}`} className="">
-          <div className="w-full rounded-full overflow-hidden drop-shadow-xl">
+      <div className="flex justify-between mx-4 items-center mb-4">
+        <Link
+          href={`/profile/${props.peopleData.id}`}
+          className="flex items-center"
+        >
+          <div className="w-14 h-14">
             <img
               src={
                 props.peopleData?.profile_image &&
@@ -75,34 +78,34 @@ export default function ProfileCard(props: PeopleDataType) {
                 (e.target as any).onError = null;
                 (e.target as any).src = '/images/avatar.jpg';
               }}
-              className="w-full h-auto aspect-square object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
-          <h4 className="text-base w-full text-center text-gray-800 font-bold py-0 mt-3 capitalize truncate">
-            {props.peopleData.name}
-          </h4>
-          <p className="text-sm text-gray-500 font-normal text-center">
-            {followCount} Followers
-          </p>
+          <div className="flex flex-col items-start ml-2">
+            <div className="text-base text-center font-medium capitalize truncate">
+              {props.peopleData.name}
+            </div>
+            <div className="text-sm text-dark-500 font-normal text-center">
+              {followCount} Followers
+            </div>
+          </div>
         </Link>
         {follow ? (
           <>
             <button
               onClick={handleFollow}
-              className="mr-1 last-of-type:mr-0 border border-red-300 bg-transparent py-1 px-3 text-xs md:px-6 md:text-base font-medium text-red-700 cursor-pointer hover:shadow-sm rounded-sm hover:bg-red-50 hover:text-red-900"
+              className="text-sm bg-accentRed/10 text-accentRed h-8 px-3 rounded-md"
             >
               Unfollow
             </button>
           </>
         ) : (
-          <>
-            <button
-              onClick={handleFollow}
-              className="mr-1 last-of-type:mr-0 border border-gray-300 bg-transparent py-1 px-3 text-xs md:px-6 md:text-base font-medium text-gray-700 cursor-pointer hover:shadow-sm rounded-sm hover:bg-slate-50 hover:text-gray-900"
-            >
-              Follow
-            </button>
-          </>
+          <button
+            onClick={handleFollow}
+            className="text-sm bg-accentRed/10 text-accentRed h-8 px-3 rounded-md"
+          >
+            Follow
+          </button>
         )}
       </div>
     </>

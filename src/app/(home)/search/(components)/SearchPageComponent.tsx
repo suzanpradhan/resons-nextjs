@@ -1,4 +1,4 @@
-import PostCardV2 from '@/app/(components)/PostCardV2';
+import PostCardMin from '@/app/(components)/PostCardMin';
 import SearchBar from '@/app/(components)/SearchBar';
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
@@ -15,11 +15,6 @@ const SearchPageComponent = () => {
   const [searchType, setSearchType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [tabIndex, setTabIndex] = useState(1);
-  // const [searchText, setSearchText] = useState(
-  //   params.searchText && params.searchText.length > 0
-  //     ? params.searchText[0]
-  //     : ''
-  // );
 
   useEffect(() => {
     dispatch(
@@ -29,6 +24,10 @@ const SearchPageComponent = () => {
       })
     );
   }, [dispatch, searchText, searchType]);
+
+  const currentPage = useAppSelector(
+    (state: RootState) => state.homepage.currentPage
+  );
 
   const searchListData = useAppSelector(
     (state: RootState) =>
@@ -47,14 +46,15 @@ const SearchPageComponent = () => {
   };
 
   return (
-    <div className="sm:container md:container lg:container mx-auto min-h-screen">
-      <div className="px-3 sm:px-0 py-2 md:hidden">
+    <div className="w-full h-screen max-h-screen pb-16 overflow-scroll bg-white">
+      <div className="pt-14"></div>
+      <div className="mx-4 bg-white">
         <SearchBar />
       </div>
-      <div className="px-3 my-4 sm:px-0">
-        <h4 className="font-bold">
+      <div className="mx-4 my-4 bg-white">
+        <h4 className="font-normal">
           Search Results for:{' '}
-          <span className=" text-accentRed">{searchText}</span>
+          <span className="text-accentRed">{searchText}</span>
         </h4>
 
         <div className="flex gap-3 mt-4">
@@ -65,18 +65,18 @@ const SearchPageComponent = () => {
               searchType === ''
                 ? 'bg-accentRed text-white border border-red-500 hover:bg-red-400'
                 : 'bg-white text-gray-900 border border-gray-300 hover:bg-gray-200'
-            } py-1 px-4 rounded-2xl text-base font-bold shadow-lg cursor-pointer `}
+            } py-1 px-4 rounded-md text-base font-medium cursor-pointer`}
           >
             All
           </span>
           <span
             onClick={handelTypeChange}
-            tab-name="post"
+            tab-name="posts"
             className={`${
-              searchType === 'post'
+              searchType === 'posts'
                 ? 'bg-accentRed text-white border border-red-500 hover:bg-red-400'
                 : 'bg-white text-gray-900 border border-gray-300 hover:bg-gray-200'
-            } py-1 px-4 rounded-2xl text-base font-bold shadow-lg cursor-pointer `}
+            } py-1 px-4 rounded-md text-base font-medium cursor-pointer`}
           >
             Posts
           </span>
@@ -87,89 +87,105 @@ const SearchPageComponent = () => {
               searchType === 'people'
                 ? 'bg-accentRed text-white border border-red-500 hover:bg-red-400'
                 : 'bg-white text-gray-900 border border-gray-300 hover:bg-gray-200'
-            } py-1 px-4 rounded-2xl text-base font-bold shadow-lg cursor-pointer `}
+            } py-1 px-4 rounded-md text-base font-medium cursor-pointer`}
           >
             People
           </span>
         </div>
       </div>
-
-      <div className="flex px-3 sm:px-0">
-        <div className="flex flex-col basis-[100%] w-full">
+      <div className="flex">
+        <div className="flex flex-col w-full gap-4">
           {searchListData ? (
             <>
-              {/* Render the "posts" if it exists */}
-              {searchType === '' || searchType === 'post' ? (
-                searchListData.posts && searchListData.posts.length > 0 ? (
-                  searchListData.posts.map((post, index) => (
-                    <PostCardV2 key={index} postData={post} />
-                  ))
-                ) : (
-                  <>
-                    <div className="bg-white py-4 px-8 my-5">
-                      <div className="flex animate-pulse">
-                        <div className="flex-shrink-0">
-                          <span className="w-12 h-12 block bg-gray-300 rounded-full dark:bg-gray-300"></span>
-                        </div>
-                        <div className="ml-4 mt-2 w-full">
-                          <h3
-                            className="h-4 bg-gray-300 rounded-md dark:bg-gray-300"
-                            style={{ width: '40%' }}
-                          ></h3>
-                          <ul className="mt-5 space-y-3">
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                          </ul>
-                        </div>
+              {searchType === '' || searchType === 'posts' ? (
+                <div>
+                  <div className="flex justify-between items-start text-gray-800 h-9 mx-4">
+                    <div className="text-base font-medium">Popular Posts</div>
+                    {/* <div className="text-sm h-full">see all</div> */}
+                  </div>
+                  {searchListData.posts &&
+                  searchListData.posts.data.length > 0 ? (
+                    searchListData.posts.data.map((post, index) => (
+                      // <PostCardV4 key={`post_detail_${index}`} post={post} />
+                      <PostCardMin
+                        post={post}
+                        key={`post_detail_${index}`}
+                        currentPage={currentPage}
+                      />
+                    ))
+                  ) : (
+                    <>
+                      <div className="flex justify-center text-sm text-primaryGray-500">
+                        No results
                       </div>
-                    </div>
-                  </>
-                )
+                      {/* <div className="bg-white py-4 px-4 my-5">
+                        <div className="flex animate-pulse">
+                          <div className="flex-shrink-0">
+                            <span className="w-12 h-12 block bg-gray-300 rounded-full dark:bg-gray-300"></span>
+                          </div>
+                          <div className="ml-4 mt-2 w-full">
+                            <h3
+                              className="h-4 bg-gray-300 rounded-md dark:bg-gray-300"
+                              style={{ width: '40%' }}
+                            ></h3>
+                            <ul className="mt-5 space-y-3">
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div> */}
+                    </>
+                  )}
+                </div>
               ) : null}
               {searchType === '' || searchType === 'people' ? (
-                searchListData.people && searchListData.people.length > 0 ? (
-                  <>
-                    <div className="flex flex-col mb-4 px-4 py-4 bg-white">
-                      <h3 className="text-lg text-gray-800 font-bold mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0">
-                        Searched People
-                      </h3>
-                      <div className="flex gap-5 flex-wrap">
-                        {searchListData.people.map((peop, index) => (
-                          <ProfileCard key={index} peopleData={peop} />
-                        ))}
+                <div>
+                  <div className="flex justify-between items-start text-gray-800 h-9 mx-4">
+                    <div className="text-base font-medium">People</div>
+                    {/* <div className="text-sm h-full">see all</div> */}
+                  </div>
+                  {searchListData.people &&
+                  searchListData.people.data.length > 0 ? (
+                    <>
+                      {searchListData.people.data.map((peop, index) => (
+                        <ProfileCard key={index} peopleData={peop} />
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-center text-sm text-primaryGray-500">
+                        No results
                       </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="bg-white py-4 px-8 my-5">
-                      <div className="flex animate-pulse">
-                        <div className="flex-shrink-0">
-                          <span className="w-12 h-12 block bg-gray-300 rounded-full dark:bg-gray-300"></span>
+                      {/* <div className="bg-white py-4 px-4 my-5">
+                        <div className="flex animate-pulse">
+                          <div className="flex-shrink-0">
+                            <span className="w-12 h-12 block bg-gray-300 rounded-full dark:bg-gray-300"></span>
+                          </div>
+                          <div className="ml-4 mt-2 w-full">
+                            <h3
+                              className="h-4 bg-gray-300 rounded-md dark:bg-gray-300"
+                              style={{ width: '40%' }}
+                            ></h3>
+                            <ul className="mt-5 space-y-3">
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                              <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
+                            </ul>
+                          </div>
                         </div>
-                        <div className="ml-4 mt-2 w-full">
-                          <h3
-                            className="h-4 bg-gray-300 rounded-md dark:bg-gray-300"
-                            style={{ width: '40%' }}
-                          ></h3>
-                          <ul className="mt-5 space-y-3">
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                            <li className="w-full h-4 bg-gray-300 rounded-md dark:bg-gray-300"></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )
+                      </div> */}
+                    </>
+                  )}
+                </div>
               ) : null}
             </>
           ) : (
             <>
-              <div className="bg-white py-4 px-8 my-5">
+              <div className="bg-white py-4 px-4 my-5">
                 <div className="flex animate-pulse">
                   <div className="flex-shrink-0">
                     <span className="w-12 h-12 block bg-gray-300 rounded-full dark:bg-gray-300"></span>

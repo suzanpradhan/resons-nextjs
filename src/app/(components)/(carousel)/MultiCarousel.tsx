@@ -19,13 +19,13 @@ export default function MultiCarousel({
   routeName,
 }: MainCarouselProps) {
   return (
-    <div className="bg-white overflow-x-hidden py-4 mb-4 last-of-type:mb-28">
-      <Link
-        href={`/genres/all`}
-        className="block text-base font-medium text-gray-800 capitalize border-0 border-solid border-b border-gray-300 mb-4 pb-2 mx-4"
-      >
-        Top Categories
-      </Link>
+    <div className="bg-white overflow-x-hidden mt-4">
+      <div className="flex justify-between items-start text-gray-800 h-9 mx-4">
+        <div className="text-base font-medium">Top Categories</div>
+        <Link href={`/genres/all`} className="text-sm h-full">
+          see all
+        </Link>
+      </div>
 
       {/* <Swiper
         // install Swiper modules
