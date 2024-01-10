@@ -22,7 +22,7 @@ module.exports = withPWA({
       },
       {
         protocol: 'http',
-        hostname: 'localhost', //local
+        hostname: '192.168.1.7', //local
         port: '3000',
         pathname: '/**',
       },

@@ -120,9 +120,9 @@ const PersonalDetailsPage = () => {
   };
 
   return (
-    <div className="sm:container md:container lg:container mx-auto h-full">
-      <div className="overflow-y-scroll h-full px-4 bg-white pt-11">
-        <h2 className="text-xl font-semibold">Personal Information</h2>
+    <div className="w-full h-screen max-h-screen bg-white pb-16 overflow-scroll">
+      <div className="mx-4 pt-14">
+        <h2 className="text-base font-medium">Personal Information</h2>
         <div className="mx-auto w-fit">
           <div className="w-32 h-32 relative rounded-full">
             <Image
@@ -140,30 +140,29 @@ const PersonalDetailsPage = () => {
               className="rounded-full "
             />
           </div>
-          <div className="flex gap-2 w-fit mx-auto mt-3 text-[#a5a5a5]">
+          <div className="flex gap-2 w-fit mx-auto mt-2 text-[#a5a5a5]">
             <label
-              className="border-[1px] p-1 rounded mb-0"
+              className="border w-10 h-10 flex justify-center items-center rounded active:bg-whiteShade"
               htmlFor="profile_image"
             >
-              <PencilSimpleLine size={30} />
+              <PencilSimpleLine size={24} />
             </label>
             <input
               id="profile_image"
               type="file"
-              accept="image/*" // Specify the file types you want to allow (e.g., images)
+              accept="image/*"
               style={{ display: 'none' }}
               name="profile_image"
               onChange={handleImageChange}
               value={undefined}
-              // Hide the input element
             />
-            <div className="border-[1px] p-1 rounded">
-              <Trash size={30} />
+            <div className="border w-10 h-10 flex justify-center items-center rounded active:bg-whiteShade">
+              <Trash size={24} />
             </div>
           </div>
         </div>
         <form
-          className="flex flex-col gap-4 mb-16"
+          className="flex flex-col gap-4"
           onSubmit={(e) => {
             e.preventDefault();
             formik.handleSubmit(e);
@@ -180,21 +179,21 @@ const PersonalDetailsPage = () => {
             />
           ))}
 
-          <div className="flex flex-col py-2">
-            <label htmlFor="username" className="mb-1 font-normal">
+          <div className="flex flex-col">
+            <label htmlFor="username" className="mb-2 text-sm font-normal">
               Username
             </label>
             <div className="">
               <label
                 htmlFor="username"
-                className="flex rounded-md border-gray-200 border-[1px] items-center m-0 text-sm text-gray-400 font-normal pl-3  "
+                className="flex rounded-md border-gray-200 border-[1px] items-center m-0 text-gray-400 font-normal text-xs pl-3 gap-2"
               >
                 <span>https://resons.com/</span>
                 <input
                   id="nickname"
                   type="text"
                   {...formik.getFieldProps('nickname')}
-                  className="!border-0 bg-slate-100 inline w-full text-sm text-gray-700 border-gray-200 font-normal py-2 pr-3 rounded-sm outline-none "
+                  className="!border-0 bg-whiteShade inline w-full text-sm text-gray-700 border-gray-200 font-normal py-2 pr-3 rounded-sm outline-none "
                   autoComplete=""
                 />
               </label>
@@ -208,12 +207,12 @@ const PersonalDetailsPage = () => {
             {...formik.getFieldProps('date_of_birth')}
           />
           <div className="flex flex-col">
-            <label className="text-base font-normal " htmlFor="language">
+            <label className="text-sm font-normal" htmlFor="language">
               Language
             </label>
             <select
               // name="language"
-              className="block appearance-none w-full border-gray-200 bg-white border  text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none w-full border-gray-200 bg-white border text-dark-500 text-sm py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
               id="language"
               // onChange={handleChange}
               {...formik.getFieldProps('user_language')}
@@ -234,12 +233,12 @@ const PersonalDetailsPage = () => {
             )} */}
           </div>
           <div className="flex flex-col pb-2">
-            <label htmlFor="country" className="text-base font-normal">
+            <label htmlFor="country" className="text-sm font-normal">
               Country
             </label>
             <select
               id="country_id"
-              className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
+              className="block appearance-none w-full bg-white border border-gray-200 text-dark-500 py-3 text-sm px-3 rounded leading-tight focus:outline-none focus:shadow-outline"
               name="country_id"
               value={formik.values.country_id}
               // onChange={(e) => handleCountryChange(e)}
@@ -256,7 +255,7 @@ const PersonalDetailsPage = () => {
           </div>
           <button
             type="submit"
-            className="w-28 bg-red-400 py-2 text-white font-semibold rounded-lg self-end"
+            className="px-4 bg-accentRed h-10 text-white text-sm font-medium rounded-lg self-end"
           >
             Save
           </button>

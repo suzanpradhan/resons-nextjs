@@ -27,7 +27,7 @@ const TextField = ({
           htmlFor={props.id}
           className={classNames(
             'mb-2 text-dark-500',
-            props.isLabelBold ? 'text-sm ' : 'text-base font-normal'
+            props.isLabelBold ? 'text-sm ' : 'text-sm font-normal'
           )}
         >
           {props.label}

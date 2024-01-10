@@ -20,7 +20,6 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const session = useSession();
   const [hasMoreData, setHasMoreData] = useState(true);
-  // Add state for managing the active tab
   const [activeTab, setActiveTab] = useState('Posts');
   const scrollableDivRef = useRef<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,14 +55,13 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true); // Set isLoading to true before making the API request
+      setIsLoading(true);
       console.log('rendering');
 
       const response = await dispatch(
-        // postApi.endpoints.getPostList.initiate(currentPage)
         postApi.endpoints.getMyPostList.initiate(currentPage)
       );
-      setIsLoading(false); // Set isLoading to false after the request is completed
+      setIsLoading(false);
       if (response.data) {
         if (
           response.data!.pagination.currentPage >=
@@ -87,12 +85,6 @@ export default function ProfilePage() {
     };
   }, [handleScroll]);
 
-  // const postListData = useAppSelector(
-  //   (state: RootState) =>
-  //     state.baseApi.queries.getPostList
-  //       ?.data as PaginatedResponseType<PostDetailType>
-  // );
-
   const myPostList = useAppSelector((state: RootState) => {
     return state.baseApi.queries[`getMyPostList`]
       ?.data as PaginatedResponseType<PostDetailType>;
@@ -107,7 +99,6 @@ export default function ProfilePage() {
         {myProfile ? <ProfileHeader viewProfile={myProfile} /> : <></>}
 
         <div className="">
-          {/* Render the Tabs component and pass the activeTab and handleTabChange as props */}
           <Tabs activeTab={activeTab} setTab={setActiveTab} />
           <div className="mb-24 flex gap-5 flex-col">
             {activeTab === 'Posts' ? (
