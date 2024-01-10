@@ -250,7 +250,7 @@ const PostCardV4 = (props: PostCardProps) => {
     }
 
     const file = e.target.files[0];
-    let audioElement: any;
+    var audioElement: any;
 
     if (file) {
       setAudioFile(undefined);
@@ -430,14 +430,14 @@ const PostCardV4 = (props: PostCardProps) => {
               {session.data?.user ? (
                 <input
                   hidden
-                  id="audioUpload"
+                  id={'audioUpload_' + props.post.id}
                   type="file"
                   accept="audio/*"
                   onChange={(e) => handleFileChange(e)}
                 />
               ) : (
                 <button
-                  id="audioUpload"
+                  id={'audioUpload_' + props.post.id}
                   hidden
                   type="button"
                   onClick={() => {
@@ -482,7 +482,7 @@ const PostCardV4 = (props: PostCardProps) => {
                   </button>
 
                   <label
-                    htmlFor="audioUpload"
+                    htmlFor={'audioUpload_' + props.post.id}
                     className={classNames(
                       'rounded-full bg-white p-2 hover:shadow-md mb-0 hover:cursor-pointer shadow-gray-200',
                       hiddenButton === 'upload' ? 'hidden' : 'block'
