@@ -24,130 +24,106 @@ export default function AccountSettingPage() {
 
   return (
     <div className="sm:container md:container lg:container mx-auto h-full">
-      <h2 className="h-11 w-full px-4 bg-white shadow-sm flex gap-2 mb-0 fixed z-50">
-        <span
-          onClick={() => router.back()}
-          className="text-3xl font-light flex items-center"
-        >
+      <div
+        className="h-11 w-full bg-white px-4 shadow-sm flex gap-2 fixed z-50 cursor-pointer"
+        onClick={() => router.back()}
+      >
+        <div className="text-3xl font-light flex items-center">
           <CaretLeft size={18} weight="bold" />
-        </span>
-        <span className="text-sm font-medium flex items-center">
+        </div>
+        <div className="text-sm font-normal flex items-center">
           Account Settings
-        </span>
-      </h2>
+        </div>
+      </div>
 
-      <div className="overflow-y-scroll h-screen px-4 bg-white pt-11">
-        <h3 className="text-sm font-semibold text-gray-700 my-4">
-          Account settings
-        </h3>
-        <div className="flex flex-col gap-5">
-          <ul className="bg-slate-100 overflow-hidden py-2">
-            <li className="relative hover:bg-slate-200">
+      <div className="overflow-y-scroll h-screen px-4 bg-white pt-14">
+        <div className="flex flex-col gap-4">
+          <ul className="bg-whiteShade rounded-lg overflow-hidden">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/accountSettings/personalDetails"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black px-3 pb-2 pt-3 flex justify-between"
               >
                 <p className="flex gap-2 items-center">
                   <UserCircle size={24} />
                   Personal Details
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
-            <li className="relative hover:bg-slate-200">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/accountSettings/security"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black px-3 py-2 flex justify-between"
               >
                 <p className="flex gap-2 items-center">
                   <Lock size={24} />
                   Password and security
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
-            <li className="relative hover:bg-slate-200">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/accountSettings/notification"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black flex justify-between px-3 py-2"
               >
                 <p className="flex gap-2 items-center">
                   <Bell size={24} />
                   Notification
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
-            <li className="relative hover:bg-slate-200">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black flex justify-between px-3 py-2"
               >
                 <p className="flex gap-2 items-center">
                   <Shield size={24} />
                   Protect account
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
-            <li className="relative hover:bg-slate-200">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/accountSettings/deactivation"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black flex justify-between px-3 pt-2 pb-3"
               >
                 <p className="flex gap-2 items-center">
-                  <Trash size={24} />
+                  <Trash size={24} className="text-black" />
                   Deactivation or deletion
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
           </ul>
-          <ul className="bg-slate-100 overflow-hidden py-2">
-            <li className="relative hover:bg-slate-200">
+          <ul className="bg-whiteShade rounded-lg overflow-hidden">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black flex justify-between px-4 pt-3 pb-2"
               >
                 <p className="flex gap-2 items-center">
                   <FileText size={24} />
                   Terms and conditions
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
-            <li className="relative hover:bg-slate-200">
+            <li className="relative hover:bg-gray-200">
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-700 block px-2 py-2"
+                className="text-sm font-normal text-black flex justify-between px-4 pt-2 pb-3"
               >
                 <p className="flex gap-2 items-center">
                   <ShieldCheck size={24} />
                   Privacy policy
                 </p>
+                <CaretRight size={21} className="text-dark-400" />
               </Link>
-              <CaretRight
-                size={21}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-700"
-              />
             </li>
           </ul>
 
@@ -155,7 +131,7 @@ export default function AccountSettingPage() {
             <button
               onClick={handleLogout}
               type="button"
-              className="bg-[#d8566c] text-white w-full h-11 flex items-center px-3 gap-4 text-sm hover:shadow-md shadow-[#f35973] hover:bg-[#f35973]"
+              className="text-white w-full py-3 rounded-md flex items-center px-4 gap-2 text-sm hover:bg-accent bg-accentRed"
             >
               <SignOut size={24} />
               Log out

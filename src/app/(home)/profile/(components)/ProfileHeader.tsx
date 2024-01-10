@@ -27,7 +27,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   ];
 
   return (
-    <div className="bg-white mt-10 pl-4 pr-6 py-4 flex gap-4 items-center">
+    <div className="bg-white mt-10 pl-4 pr-6 py-4 flex gap-3 items-center">
       <div className="relative w-16 md:w-36 h-16 md:h-36 rounded-full overflow-hidden border-red-400 shrink-0">
         <Image
           src={
@@ -71,7 +71,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
               <h3 className="font-semibold text-xs md:text-base">
                 {detail.detailNumber ?? 0}
               </h3>
-              <p className="text-slate-600 text-xs md:text-base font-medium">
+              <p className="text-slate-600 text-xs md:text-base font-normal">
                 {detail.detailName}
               </p>
             </Link>
@@ -79,9 +79,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
         </div>
 
         {props.viewProfile.bio ? (
-          <div className="text-xs mt-1">
-            This is bio section of user profile.
-          </div>
+          <div className="text-xs mt-1">{props.viewProfile.bio}</div>
         ) : (
           <></>
         )}
