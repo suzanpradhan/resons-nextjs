@@ -25,14 +25,16 @@ const AddExpiration = (props: AddExpirationType) => {
   };
 
   return (
-    <>
-      <div className="px-4 py-2 border-b-2 bg-white">Post Audience</div>
+    <div className="h-full flex flex-col">
+      <div className="px-4 max-[356px]:px-3 text-base max-[356px]:text-sm py-2 border-b-2 bg-white">
+        Post Expiration
+      </div>
       <div className="bg-white flex-1 overflow-y-scroll pb-14">
         {expirationTypes.map((item, index) => (
           <div key={index}>
             <label
               className={classNames(
-                `mb-1 w-full flex items-center justify-between p-4 font-normal text-base`,
+                `mb-1 w-full flex items-center justify-between px-4 py-3 max-[356px]:px-3 font-normal text-base max-[356px]:text-sm`,
                 Number(currentValue) === index ? 'bg-red-500' : 'bg-whiteShade',
                 Number(currentValue) === index ? 'text-white' : 'text-dark-500'
               )}
@@ -70,7 +72,7 @@ const AddExpiration = (props: AddExpirationType) => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

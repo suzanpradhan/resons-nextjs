@@ -68,28 +68,28 @@ const AddImage = ({
           className="hidden"
         />
       </div>
-      {/* <div className="flex-1 overflow-y-scroll"> */}
-      <div className="grid grid-cols-3 gap-0 w-full flex-1 overflow-y-scroll">
-        {localCoverImage ? (
-          <CoverImageItem
-            key={'local_image'}
-            currentItem={currentCoverImage}
-            handleCoverImageIdChange={handleCoverImageIdChange}
-            item={localCoverImage}
-          />
-        ) : (
-          <></>
-        )}
-        {coverImages?.map((item: CoverImageDetailType) => (
-          <CoverImageItem
-            key={item.id}
-            currentItem={currentCoverImage}
-            handleCoverImageIdChange={handleCoverImageIdChange}
-            item={item}
-          />
-        ))}
+      <div className="flex-1 overflow-y-scroll">
+        <div className="grid grid-cols-3 gap-0 w-full flex-1 overflow-y-scroll">
+          {localCoverImage ? (
+            <CoverImageItem
+              key={'local_image'}
+              currentItem={currentCoverImage}
+              handleCoverImageIdChange={handleCoverImageIdChange}
+              item={localCoverImage}
+            />
+          ) : (
+            <></>
+          )}
+          {coverImages?.map((item: CoverImageDetailType) => (
+            <CoverImageItem
+              key={item.id}
+              currentItem={currentCoverImage}
+              handleCoverImageIdChange={handleCoverImageIdChange}
+              item={item}
+            />
+          ))}
+        </div>
       </div>
-      {/* </div> */}
     </div>
   );
 };

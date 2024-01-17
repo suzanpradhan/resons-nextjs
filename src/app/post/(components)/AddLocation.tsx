@@ -51,7 +51,7 @@ const PlacesAutocomplete = ({ setMarkerPosition }: PlacesAutocompleteType) => {
   return (
     <input
       ref={inputRef}
-      className="py-3 grow px-4 h-11 border rounded-md focus:outline-none placeholder:text-sm text-sm text-gray-700 font-normal border-gray-200"
+      className="py-3 grow px-4 max-[356px]:px-3 h-11 max-[356px]:h-10 border rounded-md focus:outline-none placeholder:text-sm text-sm text-gray-700 font-normal border-gray-200"
     />
   );
 };
@@ -82,14 +82,14 @@ const AddLocation = () => {
   return (
     <APIProvider apiKey={API_KEY!}>
       <div className="flex flex-col flex-1">
-        <div className="flex py-2 px-4 bg-white">
+        <div className="flex py-2 px-4 max-[356px]:px-3 bg-white">
           <PlacesAutocomplete setMarkerPosition={setMarkerPosition} />
           <button
             type="button"
-            className="px-2 bg-dark-500 ml-2 rounded-md "
+            className="w-11 max-[356px]:wx-10 flex justify-center items-center bg-dark-500 ml-2 rounded-md "
             onClick={handleClick}
           >
-            <Crosshair size={26} className="text-white" />
+            <Crosshair className="text-white text-2xl max-[356px]:text-xl" />
           </button>
         </div>
         <Map

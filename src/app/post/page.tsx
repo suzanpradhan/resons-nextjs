@@ -9,7 +9,7 @@ const PostCreatePage = () => {
   const [activeTab, setActiveTab] = useState<'Post' | 'Story'>('Post');
   return (
     <>
-      <div className="px-4 max-[356px]:px-3 sticky top-0 h-12 shadow-sm flex items-center gap-2 my-0">
+      <div className="px-4 max-[356px]:px-3 sticky top-0 h-12 max-[356px]:h-10 shadow-sm flex items-center gap-2 my-0">
         <div className="text-base max-[356px]:text-sm font-normal flex-1">
           Create a post
         </div>

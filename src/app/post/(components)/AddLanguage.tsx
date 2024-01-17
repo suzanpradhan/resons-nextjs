@@ -19,16 +19,16 @@ const AddLanguage = ({
   );
 
   return (
-    <>
-      <div className="flex items-center px-4 gap-2 bg-white">
+    <div className="h-full flex flex-col">
+      <div className="flex items-center px-4 max-[356px]:px-3 gap-2 bg-white">
         <label htmlFor="searchInput">
-          <MagnifyingGlass size={24} />
+          <MagnifyingGlass className="text-2xl max-[356px]:text-xl" />
         </label>
         <input
           id="searchInput"
           type="search"
           placeholder="Search Language"
-          className="w-full bg-transparent py-3 focus:outline-none"
+          className="w-full bg-transparent py-3 text-base max-[356px]:text-sm focus:outline-none"
           onChange={(e) => setSearchValue(e.target.value.toLowerCase())}
           value={searchValue}
         />
@@ -40,7 +40,7 @@ const AddLanguage = ({
             <div key={index}>
               <label
                 className={classNames(
-                  `mb-1 w-full flex text-base font-normal items-center px-4 py-3`,
+                  `mb-1 w-full flex text-base max-[356px]:text-sm font-normal items-center px-4 max-[356px]:px-3 py-3`,
                   languagevalue === item.code ? 'bg-red-500' : 'bg-whiteShade'
                 )}
                 htmlFor={'language' + item.code}
@@ -64,7 +64,7 @@ const AddLanguage = ({
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 };
 

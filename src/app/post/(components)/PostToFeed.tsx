@@ -549,7 +549,7 @@ const PostToFeed = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 overflow-y-scroll">
+      <div className="flex-1 overflow-hidden">
         {activeFieldTab === 'Image' && (
           <AddImage
             hasError={formik.errors.cover_image != undefined}
