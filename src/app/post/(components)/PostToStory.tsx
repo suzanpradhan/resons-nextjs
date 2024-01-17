@@ -262,15 +262,8 @@ const PostToStory = () => {
         console.log(e.target);
         formik.handleSubmit(e);
       }}
-      className="overflow-y-scroll h-full pb-20 flex flex-col items-center max-h-[95%] bg-white"
+      className="overflow-y-scroll h-full pb-20 flex flex-col items-center bg-white"
     >
-      <div className="px-4 h-12 bg-white shadow-sm flex items-center gap-2 my-0 w-full">
-        <div className="text-base font-normal flex-1">Create a story</div>
-        <button type="submit" className="text-red-500 text-base">
-          Post
-        </button>
-      </div>
-
       <div className="relative bg-[#f5f6fa] grow w-full flex flex-col justify-center">
         <div ref={recordedAudio}></div>
         <div className="flex absolute bottom-2 left-0 right-0 w-full justify-center">
