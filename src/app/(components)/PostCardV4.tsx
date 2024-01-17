@@ -36,7 +36,7 @@ import { ConnectedProps, connect } from 'react-redux';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record';
 import { ZodError } from 'zod';
-import PlayPauseWithWave from '../(home)/post/(components)/PlayPauseWithWave';
+import PlayPauseWithWave from '../post/(components)/PlayPauseWithWave';
 import PostCommentV4 from './PostCommentV4';
 interface PostCardProps extends PropsFromRedux {
   post: PostDetailType;

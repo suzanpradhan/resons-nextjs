@@ -8,9 +8,13 @@ interface AddAudienceType {
 }
 
 const PRIVACY_CODE_ICONS = [
-  <GlobeHemisphereWest size={24} weight="fill" key={0} />,
-  <LockSimple size={24} weight="fill" key={1} />,
-  <Detective size={24} weight="fill" key={1} />,
+  <GlobeHemisphereWest
+    className="text-2xl max-[356px]:text-xl"
+    weight="fill"
+    key={0}
+  />,
+  <LockSimple className="text-2xl max-[356px]:text-xl" weight="fill" key={1} />,
+  <Detective className="text-2xl max-[356px]:text-xl" weight="fill" key={1} />,
 ];
 
 const PRIVACY_CODE_ELEMENTS = privacy_code.map((item, index) => {
@@ -27,14 +31,16 @@ const AddAudience = ({
   privacy_value,
 }: AddAudienceType) => {
   return (
-    <>
-      <div className="px-4 py-2 border-b-2 bg-white">Post Audience</div>
+    <div className="h-full flex flex-col">
+      <div className="px-4 max-[356px]:px-3 py-2 border-b-2 bg-white text-base max-[356px]:text-sm">
+        Post Audience
+      </div>
       <div className="bg-white flex-1 overflow-y-scroll pb-14">
         {PRIVACY_CODE_ELEMENTS.map((item, index) => (
           <div key={index}>
             <label
               className={classNames(
-                `mb-1 w-full flex items-center p-4 font-normal text-base`,
+                `mb-1 w-full flex items-center px-4 max-[356px]:px-3 py-3 font-normal text-base max-[356px]:text-sm`,
                 Number(privacy_value) === item.id
                   ? 'bg-red-500'
                   : 'bg-whiteShade',
@@ -58,7 +64,7 @@ const AddAudience = ({
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

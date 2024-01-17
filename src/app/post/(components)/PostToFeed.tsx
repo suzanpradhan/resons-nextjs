@@ -36,23 +36,27 @@ import PlayPauseWithWave from './PlayPauseWithWave';
 const FIELD_DETAILS = [
   {
     fieldName: 'Image',
-    fieldIcon: <ImageSquare size={24} weight="fill" />,
+    fieldIcon: (
+      <ImageSquare weight="fill" className="text-2xl max-[356px]:text-xl" />
+    ),
   },
   {
     fieldName: 'Location',
-    fieldIcon: <MapPin size={24} weight="fill" />,
+    fieldIcon: (
+      <MapPin weight="fill" className="text-2xl max-[356px]:text-xl" />
+    ),
   },
   {
     fieldName: 'Language',
-    fieldIcon: <Translate size={24} />,
+    fieldIcon: <Translate className="text-2xl max-[356px]:text-xl" />,
   },
   {
     fieldName: 'Audience',
-    fieldIcon: <Lock size={24} weight="fill" />,
+    fieldIcon: <Lock className="text-2xl max-[356px]:text-xl" weight="fill" />,
   },
   {
     fieldName: 'Expiration',
-    fieldIcon: <Timer size={24} weight="fill" />,
+    fieldIcon: <Timer className="text-2xl max-[356px]:text-xl" weight="fill" />,
   },
 ];
 
@@ -351,225 +355,228 @@ const PostToFeed = () => {
         e.preventDefault();
         formik.handleSubmit(e);
       }}
-      className="sm:container md:container lg:container mx-auto h-full pb-12 flex flex-col overflow-y-scroll"
+      className="h-full flex flex-col overflow-hidden"
     >
-      <div className="px-4 h-12 shadow-sm flex items-center gap-2 my-0">
-        <div className="text-base font-normal flex-1">Create a post</div>
-        <button type="submit" className="text-red-500 text-base">
-          Post
-        </button>
-      </div>
-
-      <div className="border-b border-grey-300">
-        <div
-          className={classNames('px-4 py-4 flex-col relative')}
-          style={{
-            background: formik.values.cover_image
-              ? `linear-gradient(rgb(0,0,0,0.2), rgb(0,0,0,0.4), rgb(0,0,0,0.2))`
-              : '#1E1F21',
-          }}
-        >
-          {formik.values.cover_image && (
-            <Image
-              className="-z-10"
-              src={formik.values.cover_image.file_path}
-              alt="cover image"
-              fill
-              objectFit="cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          )}
-          <div className="flex gap-2 items-center mb-4">
-            <div className="relative w-14 h-14">
-              <Image
-                className="rounded-full"
-                src={
-                  myProfile?.profile_image && myProfile.profile_image != null
-                    ? myProfile.profile_image
-                    : '/images/avatar.jpg'
-                }
-                alt="post_owner_avatar"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                objectFit="cover"
-              />
-            </div>
-            <div className="text-white">
-              <h3>{myProfile?.name}</h3>
-              <p className="text-sm">{myProfile?.country?.name ?? ''}</p>
-            </div>
-          </div>
-          <textarea
-            id="title"
-            placeholder="Enter title here"
-            className={classNames(
-              'w-full rounded-md h-20 p-2 border bg-transparent focus:outline-0 text-white',
-              formik.errors.title
-                ? 'border-red-400'
-                : formik.values.cover_image
-                ? 'placeholder:text-white border-white'
-                : 'border-primaryGray-500 placeholder:text-primaryGray-500',
-              formik.values.cover_image
-                ? 'placeholder:text-white'
-                : 'placeholder:text-primaryGray-500'
-            )}
-            {...formik.getFieldProps('title')}
-          />
+      <div className="basis-1/3">
+        <div className="border-b border-grey-300 h-full">
           <div
             className={classNames(
-              'text-white flex gap-2 px-3 py-2 items-center rounded-md backdrop-blur-sm',
-              formik.errors.wave_data != undefined
-                ? 'bg-accent/10 border border-red-400'
-                : 'bg-white/10',
-              wavePlayerVisible && 'h-24'
+              'px-4 max-[356px]:px-3 py-4 max-[356px]:py-3 flex-col relative'
             )}
+            style={{
+              background: formik.values.cover_image
+                ? `linear-gradient(rgb(0,0,0,0.2), rgb(0,0,0,0.4), rgb(0,0,0,0.2))`
+                : '#1E1F21',
+            }}
           >
-            <span className="grow text-white">
-              {!wavePlayerVisible && <>Record or Upload Audio</>}
-              <PlayPauseWithWave
-                audio={recordedAudio}
-                audioTime={recordTime}
-                isPlaying={isPlaying}
-                setIsPlaying={setIsPlaying}
-                audioRef={audioRef}
-                wavePlayerVisible={wavePlayerVisible}
-                theme={'dark'}
+            {formik.values.cover_image && (
+              <Image
+                className="-z-10"
+                src={formik.values.cover_image.file_path}
+                alt="cover image"
+                fill
+                objectFit="cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-            </span>
-
-            <input
-              hidden
-              id="audioUpload"
-              type="file"
-              accept="audio/*"
-              onClick={(e) => {
-                (e.target as HTMLInputElement).value = '';
-              }}
-              onChange={(e) => handleFileChange(e)}
-            />
-
-            {wavePlayerVisible && !recording ? (
-              <>
-                <div className="rounded-full bg-white p-2 hover:shadow-md">
-                  <X
-                    size={18}
-                    role="button"
-                    type="button"
-                    onClick={handleCancelAudio}
-                    className="text-accent"
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className={classNames(
-                    'rounded-full bg-white/20 p-2 hover:shadow-md',
-                    hiddenButton === 'record' ? 'hidden' : 'block'
-                  )}
-                  onClick={recording ? stopTheRecording : startNewRecording}
-                >
-                  {recording ? (
-                    <StopCircle size={24} />
-                  ) : (
-                    <Microphone size={24} />
-                  )}
-                </button>
-
-                <label
-                  htmlFor="audioUpload"
-                  className={classNames(
-                    'rounded-full bg-white/20 p-2 hover:shadow-md mb-0 hover:cursor-pointer',
-                    hiddenButton === 'upload' ? 'hidden' : 'block'
-                  )}
-                >
-                  {!wavePlayerVisible ? <UploadSimple size={24} /> : <></>}
-                </label>
-              </>
             )}
+            <div className="flex gap-2 items-center mb-4 max-[356px]:mb-3">
+              <div className="relative w-10 h-10">
+                <Image
+                  className="rounded-full"
+                  src={
+                    myProfile?.profile_image && myProfile.profile_image != null
+                      ? myProfile.profile_image
+                      : '/images/avatar.jpg'
+                  }
+                  alt="post_owner_avatar"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  objectFit="cover"
+                />
+              </div>
+              <div className="text-white">
+                <div>{myProfile?.name}</div>
+                <p className="text-sm">{myProfile?.country?.name ?? ''}</p>
+              </div>
+            </div>
+            <textarea
+              id="title"
+              placeholder="Enter title here"
+              className={classNames(
+                'w-full rounded-md h-20 text-base max-[356px]:text-sm p-2 border bg-transparent focus:outline-0 text-white',
+                formik.errors.title
+                  ? 'border-red-400'
+                  : formik.values.cover_image
+                  ? 'placeholder:text-white border-white'
+                  : 'border-primaryGray-500 placeholder:text-primaryGray-500',
+                formik.values.cover_image
+                  ? 'placeholder:text-white'
+                  : 'placeholder:text-primaryGray-500'
+              )}
+              {...formik.getFieldProps('title')}
+            />
+            <div
+              className={classNames(
+                'text-white flex gap-2 px-3 py-2 items-center rounded-md backdrop-blur-sm',
+                formik.errors.wave_data != undefined
+                  ? 'bg-accent/10 border border-red-400'
+                  : 'bg-white/10',
+                wavePlayerVisible && 'h-24'
+              )}
+            >
+              <span className="grow text-white text-base max-[356px]:text-sm">
+                {!wavePlayerVisible && <>Record or Upload Audio</>}
+                <PlayPauseWithWave
+                  audio={recordedAudio}
+                  audioTime={recordTime}
+                  isPlaying={isPlaying}
+                  setIsPlaying={setIsPlaying}
+                  audioRef={audioRef}
+                  wavePlayerVisible={wavePlayerVisible}
+                  theme={'dark'}
+                />
+              </span>
+
+              <input
+                hidden
+                id="audioUpload"
+                type="file"
+                accept="audio/*"
+                onClick={(e) => {
+                  (e.target as HTMLInputElement).value = '';
+                }}
+                onChange={(e) => handleFileChange(e)}
+              />
+
+              {wavePlayerVisible && !recording ? (
+                <>
+                  <div className="rounded-full bg-white p-2 hover:shadow-md">
+                    <X
+                      size={18}
+                      role="button"
+                      type="button"
+                      onClick={handleCancelAudio}
+                      className="text-accent"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className={classNames(
+                      'rounded-full bg-white/20 p-2 hover:shadow-md',
+                      hiddenButton === 'record' ? 'hidden' : 'block'
+                    )}
+                    onClick={recording ? stopTheRecording : startNewRecording}
+                  >
+                    {recording ? (
+                      <StopCircle className="text-2xl max-[356px]:text-lg" />
+                    ) : (
+                      <Microphone className="text-2xl max-[356px]:text-lg" />
+                    )}
+                  </button>
+
+                  <label
+                    htmlFor="audioUpload"
+                    className={classNames(
+                      'rounded-full bg-white/20 p-2 hover:shadow-md mb-0 hover:cursor-pointer',
+                      hiddenButton === 'upload' ? 'hidden' : 'block'
+                    )}
+                  >
+                    {!wavePlayerVisible ? (
+                      <UploadSimple className="text-2xl max-[356px]:text-lg" />
+                    ) : (
+                      <></>
+                    )}
+                  </label>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-        <CommonPopup
-          isModalOpen={isAddPostModalOpen}
-          toggleModelOpen={() => setAddPostModelOpen(!isAddPostModalOpen)}
-          popupName="Add to your post"
-          className="w-full rounded-xl"
-        >
-          <div className="grid grid-cols-2 px-2 pb-2">
-            {FIELD_DETAILS.map((item, index) => (
-              <div key={index}>
+          <CommonPopup
+            isModalOpen={isAddPostModalOpen}
+            toggleModelOpen={() => setAddPostModelOpen(!isAddPostModalOpen)}
+            popupName="Add to your post"
+            className="w-full rounded-xl"
+          >
+            <div className="grid grid-cols-2 px-2 pb-2">
+              {FIELD_DETAILS.map((item, index) => (
+                <div key={index}>
+                  <button
+                    type="button"
+                    className={classNames(
+                      'flex gap-2 w-full h-12 items-center px-2 text-base max-[356px]:text-sm rounded-lg overflow-hidden focus:bg-grey-100',
+                      activeFieldTab === item.fieldName
+                        ? `text-red-400`
+                        : `text-black`
+                    )}
+                    onClick={() => {
+                      toggleActiveFieldTab(item.fieldName);
+                      setAddPostModelOpen(false);
+                    }}
+                  >
+                    {item.fieldIcon}
+                    <div>{item.fieldName}</div>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </CommonPopup>
+          <div className="py-4 max-[356px]:py-3 flex flex-col gap-4 bg-white">
+            <div className="flex gap-2 border-[1px] pr-2 rounded-md border-grey-300 bg-grey-100 mx-4 max-[356px]:mx-3">
+              <span
+                className="h-10 flex px-2 items-center grow text-sm text-dark-400"
+                onClick={() => setAddPostModelOpen(true)}
+              >
+                Add to your post
+              </span>
+              {FIELD_DETAILS.map((item, index) => (
                 <button
+                  key={index}
                   type="button"
-                  className={classNames(
-                    'flex gap-2 w-full h-12 items-center px-2 rounded-lg overflow-hidden focus:bg-grey-100',
+                  className={
                     activeFieldTab === item.fieldName
                       ? `text-red-400`
                       : `text-black`
-                  )}
-                  onClick={() => {
-                    toggleActiveFieldTab(item.fieldName);
-                    setAddPostModelOpen(false);
-                  }}
+                  }
+                  onClick={() => toggleActiveFieldTab(item.fieldName)}
                 >
                   {item.fieldIcon}
-                  <div>{item.fieldName}</div>
                 </button>
-              </div>
-            ))}
-          </div>
-        </CommonPopup>
-        <div className="py-4 flex flex-col gap-4 bg-white">
-          <div className="flex gap-2 border-[1px] pr-2 rounded-md border-grey-300 bg-grey-100 mx-4">
-            <span
-              className="h-10 flex px-2 items-center grow text-sm text-dark-400"
-              onClick={() => setAddPostModelOpen(true)}
-            >
-              Add to your post
-            </span>
-            {FIELD_DETAILS.map((item, index) => (
-              <button
-                key={index}
-                type="button"
-                className={
-                  activeFieldTab === item.fieldName
-                    ? `text-red-400`
-                    : `text-black`
-                }
-                onClick={() => toggleActiveFieldTab(item.fieldName)}
-              >
-                {item.fieldIcon}
-              </button>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      {activeFieldTab === 'Image' && (
-        <AddImage
-          hasError={formik.errors.cover_image != undefined}
-          currentCoverImage={formik.values.cover_image}
-          handleCoverImageIdChange={handleCoverImageIdChange}
-        />
-      )}
-      {activeFieldTab === 'Location' && <AddLocation />}
-      {activeFieldTab === 'Language' && (
-        <AddLanguage
-          handleLanguageChange={handleLanguageChange}
-          languagevalue={formik.values.language}
-        />
-      )}
-      {activeFieldTab === 'Audience' && (
-        <AddAudience
-          handleAudienceChange={handleAudienceChange}
-          privacy_value={formik.values.privacy_code}
-        />
-      )}
-      {activeFieldTab === 'Expiration' && (
-        <AddExpiration
-          expiration={formik.values.expiration_datetime}
-          handleExpirationChange={handleExpirationChange}
-        />
-      )}
+      <div className="flex-1 overflow-hidden">
+        {activeFieldTab === 'Image' && (
+          <AddImage
+            hasError={formik.errors.cover_image != undefined}
+            currentCoverImage={formik.values.cover_image}
+            handleCoverImageIdChange={handleCoverImageIdChange}
+          />
+        )}
+        {activeFieldTab === 'Location' && <AddLocation />}
+        {activeFieldTab === 'Language' && (
+          <AddLanguage
+            handleLanguageChange={handleLanguageChange}
+            languagevalue={formik.values.language}
+          />
+        )}
+        {activeFieldTab === 'Audience' && (
+          <AddAudience
+            handleAudienceChange={handleAudienceChange}
+            privacy_value={formik.values.privacy_code}
+          />
+        )}
+        {activeFieldTab === 'Expiration' && (
+          <AddExpiration
+            expiration={formik.values.expiration_datetime}
+            handleExpirationChange={handleExpirationChange}
+          />
+        )}
+      </div>
     </form>
   );
 };

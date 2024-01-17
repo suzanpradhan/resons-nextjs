@@ -39,7 +39,7 @@ const AddImage = ({
   };
 
   return (
-    <>
+    <div className="h-full flex flex-col">
       <div
         className={classNames(
           'flex items-center px-4 py-2',
@@ -47,13 +47,13 @@ const AddImage = ({
         )}
       >
         <label
-          className="text-dark-400 h-full text-base m-0 font-normal flex items-center w-full cursor-pointer"
+          className="text-dark-400 h-full text-base max-[356px]:text-sm m-0 font-normal flex items-center w-full cursor-pointer"
           htmlFor="coverImageInput"
         >
           <p className={classNames('grow', hasError ? 'text-accent' : '')}>
             Choose or upload background
           </p>
-          <div className="flex text-accent font-normal gap-1">
+          <div className="flex text-accent font-normal gap-1 text-base max-[356px]:text-sm">
             <UploadSimple size={20} weight="fill" />
             <span>Upload</span>
           </div>
@@ -68,8 +68,8 @@ const AddImage = ({
           className="hidden"
         />
       </div>
-      <div className="overflow-y-scroll">
-        <div className="grid grid-cols-3 gap-0 w-full overflow-y-scroll">
+      <div className="flex-1 overflow-y-scroll">
+        <div className="grid grid-cols-3 gap-0 w-full flex-1 overflow-y-scroll">
           {localCoverImage ? (
             <CoverImageItem
               key={'local_image'}
@@ -90,7 +90,7 @@ const AddImage = ({
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
