@@ -61,7 +61,9 @@ const CommonPopup = ({
         )}
       >
         <div className="flex mb-4 px-4 pt-3">
-          <h3 className="grow font-semibold text-base">{popupName}</h3>
+          <h3 className="grow font-semibold text-base max-[356px]:text-sm">
+            {popupName}
+          </h3>
           <button onClick={() => toggleModelOpen(false)}>
             <X size={20} weight="bold" />
           </button>

@@ -47,13 +47,13 @@ export default function HomeLayout({
 
   return (
     <>
-      <div className="relative h-[calc(100vh)] max-h-screen overflow-hidden overscroll-y-contain">
-        <AppBar />
+      <AppBar />
+      <div className="relative h-full overflow-hidden overscroll-y-contain">
         <div
           id="homePageScroller"
-          className={`absolute transition-all duration-200 ease-in-out w-full ${
+          className={`transition-all duration-200 ease-in-out w-full ${
             currentPage == 1 ? '' : '-translate-x-full'
-          } h-[calc(100dvh)] top-0`}
+          } top-0`}
         >
           {children}
         </div>

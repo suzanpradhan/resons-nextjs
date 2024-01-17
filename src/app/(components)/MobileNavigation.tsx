@@ -29,7 +29,7 @@ const MobileNavigation = () => {
   return (
     <div
       className={
-        'fixed md:hidden bottom-0 left-0 w-full bg-white/80 z-40 border-0 border-t border-gray-100 backdrop-filter backdrop-blur-lg'
+        'sticky md:hidden bottom-0 left-0 w-full bg-white/80 z-40 border-0 border-t border-gray-100 backdrop-filter backdrop-blur-lg'
         // (scrollDirection === 'up' || scrollDirection === 'down' ? 'hidden' : '')
       }
     >

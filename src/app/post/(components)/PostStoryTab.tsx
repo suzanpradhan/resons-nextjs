@@ -8,8 +8,8 @@ interface PostStoryTabType {
 
 const PostStoryTab = ({ setActiveTab, activeTab }: PostStoryTabType) => {
   return (
-    <div className="absolute bottom-16 w-full flex justify-center z-50">
-      <span className="flex bg-black rounded-full">
+    <div className="absolute bottom-4 w-full flex justify-center z-50">
+      <span className="flex bg-black rounded-full text-base max-[356px]:text-sm">
         <button
           type="button"
           onClick={() => setActiveTab('Post')}
