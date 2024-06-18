@@ -4,26 +4,32 @@ import Link from 'next/link';
 interface CardOneProps {
   slide: {
     id?: number;
-    img_url: string;
+    image: string;
     title: string;
   };
+  classnames?: string;
+  routeName?: string;
 }
 
-export default function CardOne({ slide }: CardOneProps) {
+export default function CardOne({
+  slide,
+  classnames,
+  routeName,
+}: CardOneProps) {
   return (
     <>
       <Link
-        href={`/genres/${slide.id}`}
-        className="flex flex-col items-center last-of-type:mr-0"
+        href={`/${routeName}/${slide.title}`}
+        className={'flex flex-col items-center last-of-type:mr-0 ' + classnames}
       >
-        <div className="w-full h-28 sm:h-36 rounded-md overflow-hidden drop-shadow-xl">
+        <div className="w-full h-32 sm:h-40 overflow-hidden drop-shadow-md">
           <img
-            src={slide.img_url}
+            src={slide.image}
             alt={slide.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full aspect-auto object-cover"
           />
         </div>
-        <h4 className="text-base w-full text-center text-gray-800 font-bold py-0 mt-3 capitalize truncate">
+        <h4 className="text-sm w-full text-center text-gray-900 font-medium py-2 capitalize truncate">
           {slide.title}
         </h4>
       </Link>

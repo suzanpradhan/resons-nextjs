@@ -588,7 +588,7 @@ const NowPlayingBar = (props: PropsFromRedux) => {
                     className="flex items-center gap-1 text-xs text-gray-900 text-medium cursor-pointer"
                     onClick={handleClickScroll}
                   >
-                    Go to post
+                    Go to posts
                     <CaretRight size={15} weight="light" />
                   </div>
                 )}

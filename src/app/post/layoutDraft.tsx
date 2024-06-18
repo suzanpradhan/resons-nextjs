@@ -1,5 +1,4 @@
 'use client';
-import AppBar from '@/app/(components)/AppBar';
 import React, { useRef } from 'react';
 
 import MobileNavigation from '@/app/(components)/MobileNavigation';
@@ -7,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import { updateHomePage } from '@/modules/post/homePageReducer';
 import { useEffect } from 'react';
-export default function SettingsLayout({
+export default function PostcreateLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -17,7 +16,6 @@ export default function SettingsLayout({
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage
   );
-  
   const homePagePostId = useAppSelector(
     (state: RootState) => state.homepage.homePagePostId
   );
@@ -36,31 +34,31 @@ export default function SettingsLayout({
 
   const scrollableDivRef = useRef<any>(null);
 
-  return <>
-    <div className="relative h-[calc(100dvh)] max-h-screen">
-      <AppBar />
-      <div
-        className="w-full flex flex-col items-center h-screen max-h-screen overflow-hidden"
-        ref={scrollableDivRef}
-        id="feed-listing"
-        style={{ display: "none" }}
-      ></div>
-      <div
-        id="homePageScroller"
-        className={`absolute transition-all duration-200 ease-in-out w-full ${currentPage == 1 ? '' : '-translate-x-full'
+  return (
+    <>
+      <div className="relative h-[calc(100dvh)] max-h-screen overflow-hidden">
+        {/* <AppBar /> */}
+        <div
+          className="w-full flex flex-col items-center h-screen max-h-screen overflow-hidden"
+          ref={scrollableDivRef}
+          id="feed-listing"
+          style={{ display: 'none' }}
+        ></div>
+        <div
+          id="homePageScroller"
+          className={`absolute transition-all duration-200 ease-in-out w-full ${
+            currentPage == 1 ? '' : '-translate-x-full'
           } h-[calc(100dvh)] top-0`}
-      >
-        {children}
-      </div>
-      {/* For this element settings page was vertically scrolling so I have commented out.
-          Need to verify by saifull vai.
-      */}
-      {/* <div
-        className={`absolute transition-all duration-200 ease-in-out top-0 h-[calc(100dvh)] w-full left-full ${currentPage == 2 ? '-translate-x-full' : ''
+        >
+          {children}
+        </div>
+        <div
+          className={`absolute transition-all duration-200 ease-in-out top-0 h-[calc(100dvh)] w-full left-full ${
+            currentPage == 2 ? '-translate-x-full' : ''
           }`}
-      >
-      </div> */}
-    </div>
-    {currentPage == 1 ? <MobileNavigation /> : <></>}
-  </>;
+        ></div>
+      </div>
+      {currentPage == 1 ? <MobileNavigation /> : <></>}
+    </>
+  );
 }

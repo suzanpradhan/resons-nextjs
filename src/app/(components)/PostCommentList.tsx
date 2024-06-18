@@ -55,7 +55,7 @@ export default function PostCommentList(props: PostCommentProps) {
         await Promise.resolve(
           dispatch(
             likeApi.endpoints.addLikedComment.initiate({
-              comment_id: props.commentData.id,
+              post_comment_id: props.commentData.id,
               like: true,
             })
           )
@@ -68,7 +68,7 @@ export default function PostCommentList(props: PostCommentProps) {
         await Promise.resolve(
           dispatch(
             likeApi.endpoints.addLikedComment.initiate({
-              comment_id: props.commentData.id,
+              post_comment_id: props.commentData.id,
               like: false,
             })
           )
@@ -84,7 +84,8 @@ export default function PostCommentList(props: PostCommentProps) {
     ) {
       window
         .open(
-          `${apiPaths.baseUrl + apiPaths.postAudioDownload}${props.commentData.audio.id
+          `${apiPaths.baseUrl + apiPaths.postAudioDownload}${
+            props.commentData.audio.id
           }`,
           '_blank'
         )
@@ -102,10 +103,10 @@ export default function PostCommentList(props: PostCommentProps) {
           <img
             src={
               props.commentData.owner.profile_image &&
-                props.commentData.owner.profile_image != null
+              props.commentData.owner.profile_image != null
                 ? apiPaths.rootPath +
-                '/storage/' +
-                props.commentData.owner.profile_image
+                  '/storage/' +
+                  props.commentData.owner.profile_image
                 : '/images/avatar.jpg'
             }
             alt="post_owner_avatar"

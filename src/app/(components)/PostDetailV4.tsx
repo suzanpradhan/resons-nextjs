@@ -3,12 +3,14 @@
 import PostDropdown, { ItemComponent } from '@/app/(components)/PostDropdown';
 import { apiPaths } from '@/core/api/apiConstants';
 import { defaultWaveData } from '@/core/constants/appConstants';
+import { useAppDispatch } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
+import likeApi from '@/modules/liked/likeApi';
 import { PostDetailType } from '@/modules/post/postType';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   ChatTeardropDots,
   DownloadSimple,
@@ -21,6 +23,7 @@ import {
 import { useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import LikeList from './(popUpComponent)/LikeList';
+import AddToPlaylistPopup from './(popups)/AddToPlaylistPopup';
 import WavePlayer from './WavePlayer';
 
 interface PostDetailProps extends PropsFromRedux {
@@ -65,6 +68,12 @@ const PostDetailV4 = ({
 }: PostDetailProps) => {
   const session = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [liked, setIsLiked] = useState(props.post.my_like);
+  const [totalLike, setTotalLike] = useState(props.post.total_likes ?? 0);
+  const [isModalOpen, toggleModelOpen] = useState(false);
+  const navigator = useRouter();
+  const dispatch = useAppDispatch();
+
   const handleViewPostLikes = (e: any) => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     document.body.style.overflow = 'hidden';
@@ -84,6 +93,21 @@ const PostDetailV4 = ({
   const handleOnLikeViewClose = async () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     document.body.style.overflow = 'auto';
+  };
+
+  const handleLiked = async () => {
+    if (props.post?.id) {
+      setIsLiked(!liked);
+      setTotalLike(!liked ? totalLike + 1 : totalLike - 1);
+      await Promise.resolve(
+        dispatch(
+          likeApi.endpoints.addLiked.initiate({
+            post_id: props.post!.id,
+            like: !liked,
+          })
+        )
+      );
+    }
   };
 
   return (
@@ -116,7 +140,6 @@ const PostDetailV4 = ({
               className="w-6 h-6 object-contain absolute bottom-4 right-4"
             />
           ) : null}
-
           {props.post.cover_image ? (
             <Image
               alt="post-cover"
@@ -133,30 +156,23 @@ const PostDetailV4 = ({
             <></>
           )}
           <div
-            className={`absolute -top-4 right-4 rounded-full bg-slate-100 py-1 px-3 text-xs sm:text-sm font-medium text-black shadow-lg border-0 border-white border-t-2 border-b border-b-gray-500 ${props.currentPage == 2 ? 'hidden' : ''
-              }`}
+            className={`absolute top-0 right-4 bg-white/10 backdrop-blur-sm py-1 px-2 text-xs font-normal text-white ${
+              props.currentPage == 2 ? 'hidden' : ''
+            }`}
           >
-            {moment.duration(props.post.time_duration, 'seconds').humanize() +
-              ' ago'}
-             
+            {props.post.created_at_human}
           </div>
           <div className="flex items-center">
-            <div className="flex-1 flex items-center gap-2">
-              {/* <div
-            className="w-14 h-14 rounded-full overflow-hidden cursor-pointer"
-            onClick={(e) => {
-              console.log('clicked');
-            }}
-          > */}
-              <div className="w-max h-max border-solid border-0 border-white rounded-full p-1">
+            <div className="grow flex items-center gap-2">
+              <div className="w-max h-max border-solid border border-white rounded-full">
                 <div
-                  className="w-14 h-14 rounded-full overflow-hidden cursor-pointer"
-                  onClick={(e) => { }}
+                  className="w-12 md:w-14 h-12 md:h-14 rounded-full overflow-hidden cursor-pointer"
+                  onClick={(e) => {}}
                 >
                   <Image
                     src={
                       props.post.owner.profile_image &&
-                        props.post.owner.profile_image != null
+                      props.post.owner.profile_image != null
                         ? props.post.owner.profile_image
                         : '/images/avatar.jpg'
                     }
@@ -167,7 +183,7 @@ const PostDetailV4 = ({
                     }}
                     width={100}
                     height={100}
-                    className="w-14 h-14 object-cover"
+                    className="w-full h-full aspect-auto object-cover"
                   />
                 </div>
               </div>
@@ -188,21 +204,21 @@ const PostDetailV4 = ({
                   )}
                 </h3>
                 <p
-                  className={`text-xs sm:text-sm font-light text-white ${props.currentPage == 1 ? 'hidden' : ''
-                    }`}
+                  className={`text-xs sm:text-sm font-light text-white ${
+                    props.currentPage == 1 ? 'hidden' : ''
+                  }`}
                 >
                   {props.post.owner.country?.name}
                   {props.post.owner.country ? ' • ' : ' '}
-               
 
-                  
                   {moment
                     .duration(props.post.time_duration, 'seconds')
                     .humanize() + ' ago'}
                 </p>
                 <p
-                  className={`text-xs sm:text-sm font-light text-white ${props.currentPage == 2 ? 'hidden' : ''
-                    }`}
+                  className={`text-xs sm:text-sm font-light text-white ${
+                    props.currentPage == 2 ? 'hidden' : ''
+                  }`}
                 >
                   {props.post.owner.country?.name}
                 </p>
@@ -235,19 +251,17 @@ const PostDetailV4 = ({
               </PostDropdown>
             </div>
           </div>
-          <h1 className="text-sm sm:text-base text-white font-light mt-3 line-clamp-2">
+          <h1 className="text-sm sm:text-base text-white font-light mt-2 line-clamp-2">
             {props.post.title}
           </h1>
-          {/* <TextWrapper
-        text={props.post.description}
-        ellipsis={descriptionEllipsis}
-        className="text-sm font-normal text-white mt-1"
-      /> */}
-          <div className="rounded-lg bg-white/10 backdrop-blur-sm my-3 px-4 py-1">
+          <div className="rounded-lg bg-white/10 backdrop-blur-sm my-2 px-4 py-1">
             <WavePlayer
               audioItem={{
                 url: props?.post?.audio
-                  ? apiPaths.baseUrl + '/socialnetwork/audio/stream/' + props?.post?.audio?.id + "?isPostAudio=YES"
+                  ? apiPaths.baseUrl +
+                    '/socialnetwork/audio/stream/' +
+                    props?.post?.audio?.id +
+                    '?isPostAudio=YES'
                   : '', // Check if props.post.audio exists
                 duration: parseFloat(props?.post?.audio?.file_duration || '0'), // Use optional chaining and provide a default value
                 info: {
@@ -263,7 +277,8 @@ const PostDetailV4 = ({
               theme="dark"
               audioWaveData={
                 props?.post?.audio
-                  ? props?.post?.audio?.wave_data || JSON.stringify(defaultWaveData)
+                  ? props?.post?.audio?.wave_data ||
+                    JSON.stringify(defaultWaveData)
                   : JSON.stringify(defaultWaveData) // Check if props.post.audio.wave_data exists
               }
               size="large"
@@ -272,11 +287,16 @@ const PostDetailV4 = ({
           <div className="flex gap-3 items-center">
             <div
               className="button cursor-pointer"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e?.stopPropagation();
+                await handleLiked();
               }}
             >
-              <ThumbsUp size="26" color="white" weight="regular" />
+              <ThumbsUp
+                size="26"
+                color="white"
+                weight={liked ? 'fill' : 'regular'}
+              />
             </div>
             <div
               className="button cursor-pointer"
@@ -286,34 +306,42 @@ const PostDetailV4 = ({
             >
               <ChatTeardropDots size="26" color="white" weight="regular" />
             </div>
-            <div
+            <button
               className="button cursor-pointer"
               onClick={(e) => {
                 e?.stopPropagation();
+                if (session.data?.user != undefined) {
+                  toggleModelOpen(true);
+                } else {
+                  navigator.push('/login');
+                }
               }}
             >
               <Playlist size="26" color="white" weight="regular" />
-            </div>
+            </button>
           </div>
-          <div className="mt-2">
-            <div className="text-sm text-white font-light">
-              <span onClick={handleViewPostLikes} className="cursor-pointer">
-                {props?.post?.total_likes > 0
-                  ? props?.post?.total_likes > 1
-                    ? props?.post?.total_likes + ' likes'
-                    : props?.post?.total_likes + ' like'
-                  : null}
-              </span>
+          {totalLike > 0 &&
+          props?.post?.total_comments &&
+          props?.post?.total_comments > 1 ? (
+            <div className="mt-2">
+              <div className="text-sm text-white font-light">
+                <span onClick={handleViewPostLikes} className="cursor-pointer">
+                  {totalLike > 0
+                    ? totalLike > 1
+                      ? totalLike + ' likes'
+                      : totalLike + ' like'
+                    : null}
+                </span>
 
-              {props?.post?.total_likes > 0 && props?.post?.total_comments > 0
-                ? ' • '
-                : null}
-              {props?.post?.total_comments && props?.post?.total_comments > 1
-                ? props?.post?.total_comments + ' comments'
-                : props.post.total_comments > 0
+                {totalLike > 0 && props?.post?.total_comments > 0
+                  ? ' • '
+                  : null}
+                {props?.post?.total_comments && props?.post?.total_comments > 1
+                  ? props?.post?.total_comments + ' comments'
+                  : props.post.total_comments > 0
                   ? props.post.total_comments + ' comment'
                   : null}
-              {/* <div
+                {/* <div
             className="flex items-center absolute bottom-[-8px] left-2/3"
             style={{ transform: 'translateX(-50%)' }}
           >
@@ -328,14 +356,22 @@ const PostDetailV4 = ({
               : null}
             <span className="text-xs w-max ml-1">+33 comments</span>
           </div> */}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
 
       {isOpen ? (
         <LikeList onClose={handleOnLikeViewClose} postId={props.post.id!} />
       ) : null}
+      {session.data?.user && (
+        <AddToPlaylistPopup
+          isModalOpen={isModalOpen}
+          toggleModelOpen={toggleModelOpen}
+          postId={props.post.id}
+        />
+      )}
     </>
   );
 };

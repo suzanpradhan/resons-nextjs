@@ -434,8 +434,6 @@ input.global-player[type='range']:focus::-ms-fill-upper {
 .copyright {
 }
 
-
-
 /* Temporary Block */
 .login-container {
   display: flex;
@@ -448,7 +446,7 @@ input.global-player[type='range']:focus::-ms-fill-upper {
 .login-box {
   background-color: #ffffff;
   padding: 20px;
- 
+
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -470,14 +468,13 @@ label {
   margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="password"] {
+/* input[type='text'],
+input[type='password'] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-}
+} */
 
 .loginButton {
   background-color: #0070f3;
@@ -508,13 +505,10 @@ input[type="password"] {
 .image-button {
   cursor: pointer; /* Add a pointer cursor for better UX */
 }
-.cover-image-size
-{
-  width: 100px!important;
+.cover-image-size {
+  width: 100px !important;
   height: 40px;
-
 }
-
 
 /* components popup css */
 .popup {
@@ -556,4 +550,53 @@ input[type="password"] {
 /* Hide the scrollbar for WebKit browsers (Chrome, Safari) */
 .overflow-x-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* swiper-slider */
+.swiper-container {
+  width: 480px;
+}
+
+@media screen and (min-width: 480px) {
+  .swiper-container {
+    width: 480px;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .swiper-container {
+    width: 640px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .swiper-container {
+    width: 768px;
+  }
+}
+
+.react-calendar {
+  width: 400px;
+  max-width: 100%;
+  background-color: transparent !important;
+  color: #222;
+  border-radius: 0 !important;
+  border: 0px !important;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.125em;
+}
+
+.react-calendar__navigation {
+  border-radius: 5px;
+  color: white !important;
+  background: #d9362f !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.react-calendar__tile--now {
+  /* background: #f0d0ce !important; */
+  border-radius: 5px;
+  color: white !important;
+  background: #d9362f !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
 }

@@ -14,7 +14,7 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        whiteShade: '#ECF2F8',
+        whiteShade: '#F5F6FA',
         accentRed: '#D9362F',
         redShade: '#F0D0CE',
         primaryGray: {
@@ -24,8 +24,10 @@ module.exports = {
         },
         dark: {
           500: '#2D2D2E',
+          400: '#3F3F3F',
         },
         grey: {
+          300: '#DCE2E5',
           200: '#EDF3F9',
           100: '#F5F8FA',
         },
@@ -41,10 +43,13 @@ module.exports = {
           200: '#C1C2C6',
           100: '#D6D6D9',
         },
-        accent: '#de5b6d',
+        accent: '#D9362F',
       },
       fontFamily: {
         sans: ['var(--font-poppins)'],
+      },
+      boxShadow: {
+        upper: '0px -1px 5px 0px rgba(0,0,0,0.26)',
       },
     },
   },

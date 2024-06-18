@@ -9,7 +9,7 @@ import {
   updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
-import { Pause, Play } from 'phosphor-react';
+import { Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { ConnectedProps, connect } from 'react-redux';
@@ -20,6 +20,8 @@ interface WavePlayerV2Props extends PropsFromRedux {
   onPlay?: () => void;
   audioWaveData?: string;
   controls?: boolean;
+  playBackControls?: boolean;
+
   theme?: 'dark' | 'white';
   size?: 'small' | 'large';
 }
@@ -30,6 +32,7 @@ const WavePlayer = ({
   audioWaveData,
   theme = 'white',
   controls = true,
+  playBackControls = false,
   size,
   currentTime,
   currentPlaylistIndex,
@@ -76,6 +79,7 @@ const WavePlayer = ({
         audioRef.current.destroy();
         audioRef.current = undefined;
       }
+
       if (!audioContainer.current) return;
 
       var waveColor = (audioRef.current = WaveSurfer.create({
@@ -123,7 +127,7 @@ const WavePlayer = ({
       };
     };
     create();
-  }, []);
+  }, [audioItem]);
 
   const handlePlayPause = async (e: any) => {
     e?.stopPropagation();
@@ -135,71 +139,83 @@ const WavePlayer = ({
         dispatch(updateIsPlaying(true));
       }
     } else {
-      console.log("sdkjfhfsjkhjfkjsdj")
       dispatch(playSong(audioItem));
     }
   };
 
   return (
-    <div>
-      <div className="relative flex items-center w-full">
-        {controls ? (
-          <button
-            type="button"
-            className={`border-none rounded-full p-2 mr-2 ${theme == 'dark' ? 'bg-white' : 'bg-primary-900'
+    <div className="relative flex items-center gap-1 w-full">
+      {playBackControls && (
+        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm mr-1">
+          <SkipBack size={18} className={`${'text-white'}`} weight="fill" />
+        </div>
+      )}
+
+      {controls ? (
+        <button
+          type="button"
+          className={`border-none rounded-full p-2 ${
+            theme == 'dark' ? 'bg-white' : 'bg-primary-700'
+          }`}
+          onClick={onPlay ?? handlePlayPause}
+        >
+          {playlist[currentPlaylistIndex]?.url == audioItem.url && isPlaying ? (
+            <Pause
+              size={size == 'small' ? 14 : 24}
+              className={`${
+                sessionPlayed
+                  ? 'text-purple'
+                  : theme == 'dark'
+                  ? 'text-accent'
+                  : 'text-white'
               }`}
-            onClick={handlePlayPause}
-          >
-            {playlist[currentPlaylistIndex]?.url == audioItem.url &&
-              isPlaying ? (
-              <Pause
-                size={size == 'small' ? 9 : 24}
-                className={`${sessionPlayed
+              weight="fill"
+            />
+          ) : (
+            <Play
+              size={size == 'small' ? 14 : 24}
+              className={`${
+                sessionPlayed
                   ? 'text-purple'
                   : theme == 'dark'
-                    ? 'text-accent'
-                    : 'text-white'
-                  }`}
-                weight="fill"
-              />
-            ) : (
-              <Play
-                size={size == 'small' ? 9 : 24}
-                className={`${sessionPlayed
-                  ? 'text-purple'
-                  : theme == 'dark'
-                    ? 'text-accent'
-                    : 'text-white'
-                  }`}
-                weight="fill"
-              />
-            )}
-          </button>
-        ) : (
-          <></>
-        )}
-        <div
-          ref={audioContainer}
-          className={`w-full flex-1 audio-wrapper ${playlist[currentPlaylistIndex]?.url == audioItem.url
+                  ? 'text-accent'
+                  : 'text-white'
+              }`}
+              weight="fill"
+            />
+          )}
+        </button>
+      ) : (
+        <></>
+      )}
+      {playBackControls && (
+        <div className="p-[6px] rounded-full bg-white/10 backdrop-blur-sm ml-1">
+          <SkipForward size={18} className={`${'text-white'}`} weight="fill" />
+        </div>
+      )}
+
+      <div
+        ref={audioContainer}
+        className={`w-full grow audio-wrapper ${
+          playlist[currentPlaylistIndex]?.url == audioItem.url
             ? ''
             : 'pointer-events-none'
-            }`}
-          onClick={(e) => {
-            e?.stopPropagation();
-          }}
-        ></div>
-        <div className="bg-primary-900 text-white text-xs w-11 text-center py-1 ml-1 rounded-sm">
-          {audioItem.duration
-            ? formatTime(
+        }`}
+        onClick={(e) => {
+          e?.stopPropagation();
+        }}
+      ></div>
+      <div className="bg-primary-700 text-white text-xs p-1 flex item-center leading-[11px]">
+        {audioItem.duration
+          ? formatTime(
               audioItem.duration
                 ? audioItem.duration -
-                (playlist[currentPlaylistIndex]?.url == audioItem.url
-                  ? currentTime
-                  : 0)
+                    (playlist[currentPlaylistIndex]?.url == audioItem.url
+                      ? currentTime
+                      : 0)
                 : 0
             )
-            : '0:00'}
-        </div>
+          : '0:00'}
       </div>
     </div>
   );

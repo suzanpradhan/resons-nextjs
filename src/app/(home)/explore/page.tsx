@@ -1,18 +1,14 @@
 'use client';
 
 import SearchBar from '@/app/(components)/SearchBar';
-import { useState } from 'react';
-import Suggestion from './(components)/Suggestion';
+import PopularPostsSection from './(components)/PopularPostsSection';
 import TopicGenres from './(components)/TopicGenres';
-import TopicListScroll from './(components)/TopicListScroll';
 
 export default function TopicPage() {
-  const [tabIndex, setTabIndex] = useState(1);
-
   return (
-    <div className="sm:container md:container lg:container mx-auto px-4 pb-[3.9rem]">
-      <div className="">
-        {/* <div className="py-4 flex flex-col">
+    <div className="w-full h-screen max-h-screen bg-white pb-16 overflow-scroll">
+      <div className="mt-14"></div>
+      {/* <div className="py-4 flex flex-col">
           <label
             htmlFor="selectTopic"
             className="text-xl font-bold text-gray-800 mb-1"
@@ -35,18 +31,18 @@ export default function TopicPage() {
           </div>
         </div> */}
 
-        <div className="sm:px-0 my-4">
-          <SearchBar />
-        </div>
-
-        <TopicListScroll title="My Cloud" />
-        <TopicGenres title="Genres" />
-        <TopicListScroll title="Popular" />
-        <TopicListScroll title="Newest" />
-        <TopicListScroll title="Professionals" />
-        <TopicListScroll title="Suggestions" />
-        <Suggestion title="Artist to Follow" />
+      <div className="mx-4 mt-4">
+        <SearchBar />
       </div>
+
+      {/* <TopicListScroll title="My Cloud" /> */}
+      <TopicGenres title="Top Categories" />
+      <PopularPostsSection />
+      {/* <TopicListScroll title="Newest" /> */}
+      {/* <TopicListScroll title="Professionals" /> */}
+      {/* <TopicListScroll title="More you like" /> */}
+      {/* <Suggestion title="Artist to Follow" /> */}
+      {/* <LanguagePostList title="Explore by language" /> */}
     </div>
   );
 }

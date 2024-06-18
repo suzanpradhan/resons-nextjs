@@ -2,6 +2,19 @@ import { z } from 'zod';
 import { accountDetailSchema } from '../account/accountType';
 import { audioDetailSchema } from '../audio/audioType';
 
+export const createStoryDetailSchema = z.object({
+  audio_file: z.custom<File | undefined>().optional(),
+  file_duration: z.number().optional(),
+  wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)).optional(),
+})
+
+export const storyValidateFormSchema = createStoryDetailSchema.extend({
+  wave_data: z.array(z.number()).or(z.string()).or(z.instanceof(Blob)),
+});
+
+
+export type CreateStoryDetailType = z.infer<typeof createStoryDetailSchema>
+
 export const storyDetailSchema = z.object({
   story_id: z.number().optional(),
   title: z.string(),
@@ -53,7 +66,7 @@ export interface StoryAudioType {
   file_name: string,
   file_duration: string,
   file_size: string,
-  wave_data: number[]
+  wave_data: string
 }
 
 export interface StorySingleDataType {

@@ -20,6 +20,7 @@ const topicsApi = baseApi
                 },
             }),
         }),
+
         overrideExisting: true,
     });
 export default topicsApi;

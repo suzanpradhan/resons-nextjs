@@ -3,15 +3,13 @@
 import { useAppDispatch, useAppSelector } from '@/core/redux/clientStore';
 import { RootState } from '@/core/redux/store';
 import Button from '@/core/ui/components/Button';
-import notificationApi from '@/modules/notification/notificationApi';
 import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Bell, UploadSimple } from 'phosphor-react';
-import { useEffect, useState } from 'react';
-import SearchBar from './SearchBar';
+import { useState } from 'react';
 import useScrollDirection from './useScrollDirection';
 //import useScrollDirection from './useScrollDirection';
 
@@ -21,24 +19,31 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const session = useSession();
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = Cookies.get('token');
+    console.log(token);
+
+    return token != undefined;
+  });
+
   // const scrollDirection = useScrollDirection();
 
-  // console.log(scrollDirection);
-
   const handleLogout = async () => {
-    Cookies.remove("token");
+    Cookies.remove('token');
+    Cookies.remove('token');
     signOut({ callbackUrl: '/login', redirect: true });
   };
 
-  useEffect(() => {
-    if (session.data?.user) {
-      dispatch(
-        notificationApi.endpoints.unreadNotificationCount.initiate(undefined, {
-          subscriptionOptions: { pollingInterval: 10000 },
-        })
-      );
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (session.data?.user) {
+  //     dispatch(
+  //       notificationApi.endpoints.unreadNotificationCount.initiate(undefined, {
+  //         subscriptionOptions: { pollingInterval: 10000 },
+  //       })
+  //     );
+  //   }
+  // }, [dispatch]);
 
   const currentPage = useAppSelector(
     (state: RootState) => state.homepage.currentPage
@@ -54,12 +59,18 @@ const Header = () => {
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
-  }
+  };
 
   return (
     <>
       <div
-        className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${currentPage == 1 ? '' : 'hidden'} ${(scrollDirection === 'up' || scrollDirection === 'down') ? '-translate-y-[105%]' : ''}`}
+        className={`bg-white text-slate-950 sticky left-0 transition-all duration-500 w-full z-40 shadow-sm ${
+          currentPage == 1 ? '' : 'hidden'
+        } ${
+          scrollDirection === 'up' || scrollDirection === 'down'
+            ? '-translate-y-[105%]'
+            : ''
+        }`}
       >
         <header className="static sm:container md:container lg:container mx-auto px-4 sm:px-0 py-2 md:py-0">
           <div className="flex flex-row items-center justify-between">
@@ -81,10 +92,11 @@ const Header = () => {
                   <li className="basis-1/3">
                     <Link
                       href="/"
-                      className={`block py-[.8rem] px-4 text-center ${pathName === '/'
-                        ? 'text-accentRed bg-redShade font-bold'
-                        : 'text-dark-500 font-normal'
-                        }`}
+                      className={`block py-[.8rem] px-4 text-center ${
+                        pathName === '/'
+                          ? 'text-accentRed bg-redShade font-bold'
+                          : 'text-dark-500 font-normal'
+                      }`}
                     >
                       Home
                     </Link>
@@ -107,32 +119,26 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
-              <SearchBar />
-              <Link
+              {/* <SearchBar /> */}
+
+              <Button
+                type="link"
                 href="/postCreate"
-              >
-                <Button
-                  type="link"
-                  href="/postCreate"
-                  text="Upload"
-                  kind="default"
-                  prefix={
-                    <UploadSimple
-                      className="text-white"
-                      size={18}
-                      weight="fill"
-                    />
-                  }
-                  textClassName="ml-1"
-                  className="hidden md:block font-bold pointer-events-none"
-                />
-              </Link>
+                text="Upload"
+                kind="default"
+                prefix={
+                  <UploadSimple
+                    className="text-white"
+                    size={18}
+                    weight="fill"
+                  />
+                }
+                textClassName="ml-1"
+                className="hidden md:block font-bold pointer-events-none"
+              />
             </div>
             <div className="basis-[15%] flex flex-row justify-end gap-3 items-center hidden md:flex flex-row">
-              <Link
-                href="/notification"
-
-              >
+              <Link href="/notification">
                 <Bell size="27" className="text-primary-700" weight="regular" />
                 {unreadNotificationCount ? (
                   <>
@@ -163,15 +169,40 @@ const Header = () => {
                 {isOpen && (
                   <div className="absolute top-12 right-0 bg-white border rounded shadow-lg w-48">
                     <ul>
-                      <li className="hover:bg-gray-100 pt-5 pb-5 pl-10">
-                        <Link href="/settings">Settings</Link>
-                      </li>
-                      <li className="hover:bg-gray-100 pt-5 pb-5 pl-10 cursor-pointer" onClick={handleLogout}>
-                        <a href="#" onClick={(e) => e.preventDefault()}>Logout</a>
-                      </li>
-                      <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
-                        <Link href="#">Sign Up</Link>
-                      </li>
+                      {isAuthenticated ? (
+                        <>
+                          <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                            <Link href="/profile">Profile</Link>
+                          </li>
+                          <li className="hover:bg-gray-100 pt-5 pb-5 pl-10">
+                            <Link href="/settings">Settings</Link>
+                          </li>
+                          <li
+                            className="hover:bg-gray-100 pt-5 pb-5 pl-10 cursor-pointer"
+                            onClick={handleLogout}
+                          >
+                            <Link href="#" onClick={(e) => e.preventDefault()}>
+                              Logout
+                            </Link>
+                          </li>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+
+                      {!isAuthenticated ? (
+                        <>
+                          <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                            <Link href="/signup">Sign Up</Link>
+                          </li>
+                          <li className="hover:bg-gray-100 pt-5 pl-10 pb-5">
+                            <Link href="/login">Login</Link>
+                          </li>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+
                       {/* Add more dropdown items here */}
                     </ul>
                   </div>

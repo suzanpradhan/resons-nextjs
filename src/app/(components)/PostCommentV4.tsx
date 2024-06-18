@@ -66,7 +66,7 @@ export default function PostCommentV4(props: PostCommentProps) {
         await Promise.resolve(
           dispatch(
             likeApi.endpoints.addLikedComment.initiate({
-              comment_id: props.commentData.id,
+              post_comment_id: props.commentData.id,
               like: true,
             })
           )
@@ -79,7 +79,7 @@ export default function PostCommentV4(props: PostCommentProps) {
         await Promise.resolve(
           dispatch(
             likeApi.endpoints.addLikedComment.initiate({
-              comment_id: props.commentData.id,
+              post_comment_id: props.commentData.id,
               like: false,
             })
           )
@@ -91,22 +91,23 @@ export default function PostCommentV4(props: PostCommentProps) {
   return (
     <>
       <div
-        className={`px-4 py-4 flex border-0 border-gray-100 border-b last-of-type:border-b-0 transition-all duration-700 ease-in-out ${playlist &&
+        className={`px-4 py-2 flex border-0 border-gray-50 border-b last-of-type:border-b-0 transition-all duration-700 ease-in-out ${
+          playlist &&
           playlist[currentPlaylistIndex]?.info?.cid === props.commentData.id &&
           isPlaying
-          ? 'bg-blue-100 bg-opacity-[.1]'
-          : 'bg-white bg-opacity-100'
-          }`}
+            ? 'bg-blue-100 bg-opacity-[.1]'
+            : 'bg-white bg-opacity-100'
+        }`}
         id={`post-card-comment-id-${props.commentData.id}`}
       >
-        <div className="w-max h-max border-solid border-2 border-gray-300 rounded-full p-[2px]">
-          <div className="w-11 h-11 rounded-full overflow-hidden cursor-pointer">
+        <div className="w-max h-max border-solid border-0 border-white rounded-full">
+          <div className="w-9 h-9 rounded-full overflow-hidden cursor-pointer">
             <Image
               width={100}
               height={100}
               src={
                 props.commentData.owner?.profile_image &&
-                  props.commentData.owner?.profile_image != null
+                props.commentData.owner?.profile_image != null
                   ? props.commentData.owner?.profile_image
                   : '/images/avatar.jpg'
               }
@@ -115,19 +116,19 @@ export default function PostCommentV4(props: PostCommentProps) {
                 (e.target as any).onError = null;
                 (e.target as any).src = '/images/avatar.jpg';
               }}
-              className="w-full h-full object-cover"
+              className="w-full h-full aspect-auto object-cover"
             />
           </div>
         </div>
-        <div className="flex-1 flex flex-col ml-3">
+        <div className="grow flex flex-col ml-3">
           <div className="flex items-center">
-            <div className="flex-col flex-1">
-              <h3 className="flex items-center gap-4 text-base text-black font-medium leading-4">
+            <div className="flex-col grow">
+              <h3 className="flex items-center gap-4 text-xs md:text-base text-slate-700 font-medium leading-5">
                 {props.commentData.owner.name}
                 {playlist &&
-                  playlist[currentPlaylistIndex]?.info?.cid ===
+                playlist[currentPlaylistIndex]?.info?.cid ===
                   props.commentData.id &&
-                  isPlaying ? (
+                isPlaying ? (
                   <Image
                     alt="wave-icon"
                     src="/images/wave.gif"
@@ -137,7 +138,7 @@ export default function PostCommentV4(props: PostCommentProps) {
                   />
                 ) : null}
               </h3>
-              <p className="text-sm text-primary-500 font-thin leading-4">
+              <p className="text-xs md:text-sm text-primary-500 font-thin leading-4">
                 {moment
                   .duration(props.commentData.time_duration, 'seconds')
                   .humanize() + ' ago'}
@@ -205,18 +206,20 @@ export default function PostCommentV4(props: PostCommentProps) {
               <Playlist size="24" color="black" weight="regular" />
             </div>
           </div>
-          <div className="pt-2">
-            <p
-              className="text-sm text-primary-500 font-light cursor-pointer inline-block"
-              onClick={handleViewCommentLikes}
-            >
-              {totalLikedComment > 0
-                ? totalLikedComment > 1
-                  ? totalLikedComment + ' likes'
-                  : totalLikedComment + ' like'
-                : null}
-            </p>
-          </div>
+          {totalLikedComment > 0 ? (
+            <div className="pt-2 flex">
+              <p
+                className="text-xs md:text-sm text-slate-600 font-light cursor-pointer inline-flex"
+                onClick={handleViewCommentLikes}
+              >
+                {totalLikedComment > 0
+                  ? totalLikedComment > 1
+                    ? totalLikedComment + ' likes'
+                    : totalLikedComment + ' like'
+                  : null}
+              </p>
+            </div>
+          ) : null}
         </div>
       </div>
       {isOpen ? (

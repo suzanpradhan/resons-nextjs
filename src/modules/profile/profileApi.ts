@@ -21,14 +21,17 @@ const profileApi = baseApi
                         toast.error(JSON.stringify(err));
                     }
                 },
+                forceRefetch({ currentArg, previousArg }) {
+                    return currentArg !== previousArg;
+                },
                 transformResponse: (response) => {
                     return (response as any)?.data as ProfileDetailType;
                 },
             }),
 
             getMyProfileData: builder.query<ProfileDetailType, string>({
-                query: (query: string) => `${apiPaths.profileUrl}/${query}`,
-                providesTags: ['Profile'],
+                query: (query: string) => `${apiPaths.profileUrl}${query}`,
+                providesTags: ['Profile', 'Posts'],
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {
                         await queryFulfilled;
@@ -36,6 +39,9 @@ const profileApi = baseApi
                         console.log(err);
                         toast.error(JSON.stringify(err));
                     }
+                },
+                forceRefetch({ currentArg, previousArg }) {
+                    return currentArg !== previousArg;
                 },
                 transformResponse: (response) => {
                     return (response as any)?.data as ProfileDetailType;
@@ -63,32 +69,19 @@ const profileApi = baseApi
             updateProfile: builder.mutation<APIResponseType<ProfileUpdateResponseType>, ProfileUpdateFormType>({
                 query: ({ ...payload }) => {
                     var formData = new FormData();
-                    formData.append('name', payload.name);
-                    if (payload.phone_number !== undefined) {
-                        formData.append('phone_number', payload.phone_number);
-                    }
-                    if (payload.profile_image instanceof File) {
-                        formData.append('profile_image', payload.profile_image);
-                    }
-                    if (payload.date_of_birth !== undefined) {
-                        formData.append('date_of_birth', payload.date_of_birth);
-                    }
-                    if (payload.nickname !== undefined) {
-                        formData.append('nickname', payload.nickname);
-                    }
-                    if (payload.religion !== undefined) {
-                        formData.append('religion', payload.religion);
-                    }
-                    if (payload.about !== undefined) {
-                        formData.append('about', payload.about);
-                    }
-                    if (payload.country_id !== undefined) {
-                        formData.append('country_id', payload.country_id.toString());
-                    }
-                    if (payload.user_language !== undefined) {
-                        formData.append('user_language', payload.user_language);
-                    }
-
+                    formData.append('name', payload.name!);
+                    formData.append('phone_number', payload.phone_number!);
+                    formData.append('profile_image', payload.profile_image!);
+                    formData.append('date_of_birth', payload.date_of_birth!);
+                    formData.append('nickname', payload.nickname!);
+                    // if (payload.religion !== undefined) {
+                    //     formData.append('religion', payload.religion);
+                    // }
+                    // if (payload.about !== undefined) {
+                    //     formData.append('about', payload.about);
+                    // }
+                    payload.country_id !== undefined && formData.append('country', payload.country_id!.toString());
+                    formData.append('user_language', payload.user_language!);
                     return {
                         url: `${apiPaths.profileUpdateUrl}`,
                         method: 'POST',
@@ -96,7 +89,7 @@ const profileApi = baseApi
                         formData: true,
                     };
                 },
-                invalidatesTags: ['Profile'],
+                invalidatesTags: ['Profile', 'Posts'],
                 async onQueryStarted(payload, { queryFulfilled }) {
                     try {
                         await queryFulfilled;

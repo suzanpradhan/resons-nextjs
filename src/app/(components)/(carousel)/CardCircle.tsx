@@ -3,7 +3,7 @@ import Link from 'next/link';
 /* eslint-disable @next/next/no-img-element */
 interface CardOneProps {
   slide: {
-    img_url: string;
+    image: string;
     title: string;
     follow_count: number;
   };
@@ -18,7 +18,7 @@ export default function CardCircle({ slide }: CardOneProps) {
       >
         <div className="w-full rounded-full overflow-hidden drop-shadow-xl">
           <img
-            src={slide.img_url}
+            src={slide.image}
             alt={slide.title}
             className="w-full h-auto aspect-square object-cover"
           />

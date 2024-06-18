@@ -28,20 +28,21 @@ export const authOptions: NextAuthOptions = {
             headers: { 'Content-Type': 'application/json' },
           });
           const data = await res.json();
-          if (data.error) {
+
+          if (!data.status) {
             throw data;
-            // return null;
           }
 
-          if (!data?.error && data) {
+          if (data?.status && data) {
+            console.log("data:" + data.data);
+
             return {
-              token: data.data.token,
-              ...data.data.session,
+              token: data.optional.token,
+              ...data.data,
             };
           }
           return null;
         } catch (error) {
-          console.log(error);
           return null;
         }
       },

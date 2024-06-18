@@ -5,7 +5,7 @@ import CardOne from './CardOne';
 
 interface Slide {
   id: number | undefined;
-  img_url: string;
+  image: string;
   title: string;
   follow_count: number;
 }
@@ -46,7 +46,7 @@ export default function MultiCarouselAlt({
   };
 
   return (
-    <div className="flex flex-col mb-4 px-4 py-4 bg-white rounded-md overflow-x-hidden last-of-type:mb-16">
+    <div className="flex flex-col mb-4 px-4 py-4 bg-white overflow-x-hidden last-of-type:mb-16">
       <h3 className="text-lg text-gray-800 font-bold mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0">
         {slides[0].groupTitle}
       </h3>

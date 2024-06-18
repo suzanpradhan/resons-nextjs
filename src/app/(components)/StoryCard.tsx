@@ -7,36 +7,34 @@ import { StorySingleDataType } from '@/modules/story/storyType';
 import { ConnectedProps, connect } from 'react-redux';
 import StoryWavePlayer from './StoryWavePlayer';
 
-
 interface StoryType {
   story: StorySingleDataType;
 }
 
 const StoryCard = ({ ...props }: StoryType) => {
-
   return (
     <>
-
       <StoryWavePlayer
         audioItem={{
           url: props.story?.audio
-            ? apiPaths.baseUrl + '/socialnetwork/stream/story/audio/' + props.story?.audio.id
+            ? apiPaths.baseUrl +
+              '/socialnetwork/stream/story/audio/' +
+              props.story?.audio.id
             : '', // Check if props.post.audio exists
           duration: parseFloat(props.story?.audio?.file_duration || '0'), // Use optional chaining and provide a default value
           info: {
             title: props.story?.title ?? props.story?.title,
             description: props?.story?.owner_name ?? '',
-            id: props.story.story_id
+            id: props.story.story_id,
           },
         }}
         theme="dark"
         audioWaveData={
-          JSON.stringify(props.story?.audio?.wave_data) ?? JSON.stringify(defaultWaveData)
+          props.story?.audio?.wave_data ?? JSON.stringify(defaultWaveData)
         }
         size="large"
         profileImage={props?.story?.profile_image}
       />
-
     </>
   );
 };

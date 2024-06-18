@@ -16,7 +16,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 // import DatePicker from 'react-datepicker';
 import { toast } from 'react-toastify';
-const supportedImageTypes = ["image/png", "image/jpeg", "image/gif", "image/webp"]
+const supportedImageTypes = [
+  'image/png',
+  'image/jpeg',
+  'image/gif',
+  'image/webp',
+];
 
 // import 'react-datepicker/dist/react-datepicker.css';
 
@@ -40,7 +45,7 @@ export default function SettingPage() {
     current_password: '',
     password: '',
     confirm_password: '',
-  }); 
+  });
 
   const navigate = useRouter();
 
@@ -80,7 +85,7 @@ export default function SettingPage() {
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
-    console.log("file", file)
+    console.log('file', file);
     if (file) {
       if (supportedImageTypes.includes(file.type)) {
         const imageUrl = URL.createObjectURL(file);
@@ -281,7 +286,8 @@ export default function SettingPage() {
 
   const myProfile = useAppSelector(
     (state: RootState) =>
-      state.baseApi.queries['getMyProfile(undefined)']?.data as ProfileDetailType,
+      state.baseApi.queries['getMyProfile(undefined)']
+        ?.data as ProfileDetailType
   );
 
   useEffect(() => {
@@ -368,6 +374,7 @@ export default function SettingPage() {
             value: 'allow',
           })
         );
+        toast.success('Notification disable');
       } catch (error) {
         // Handle error
         toast.success('Opps! cant set notification');
@@ -382,6 +389,7 @@ export default function SettingPage() {
             value: 'deny',
           })
         );
+        toast.success('Notification enable');
       } catch (error) {
         // Handle error
         toast.success('Opps! cant set notification');
@@ -394,9 +402,9 @@ export default function SettingPage() {
   // const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <div className="sm:container md:container lg:container mx-auto md:px-4 min-h-screen mb-32 pt-20">
-      <div className="px-4">
-        <div className="flex flex-col md:flex-row md:justify-start md:items-start px-5 py-5 border-0 border-b border-gray-300 bg-white mb-5">
+    <div className="sm:container md:container lg:container mx-auto flex flex-col h-full">
+      <div className="overflow-y-scroll pb-16 md:pb-0 pt-11">
+        <div className="flex flex-col md:flex-row md:justify-start md:items-start px-5 py-5 bg-white mb-5">
           <div className="rounded-sm py-2 basis-2/6 w-full md:mr-5">
             <h3 className="text-base text-gray-700 font-bold">
               Personal Detail
@@ -498,22 +506,22 @@ export default function SettingPage() {
                 >
                   Username
                 </label>
-                <div className="flex">
+                <div className="">
                   <label
                     htmlFor="username"
-                    className="bg-slate-200 text-sm text-gray-400 font-normal pl-3 py-2 rounded-sm"
+                    className="flex rounded-md border-gray-300 border-[1px] items-center m-0 bg-slate-200 text-sm text-gray-400 font-normal pl-3  "
                   >
-                    https://resons.com/
+                    <span>https://resons.com/</span>
+                    <input
+                      id="username"
+                      type="text"
+                      name="username"
+                      value={username ?? ''}
+                      onChange={handleUsernameChange}
+                      className="bg-slate-200 !border-0 inline w-full text-sm text-gray-700 font-normal py-2 pr-3 rounded-sm outline-none "
+                      autoComplete=""
+                    />
                   </label>
-                  <input
-                    id="username"
-                    type="text"
-                    name="username"
-                    value={username ?? ''}
-                    onChange={handleUsernameChange}
-                    className="bg-slate-200 w-full text-sm text-gray-700 font-normal py-2 pr-3 rounded-sm focus:outline-none"
-                    autoComplete=""
-                  />
                 </div>
               </div>
               <div className="flex flex-col py-2">
@@ -575,10 +583,10 @@ export default function SettingPage() {
                   <option value="">Select a country</option>
                   {language_code?.length > 0
                     ? language_code.map((value, index) => (
-                      <option value={value.code} key={index}>
-                        {value.name}
-                      </option>
-                    ))
+                        <option value={value.code} key={index}>
+                          {value.name}
+                        </option>
+                      ))
                     : null}
                 </select>
               </div>
@@ -685,12 +693,10 @@ export default function SettingPage() {
 
         <div className="flex flex-col md:flex-row md:justify-start md:items-start px-5 py-5 border-0 border-b border-gray-300 bg-white my-5">
           <div className="rounded-sm py-2 basis-2/6 w-full md:mr-5">
-            <h3 className="text-base text-gray-700 font-bold">
-              Notification
-            </h3>
+            <h3 className="text-base text-gray-700 font-bold">Notification</h3>
             <p className="text-sm text-gray-500 font-normal">
-              You can enable or disable all Notification and Alerts here.
-              You can change this setting any time.
+              You can enable or disable all Notification and Alerts here. You
+              can change this setting any time.
             </p>
           </div>
           <div className="md:mt-0 md:py-0 mt-4 py-4 basis-4/6 w-full">
@@ -711,10 +717,11 @@ export default function SettingPage() {
                   className={`slider mr-3 flex h-[26px] w-[50px] items-center rounded-full bg-gray-200 p-1 duration-200`}
                 >
                   <span
-                    className={`dot h-[18px] w-[18px] rounded-full duration-200 transition-transform ${isChecked
-                      ? 'transform translate-x-[24px] bg-[#848ef5]'
-                      : 'bg-gray-400'
-                      }`}
+                    className={`dot h-[18px] w-[18px] rounded-full duration-200 transition-transform ${
+                      isChecked
+                        ? 'transform translate-x-[24px] bg-[#848ef5]'
+                        : 'bg-gray-400'
+                    }`}
                   ></span>
                 </span>
                 <span className="label flex items-center text-sm font-medium text-black">
@@ -747,12 +754,12 @@ export default function SettingPage() {
                 >
                   {privacy_code?.length > 0
                     ? privacy_code.map((value) => {
-                      return value.show ? (
-                        <option value={value.id} key={value.id}>
-                          {value.nameV2}
-                        </option>
-                      ) : null;
-                    })
+                        return value.show ? (
+                          <option value={value.id} key={value.id}>
+                            {value.nameV2}
+                          </option>
+                        ) : null;
+                      })
                     : null}
                 </select>
               </div>
@@ -774,8 +781,8 @@ export default function SettingPage() {
               Log Out My Account
             </h3>
             <p className="text-sm text-gray-500 font-normal">
-              You can logout your account here. You can login in again by
-              using your email and password.
+              You can logout your account here. You can login in again by using
+              your email and password.
             </p>
           </div>
           <div className="md:mt-0 md:py-0 mt-4 py-4 basis-4/6 w-full">
@@ -800,33 +807,28 @@ export default function SettingPage() {
             </h3>
             <p className="text-sm text-gray-500 font-normal">
               No longer want to use our service? You can delete your account
-              here. This action is not reversible. All information related
-              to this account will be deleted permanently.
+              here. This action is not reversible. All information related to
+              this account will be deleted permanently.
             </p>
           </div>
           <div className="md:mt-0 md:py-0 mt-4 py-4 basis-4/6 w-full">
-        
-              <div className="py-2">
-                <button
-                  onClick={handleAccountDelete}
-                  className="bg-[#cd3328] py-2 px-3 text-white rounded-md"
-                >
-                  Yes, delete my account
-                </button>
-              </div>
-           
+            <div className="py-2">
+              <button
+                onClick={handleAccountDelete}
+                className="bg-[#cd3328] py-2 px-3 text-white rounded-md"
+              >
+                Yes, delete my account
+              </button>
+            </div>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row md:justify-start md:items-start px-5 py-5 border-0 border-b border-gray-300 bg-white my-5">
           <div className="rounded-sm py-2 basis-2/6 w-full md:mr-5">
-            <h3 className="text-base text-gray-700 font-bold">
-              Delete Post
-            </h3>
+            <h3 className="text-base text-gray-700 font-bold">Delete Post</h3>
             <p className="text-sm text-gray-500 font-normal">
-              You can delete your all post here. This action is not
-              reversible. All information related to the post will be
-              deleted permanently.
+              You can delete your all post here. This action is not reversible.
+              All information related to the post will be deleted permanently.
             </p>
           </div>
           <div className="md:mt-0 md:py-0 mt-4 py-4 basis-4/6 w-full">

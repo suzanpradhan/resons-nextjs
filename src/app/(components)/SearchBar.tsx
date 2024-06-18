@@ -19,18 +19,18 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="rounded-sm overflow-hidden hidden md:block">
+    <div className="rounded-lg overflow-hidden">
       <form onSubmit={handleSubmit}>
         <div className="flex">
           <input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-grey-200 w-full text-sm text-primary-500 font-normal py-2 pl-3 focus:outline-none"
-            placeholder="Search audio here..."
+            className="bg-whiteShade w-full text-sm text-dark-500 h-10 font-normal pl-3 focus:outline-none"
+            placeholder="Search"
           />
           <button
             type="submit"
-            className="bg-gray-700 text-sm text-white font-normal px-2 py-2"
+            className="bg-accent text-sm text-white font-normal w-10 h-10 flex items-center justify-center"
           >
             <MagnifyingGlass size={18} />
           </button>

@@ -1,73 +1,100 @@
-import Carousel from 'react-multi-carousel';
+import Link from 'next/link';
 import 'react-multi-carousel/lib/styles.css';
-import CardOne from './CardOne';
+import 'swiper/css';
+// import Swiper core and required modules
 
-interface Slide {
+export interface Slide {
   id?: number;
   img_url: string;
   title: string;
 }
 
-interface Group {
-  groupTitle: string;
-  slides: Slide[];
-}
-
 interface MainCarouselProps {
-  slides: Group[];
+  slides: Slide[];
+  routeName: string;
 }
 
-export default function MultiCarousel({ slides }: MainCarouselProps) {
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 8,
-      slidesToSlide: 4, // optional, default to 1.
-      partialVisibilityGutter: 20,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 3,
-      slidesToSlide: 2, // optional, default to 1.
-      partialVisibilityGutter: 10,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 2,
-      slidesToSlide: 2, // optional, default to 1.
-      partialVisibilityGutter: 10,
-    },
-  };
-
+export default function MultiCarousel({
+  slides,
+  routeName,
+}: MainCarouselProps) {
   return (
-    <div className="flex flex-col mb-4 px-4 py-4 bg-white rounded-md overflow-x-hidden last-of-type:mb-16">
-      <h3 className="text-lg text-gray-800 font-bold mb-4 pb-2 capitalize border border-solid border-gray-300 border-t-0 border-l-0 border-r-0">
-        {slides[0].groupTitle}
-      </h3>
-      <Carousel
-        swipeable={true}
-        draggable={true}
-        responsive={responsive}
-        infinite={true}
-        transitionDuration={500}
-        containerClass="carousel-container"
-        removeArrowOnDeviceType={['tablet', 'mobile']}
-        itemClass="px-1"
-        partialVisible={true}
-        // Uncomment Extra Features
-        //  showDots={false}
-        //  ssr={true} // means to render carousel on server-side.
-        //  autoPlay={false}
-        //  autoPlaySpeed={1000}
-        //  keyBoardControl={true}
-        //  customTransition="all .5"
-        //  deviceType={this.props.deviceType}
-        //  dotListClass="custom-dot-list-style"
+    <div className="bg-white overflow-x-hidden mt-4">
+      <div className="flex justify-between items-start text-gray-800 h-9 mx-4">
+        <div className="text-base font-medium">Top Categories</div>
+        <Link href={`/genres/all`} className="text-sm h-full">
+          see all
+        </Link>
+      </div>
+
+      {/* <Swiper
+        // install Swiper modules
+        modules={[EffectFade]}
+        spaceBetween={15}
+        slidesPerView={3}
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        speed={600}
+        resistanceRatio={1}
+        // onSwiper={(swiper) => console.log(swiper)}
+        // // onSlideChange={() => console.log('slide change')}
+        // breakpoints={{
+        //   // when window width is >= 480px
+        //   480: {
+        //     width: 480,
+        //     slidesPerView: 3,
+        //   },
+        //   // when window width is >= 640px
+        //   640: {
+        //     width: 640,
+        //     slidesPerView: 4,
+        //   },
+        //   // when window width is >= 768px
+        //   768: {
+        //     width: 768,
+        //     slidesPerView: 5,
+        //   },
+        // }}
       >
-        {slides[0].slides.map((slide, index) => (
-          <CardOne slide={slide} key={index} />
+        {slides.map((slide, index) => (
+          <SwiperSlide key={index}>
+            {({ isActive }) => (
+              <CardOne
+                classnames={`${isActive ? '' : ''}`}
+                slide={slide}
+                routeName={routeName}
+              />
+            )}
+          </SwiperSlide>
         ))}
-      </Carousel>
+      </Swiper> */}
+
+      <div className="w-screen overflow-x-scroll">
+        <div className="inline-flex">
+          {slides.map((slide) => {
+            return (
+              <Link
+                key={'category_' + slide.id}
+                href={`/${routeName}/${slide.title}`}
+                className="flex flex-col items-center group w-32 ml-4 last-of-type:mr-4 "
+              >
+                <div className="w-full h-32 rounded-md overflow-hidden group-hover:drop-shadow-md">
+                  <img
+                    src={slide.img_url ?? '/images/cover.webp'}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h4
+                  className="text-sm w-full text-gray-800 py-0 mt-3 capitalize truncate text-center"
+                  title={slide.title}
+                >
+                  {slide.title}
+                </h4>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

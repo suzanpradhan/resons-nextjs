@@ -1,28 +1,28 @@
 import { apiPaths } from '@/core/api/apiConstants';
 import { baseApi } from '@/core/api/apiQuery';
 import { toast } from 'react-toastify';
-import { MyStoryDetailType, StoryDetailType, StoryFormType } from './storyType';
+import { CreateStoryDetailType, MyStoryDetailType, StoryDetailType } from './storyType';
 
 const storyApi = baseApi
   .enhanceEndpoints({ addTagTypes: ['Stories'] })
   .injectEndpoints({
     endpoints: (builder) => ({
       // Add Story
-      addStory: builder.mutation<any, StoryFormType>({
+      addStory: builder.mutation<any, CreateStoryDetailType>({
         query: ({ ...payload }) => {
           var formData = new FormData();
-          formData.append('title', payload.title);
-          formData.append('privacy_code', payload.privacy_code);
-          formData.append('audio_file', payload.audio_file);
-          formData.append('description', payload.description);
-          formData.append('is_ai_generated', payload.is_ai_generated);
+          // formData.append('title', payload.title);
+          // formData.append('privacy_code', payload.privacy_code);
+          formData.append('audio_file', payload.audio_file!);
+          // formData.append('description', payload.description);
+          // formData.append('is_ai_generated', payload.is_ai_generated);
           if (payload.wave_data)
             formData.append('wave_data', JSON.stringify(payload.wave_data));
           if (payload.file_duration)
             formData.append('file_duration', payload.file_duration.toString());
-          formData.append('privacy_code', payload.privacy_code);
-          formData.append('is_ai_generated', payload?.is_ai_generated);
-       
+          // formData.append('privacy_code', payload.privacy_code);
+          // formData.append('is_ai_generated', payload?.is_ai_generated);
+
           return {
             url: `${apiPaths.storyCreateUrl}`,
             method: 'POST',

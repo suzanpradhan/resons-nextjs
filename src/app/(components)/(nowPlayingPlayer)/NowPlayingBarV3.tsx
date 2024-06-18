@@ -18,11 +18,19 @@ import { updateHomePage } from '@/modules/post/homePageReducer';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { CaretRight, Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
+import {
+  CaretRight,
+  Pause,
+  Play,
+  Queue,
+  SkipBack,
+  SkipForward,
+} from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import MarqueeText from '../MarqueeText';
 import useScrollDirection from '../useScrollDirection';
+import NowPlayingList from './NowPlayingList';
 
 const NowPlayingBarV3 = (props: PropsFromRedux) => {
   const dispatch = useAppDispatch();
@@ -35,6 +43,18 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
   const navigator = useRouter();
   const [showComponent, toggleShowComponent] = useState(false);
   const [showAction, setShowAction] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const handleViewList = (e: any) => {
+    setIsOpen((prevIsOpen) => !prevIsOpen);
+    document.body.style.overflow = 'hidden';
+    e.stopPropagation();
+  };
+  const handleOnListViewClose = async () => {
+    setIsOpen((prevIsOpen) => !prevIsOpen);
+    document.body.style.overflow = 'auto';
+  };
+
   // const currentDuration = useSelector(
   //   (state: RootState) =>
   //     state.nowPlaying.playlist[state.nowPlaying.currentPlaylistIndex]?.duration
@@ -444,11 +464,11 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
       // Set a timeout to automatically hide the element after 5 seconds
       timeoutId = setTimeout(() => {
         setShowAction(!showAction);
-      }, 5000);
+      }, 50000);
     }
 
     // Clean up the timeout when the component unmounts or when the isVisible state changes to false
-    return () => clearTimeout(timeoutId);
+    // return () => clearTimeout(timeoutId);
   }, [showAction]);
 
   useEffect(() => {
@@ -493,51 +513,186 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
   };
 
   return (
-    <AnimatePresence mode="wait">
-      <div
-        className={`bg-white container mx-auto fixed transition-all duration-150 ease-in-out z-40 border-0 border-b border-gray-200 ${
-          showComponent ? '' : 'hidden'
-        } ${
-          scrollDirection === 'down' && props.currentPage == 1
-            ? 'bottom-0'
-            : props.currentPage == 1
-            ? 'bottom-[3.5rem]'
-            : 'bottom-[3.2rem]'
-        }`}
-      >
-        {props.playlist[props.currentPlaylistIndex]?.info ? (
-          <motion.div
-            className="relative"
-            onClick={() => setShowAction(!showAction)}
-            ref={hiddenElementRef}
-            variants={dropIn}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            {showAction ? (
-              <motion.div
-                variants={dropIn}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="flex items-center justify-between px-4 h-12 border-0 border-b border-gray-200"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 overflow-hidden cursor-pointer">
-                    <Image
-                      src="/images/cover.webp"
-                      alt="cover-image"
-                      onError={(e) => {
-                        (e.target as any).onError = null;
-                        (e.target as any).src = '/images/avatar.jpg';
-                      }}
-                      width={100}
-                      height={100}
-                      className="w-14 h-14 object-contain"
-                    />
+    <>
+      <AnimatePresence mode="wait">
+        <div
+          className={`bg-white/80 backdrop-filter backdrop-blur-lg container mx-auto fixed transition-all duration-150 ease-in-out z-40 ${
+            showComponent ? '' : 'hidden'
+          } ${
+            scrollDirection === 'down' && props.currentPage == 1
+              ? 'bottom-0'
+              : props.currentPage == 1
+              ? 'bottom-[3rem]'
+              : 'bottom-[3rem]'
+          }`}
+        >
+          {props.playlist[props.currentPlaylistIndex]?.info ? (
+            <motion.div
+              className="relative"
+              onClick={() => setShowAction(!showAction)}
+              ref={hiddenElementRef}
+              variants={dropIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              {showAction ? (
+                <motion.div
+                  variants={dropIn}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="flex items-center justify-between px-4 h-12 border-0 border-b border-gray-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 overflow-hidden cursor-pointer">
+                      <Image
+                        src="/images/cover.webp"
+                        alt="cover-image"
+                        onError={(e) => {
+                          (e.target as any).onError = null;
+                          (e.target as any).src = '/images/avatar.jpg';
+                        }}
+                        width={100}
+                        height={100}
+                        className="w-14 h-14 object-contain"
+                      />
+                    </div>
+                    <div className="w-40">
+                      <MarqueeText
+                        className="text-gray-900 font-bold capitalize text-xs"
+                        text={
+                          props.playlist[props.currentPlaylistIndex]!.info!
+                            .title
+                        }
+                      />
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray-900 font-medium capitalize text-xs">
+                          {
+                            props.playlist[props.currentPlaylistIndex]!.info!
+                              .description
+                          }
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-40">
+                  <div className="flex gap-3">
+                    {props.playlist[props.currentPlaylistIndex].info?.id ==
+                    props.homePagePostId ? null : (
+                      <div
+                        className="flex items-center gap-1 text-xs text-gray-900 text-medium cursor-pointer"
+                        onClick={handleClickScroll}
+                      >
+                        Go to post
+                        <CaretRight size={15} weight="light" />
+                      </div>
+                    )}
+                    <div
+                      onClick={handleViewList}
+                      className="flex items-center gap-1 text-xs text-gray-900 text-medium cursor-pointer"
+                    >
+                      <Queue size={24} weight="light" />
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null}
+              <div className="flex items-center justify-between gap-4 px-4 h-12">
+                <div className="flex basis-[80%] items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    {showAction ? (
+                      <button
+                        onClick={handlePrevious}
+                        type="button"
+                        className="w-6 h-6 bg-white rounded-full flex justify-center items-center hover:opacity-90"
+                      >
+                        <SkipBack
+                          size={15}
+                          weight="light"
+                          className={
+                            props.currentPlaylistIndex - 1 >= 0
+                              ? 'text-dark-500'
+                              : 'text-slate-400'
+                          }
+                        />
+                      </button>
+                    ) : null}
+                    <button
+                      onClick={(e) => {
+                        if (props.isPlaying) {
+                          dispatch(updateIsPlaying(false));
+                        } else {
+                          if (
+                            props.playlist[props.currentPlaylistIndex]?.url &&
+                            props.currentTime == 0
+                          ) {
+                            dispatch(
+                              playSong(
+                                props.playlist[props.currentPlaylistIndex]
+                              )
+                            );
+                          } else {
+                            dispatch(updateIsPlaying(true));
+                          }
+                        }
+                        e.stopPropagation();
+                      }}
+                      type="button"
+                      className="border border-gray-500 rounded-full p-1"
+                    >
+                      {props.isPlaying ? (
+                        <Pause size={20} className={`black`} weight="fill" />
+                      ) : (
+                        <Play size={20} className={`black`} weight="fill" />
+                      )}
+                    </button>
+                    {showAction ? (
+                      <button
+                        onClick={handleNext}
+                        type="button"
+                        className="w-6 h-6 bg-white rounded-full flex justify-center items-center hover:opacity-90"
+                      >
+                        <SkipForward
+                          size={15}
+                          weight="light"
+                          className={
+                            props.playlist.length >
+                            props.currentPlaylistIndex + 1
+                              ? 'text-dark-500'
+                              : 'text-slate-400'
+                          }
+                        />
+                      </button>
+                    ) : null}
+                    {showAction ? (
+                      <div
+                        className="text-sm px-4 py-1 bg-white rounded-full cursor-pointer"
+                        onClick={(e) => {
+                          if (props.audioPlayBackRate == 2) {
+                            dispatch(updatePlaybackRate(1));
+                          } else {
+                            dispatch(updatePlaybackRate(2));
+                          }
+                          e.stopPropagation();
+                        }}
+                      >
+                        {props.audioPlayBackRate}X
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div
+                    className={`w-full h-12 relative flex-col justify-center ${
+                      showAction ? 'hidden' : 'flex'
+                    }`}
+                  >
+                    <div
+                      className="absolute top-0 left-0 w-full h-full z-50"
+                      onClick={(e) => {
+                        setShowAction(!showAction);
+                        e.stopPropagation();
+                      }}
+                    ></div>
                     <MarqueeText
                       className="text-gray-900 font-bold capitalize text-xs"
                       text={
@@ -554,214 +709,95 @@ const NowPlayingBarV3 = (props: PropsFromRedux) => {
                     </div>
                   </div>
                 </div>
-                {props.playlist[props.currentPlaylistIndex].info?.id ==
-                props.homePagePostId ? null : (
-                  <div
-                    className="flex items-center gap-1 text-xs text-gray-900 text-medium cursor-pointer"
-                    onClick={handleClickScroll}
-                  >
-                    Go to post
-                    <CaretRight size={15} weight="light" />
-                  </div>
-                )}
-              </motion.div>
-            ) : null}
-            <div className="flex items-center justify-between gap-4 px-4 h-12">
-              <div className="flex basis-[80%] items-center gap-2">
-                <div className="flex items-center gap-2">
-                  {showAction ? (
-                    <button
-                      onClick={handlePrevious}
-                      type="button"
-                      className="w-6 h-6 bg-whiteShade rounded-full flex justify-center items-center hover:opacity-90"
+                {props.totalDuration ? (
+                  <div className="flex flex-col items-center">
+                    <p
+                      className="w-max text-xs font-bold text-accentRed cursor-pointer"
+                      title="Now Playing"
                     >
-                      <SkipBack
-                        size={15}
-                        weight="light"
-                        className={
-                          props.currentPlaylistIndex - 1 >= 0
-                            ? 'text-dark-500'
-                            : 'text-slate-400'
-                        }
-                      />
-                    </button>
-                  ) : null}
-                  <button
-                    onClick={(e) => {
-                      if (props.isPlaying) {
-                        dispatch(updateIsPlaying(false));
-                      } else {
-                        if (
-                          props.playlist[props.currentPlaylistIndex]?.url &&
-                          props.currentTime == 0
-                        ) {
-                          dispatch(
-                            playSong(props.playlist[props.currentPlaylistIndex])
-                          );
-                        } else {
-                          dispatch(updateIsPlaying(true));
-                        }
-                      }
-                      e.stopPropagation();
-                    }}
-                    type="button"
-                    className="border border-gray-300 rounded-full p-1"
-                  >
-                    {props.isPlaying ? (
-                      <Pause size={20} className={`black`} weight="fill" />
-                    ) : (
-                      <Play size={20} className={`black`} weight="fill" />
-                    )}
-                  </button>
-                  {showAction ? (
-                    <button
-                      onClick={handleNext}
-                      type="button"
-                      className="w-6 h-6 bg-whiteShade rounded-full flex justify-center items-center hover:opacity-90"
+                      {props.currentDuration
+                        ? formatTime(
+                            props.currentDuration
+                              ? Math.round(
+                                  props.currentDuration - props.currentTime
+                                )
+                              : 0
+                          )
+                        : '00:00'}
+                    </p>
+                    <p
+                      className="w-max text-xs font-bold text-primary-900 cursor-pointer"
+                      title="Playlist Duration"
                     >
-                      <SkipForward
-                        size={15}
-                        weight="light"
-                        className={
-                          props.playlist.length > props.currentPlaylistIndex + 1
-                            ? 'text-dark-500'
-                            : 'text-slate-400'
-                        }
-                      />
-                    </button>
-                  ) : null}
-                  {showAction ? (
-                    <div
-                      className="text-sm px-4 py-1 bg-grey-200 rounded-full cursor-pointer"
-                      onClick={(e) => {
-                        if (props.audioPlayBackRate == 2) {
-                          dispatch(updatePlaybackRate(1));
-                        } else {
-                          dispatch(updatePlaybackRate(2));
-                        }
-                        e.stopPropagation();
-                      }}
-                    >
-                      {props.audioPlayBackRate}X
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <div
-                  className={`w-full h-12 relative flex-col justify-center ${
-                    showAction ? 'hidden' : 'flex'
-                  }`}
-                >
-                  <div
-                    className="absolute top-0 left-0 w-full h-full z-50"
-                    onClick={(e) => {
-                      setShowAction(!showAction);
-                      e.stopPropagation();
-                    }}
-                  ></div>
-                  <MarqueeText
-                    className="text-gray-900 font-bold capitalize text-xs"
-                    text={
-                      props.playlist[props.currentPlaylistIndex]!.info!.title
-                    }
-                  />
-                  <div className="flex items-center gap-2">
-                    <p className="text-gray-900 font-medium capitalize text-xs">
-                      {
-                        props.playlist[props.currentPlaylistIndex]!.info!
-                          .description
-                      }
+                      {props.totalDuration
+                        ? formatTime(
+                            props.totalDuration
+                              ? Math.round(
+                                  props.totalDuration -
+                                    (props.currentTime +
+                                      (props.prevDuration ?? 0)) <
+                                    0
+                                    ? 0
+                                    : props.totalDuration -
+                                        (props.currentTime +
+                                          (props.prevDuration ?? 0))
+                                )
+                              : 0
+                          )
+                        : '00:00'}
                     </p>
                   </div>
-                </div>
-              </div>
-              {props.totalDuration ? (
-                <div className="flex flex-col items-center">
-                  <p
-                    className="w-max text-xs font-bold text-accentRed cursor-pointer"
-                    title="Now Playing"
-                  >
+                ) : (
+                  <p className="w-max text-xs font-bold text-primary-900">
                     {props.currentDuration
                       ? formatTime(
                           props.currentDuration
-                            ? Math.round(
-                                props.currentDuration - props.currentTime
+                            ? subtractSeconds(
+                                props.currentDuration,
+                                props.currentTime
                               )
                             : 0
                         )
                       : '00:00'}
                   </p>
-                  <p
-                    className="w-max text-xs font-bold text-primary-900 cursor-pointer"
-                    title="Playlist Duration"
-                  >
-                    {props.totalDuration
-                      ? formatTime(
-                          props.totalDuration
-                            ? Math.round(
-                                props.totalDuration -
-                                  (props.currentTime +
-                                    (props.prevDuration ?? 0)) <
-                                  0
-                                  ? 0
-                                  : props.totalDuration -
-                                      (props.currentTime +
-                                        (props.prevDuration ?? 0))
-                              )
-                            : 0
-                        )
-                      : '00:00'}
-                  </p>
-                </div>
-              ) : (
-                <p className="w-max text-xs font-bold text-primary-900">
-                  {props.currentDuration
-                    ? formatTime(
-                        props.currentDuration
-                          ? subtractSeconds(
-                              props.currentDuration,
-                              props.currentTime
-                            )
-                          : 0
-                      )
-                    : '00:00'}
-                </p>
-              )}
-            </div>
+                )}
+              </div>
 
-            <div className="progress-bar-container">
-              <div
-                className="progress-bar-fill"
-                style={{
-                  width: `${
-                    Math.round(
-                      ((props.currentTime +
-                        (props.totalDuration ? props.prevDuration ?? 0 : 0)) /
-                        (props.totalDuration ?? props.currentDuration)) *
-                        10000
-                    ) / 100
-                  }%`,
-                }}
-              />
-            </div>
-          </motion.div>
-        ) : (
-          <div></div>
-          // <div className="border-y border-y-grey-200 px-4 flex items-center gap-2 h-12">
-          //   <Play size="20" className="text-primary-900" weight="fill" />
-          //   <div className="text-sm">Play all (2.57 minutes)</div>
-          // </div>
-        )}
+              <div className="progress-bar-container">
+                <div
+                  className="progress-bar-fill"
+                  style={{
+                    width: `${
+                      Math.round(
+                        ((props.currentTime +
+                          (props.totalDuration ? props.prevDuration ?? 0 : 0)) /
+                          (props.totalDuration ?? props.currentDuration)) *
+                          10000
+                      ) / 100
+                    }%`,
+                  }}
+                />
+              </div>
+            </motion.div>
+          ) : (
+            <div></div>
+            // <div className="border-y border-y-grey-200 px-4 flex items-center gap-2 h-12">
+            //   <Play size="20" className="text-primary-900" weight="fill" />
+            //   <div className="text-sm">Play all (2.57 minutes)</div>
+            // </div>
+          )}
 
-        <input
-          type="range"
-          ref={progressRef}
-          defaultValue={0}
-          className="global-player absolute top-0 left-0 w-full hidden"
-        />
-      </div>
-    </AnimatePresence>
+          <input
+            type="range"
+            ref={progressRef}
+            defaultValue={0}
+            className="global-player absolute top-0 left-0 w-full hidden"
+          />
+        </div>
+      </AnimatePresence>
+
+      {isOpen ? <NowPlayingList onClose={handleOnListViewClose} /> : null}
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import CardOne from './CardOne';
 
 interface Slide {
   id: number | undefined;
-  img_url: string;
+  image: string;
   title: string;
 }
 
